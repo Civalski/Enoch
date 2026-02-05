@@ -1,0 +1,143 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Section from '../components/Section.astro';
+import Card from '../components/Card.astro';
+---
+
+<Layout title="Projetos" description="Conheça os projetos e iniciativas da A.R.L.S Enoch">
+  <!-- Hero -->
+  <section class="gradient-animated text-white py-20 relative overflow-hidden particles-bg">
+    <div class="absolute inset-0 bg-gradient-blue-subtle opacity-90"></div>
+    <div class="container mx-auto px-4 relative z-10">
+      <h1 class="text-4xl md:text-5xl font-bold mb-4 animate-fade-in-up bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent drop-shadow-lg">Nossos Projetos</h1>
+      <p class="text-xl text-blue-100 animate-fade-in-up drop-shadow-md" style="animation-delay: 0.2s;">Conheça as iniciativas que transformam vidas</p>
+    </div>
+  </section>
+
+  <!-- Projetos -->
+  <Section
+    title="Projetos em Andamento"
+    subtitle="Iniciativas que fazem a diferença na vida das pessoas"
+    className="bg-white"
+  >
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <Card
+        title="Assistência Alimentar"
+        description="Distribuição de cestas básicas e refeições para famílias em situação de vulnerabilidade social, garantindo segurança alimentar."
+        image="https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=800&h=600&fit=crop&q=80"
+      />
+      <Card
+        title="Programa de Capacitação Profissional"
+        description="Cursos gratuitos de capacitação profissional em diversas áreas, promovendo a inserção no mercado de trabalho."
+        image="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop&q=80"
+      />
+      <Card
+        title="Apoio à Infância"
+        description="Projetos voltados para crianças e adolescentes, incluindo atividades educativas, recreativas e apoio escolar."
+        image="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=800&h=600&fit=crop&q=80"
+      />
+      <Card
+        title="Assistência ao Idoso"
+        description="Programas de atenção e cuidado com idosos, incluindo visitas domiciliares, atividades recreativas e apoio social."
+        image="https://images.unsplash.com/photo-1559027615-51f9f03eceb2?w=800&h=600&fit=crop&q=80"
+      />
+      <Card
+        title="Campanhas de Arrecadação"
+        description="Organização de campanhas para arrecadação de alimentos, roupas, brinquedos e outros materiais para famílias necessitadas."
+        image="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=800&h=600&fit=crop&q=80"
+      />
+      <Card
+        title="Eventos Comunitários"
+        description="Realização de eventos que promovem a integração social e o fortalecimento dos laços comunitários."
+        image="https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=800&h=600&fit=crop&q=80"
+      />
+    </div>
+  </Section>
+
+  <!-- Impacto -->
+  <Section
+    title="Impacto dos Nossos Projetos"
+    className="bg-gray-50"
+  >
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+      <div>
+        <h3 class="text-2xl font-bold text-gradient-heading mb-6">Números que Transformam</h3>
+        <div class="space-y-4">
+          <div class="flex items-start">
+            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mr-4 flex-shrink-0 shadow-lg">
+              <span class="text-white font-bold">1</span>
+            </div>
+            <div>
+              <h4 class="font-bold text-gray-900 mb-1">500+ Famílias Atendidas</h4>
+              <p class="text-gray-600">Famílias que receberam assistência através de nossos projetos</p>
+            </div>
+          </div>
+          <div class="flex items-start">
+            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mr-4 flex-shrink-0 shadow-lg">
+              <span class="text-white font-bold">2</span>
+            </div>
+            <div>
+              <h4 class="font-bold text-gradient-heading mb-1">50+ Projetos Realizados</h4>
+              <p class="text-gradient-subtle font-medium">Iniciativas desenvolvidas ao longo dos anos</p>
+            </div>
+          </div>
+          <div class="flex items-start">
+            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mr-4 flex-shrink-0 shadow-lg">
+              <span class="text-white font-bold">3</span>
+            </div>
+            <div>
+              <h4 class="font-bold text-gradient-heading mb-1">1000+ Voluntários</h4>
+              <p class="text-gradient-subtle font-medium">Pessoas que dedicam seu tempo para fazer a diferença</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="w-full h-96 bg-gray-200 rounded-lg overflow-hidden group">
+        <img
+          src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop&q=80"
+          alt="Impacto dos projetos"
+          class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+        />
+      </div>
+    </div>
+  </Section>
+
+  <!-- Como Participar -->
+  <Section
+    title="Como Participar dos Projetos"
+    subtitle="Existem várias formas de se envolver e fazer parte das nossas iniciativas"
+    className="bg-white"
+  >
+    <div class="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+      <div class="text-center p-6 bg-gray-50 rounded-lg border border-gray-100">
+        <div class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent mb-2">1</div>
+        <h3 class="font-bold text-gradient-heading mb-3">Seja Voluntário</h3>
+        <p class="text-gradient-subtle font-medium">
+          Participe diretamente dos nossos projetos como voluntário e faça a diferença na vida das pessoas.
+        </p>
+      </div>
+      <div class="text-center p-6 bg-gray-50 rounded-lg border border-gray-100">
+        <div class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent mb-2">2</div>
+        <h3 class="font-bold text-gradient-heading mb-3">Faça uma Doação</h3>
+        <p class="text-gradient-subtle font-medium">
+          Sua contribuição financeira ajuda a manter e ampliar nossos projetos e iniciativas.
+        </p>
+      </div>
+      <div class="text-center p-6 bg-gray-50 rounded-lg border border-gray-100">
+        <div class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent mb-2">3</div>
+        <h3 class="font-bold text-gradient-heading mb-3">Divulgue</h3>
+        <p class="text-gradient-subtle font-medium">
+          Compartilhe nossos projetos e ajude a aumentar o alcance das nossas ações.
+        </p>
+      </div>
+    </div>
+    <div class="text-center mt-8 reveal">
+      <a
+        href="/contato"
+        class="inline-block bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
+      >
+        Entre em Contato
+      </a>
+    </div>
+  </Section>
+</Layout>

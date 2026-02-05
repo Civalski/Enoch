@@ -1,0 +1,173 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Section from '../components/Section.astro';
+---
+
+<Layout title="Sobre Nós" description="Conheça a história e os valores da A.R.L.S Enoch">
+  <!-- Hero -->
+  <section class="gradient-animated text-white py-20 relative overflow-hidden particles-bg">
+    <div class="absolute inset-0 bg-gradient-to-br from-blue-600/90 via-blue-700/90 to-blue-800/90"></div>
+    <div class="container mx-auto px-4 relative z-10">
+      <h1 class="text-4xl md:text-5xl font-bold mb-4 animate-fade-in-up bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent drop-shadow-lg">Sobre a A.R.L.S Enoch</h1>
+      <p class="text-xl text-blue-100 animate-fade-in-up drop-shadow-md" style="animation-delay: 0.2s;">Conheça nossa história, missão e valores</p>
+    </div>
+  </section>
+
+  <!-- História -->
+  <Section
+    title="Nossa História"
+    className="bg-white"
+  >
+    <div class="max-w-4xl mx-auto">
+      <div class="grid md:grid-cols-2 gap-8 items-center mb-12">
+        <div>
+          <p class="text-gradient-subtle mb-4 font-medium">
+            A A.R.L.S Enoch foi fundada com o propósito de transformar vidas através da solidariedade e ações sociais. 
+            Desde o início, nossa instituição tem se dedicado a promover o bem-estar social e a dignidade humana.
+          </p>
+          <p class="text-gradient-subtle mb-4 font-medium">
+            Ao longo dos anos, desenvolvemos diversos projetos que impactaram positivamente centenas de famílias, 
+            sempre mantendo nosso compromisso com a transparência e a eficiência no uso dos recursos.
+          </p>
+        </div>
+        <div class="w-full h-64 bg-gray-200 rounded-lg overflow-hidden group">
+          <img
+            src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=800&h=600&fit=crop&q=80"
+            alt="História da A.R.L.S Enoch"
+            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          />
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Missão, Visão e Valores -->
+  <Section
+    title="Missão, Visão e Valores"
+    className="bg-gray-50"
+  >
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="bg-white p-8 rounded-lg shadow-md border border-gray-100">
+        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mb-4 shadow-lg">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-gradient-heading mb-3">Missão</h3>
+        <p class="text-gradient-subtle font-medium">
+          Promover ações de caridade, assistência social e desenvolvimento comunitário, sempre com foco no bem-estar 
+          e na dignidade das pessoas que atendemos.
+        </p>
+      </div>
+
+      <div class="bg-white p-8 rounded-lg shadow-md border border-gray-100">
+        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mb-4 shadow-lg">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-gradient-heading mb-3">Visão</h3>
+        <p class="text-gradient-subtle font-medium">
+          Ser reconhecida como uma instituição de referência em ações sociais, promovendo transformações positivas 
+          e duradouras na vida das pessoas e comunidades.
+        </p>
+      </div>
+
+      <div class="bg-white p-8 rounded-lg shadow-md border border-gray-100">
+        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mb-4 shadow-lg">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-3">Valores</h3>
+        <ul class="text-gray-600 space-y-2">
+          <li>• Solidariedade</li>
+          <li>• Transparência</li>
+          <li>• Comprometimento</li>
+          <li>• Respeito à dignidade humana</li>
+          <li>• Eficiência e responsabilidade</li>
+        </ul>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Equipe -->
+  <Section
+    title="Nossa Equipe"
+    subtitle="Pessoas dedicadas que fazem a diferença"
+    className="bg-white"
+  >
+    <div class="grid md:grid-cols-4 gap-8">
+      <div class="text-center reveal">
+        <div class="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4 overflow-hidden group hover:scale-110 transition-transform duration-300 shadow-lg">
+          <img
+            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&q=80"
+            alt="Membro da equipe"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <h3 class="font-bold text-gray-900 mb-1">Nome do Membro</h3>
+        <p class="text-sm text-gray-600">Cargo/Função</p>
+      </div>
+      <div class="text-center reveal" style="animation-delay: 0.1s;">
+        <div class="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4 overflow-hidden group hover:scale-110 transition-transform duration-300 shadow-lg">
+          <img
+            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop&q=80"
+            alt="Membro da equipe"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <h3 class="font-bold text-gray-900 mb-1">Nome do Membro</h3>
+        <p class="text-sm text-gray-600">Cargo/Função</p>
+      </div>
+      <div class="text-center reveal" style="animation-delay: 0.2s;">
+        <div class="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4 overflow-hidden group hover:scale-110 transition-transform duration-300 shadow-lg">
+          <img
+            src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&q=80"
+            alt="Membro da equipe"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <h3 class="font-bold text-gray-900 mb-1">Nome do Membro</h3>
+        <p class="text-sm text-gray-600">Cargo/Função</p>
+      </div>
+      <div class="text-center reveal" style="animation-delay: 0.3s;">
+        <div class="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4 overflow-hidden group hover:scale-110 transition-transform duration-300 shadow-lg">
+          <img
+            src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&q=80"
+            alt="Membro da equipe"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <h3 class="font-bold text-gray-900 mb-1">Nome do Membro</h3>
+        <p class="text-sm text-gray-600">Cargo/Função</p>
+      </div>
+    </div>
+  </Section>
+
+  <!-- CTA -->
+  <Section className="gradient-animated text-white relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-blue-subtle opacity-95"></div>
+    <div class="text-center relative z-10">
+      <h2 class="text-3xl font-bold mb-4 bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent drop-shadow-lg">Faça Parte Desta Causa</h2>
+      <p class="text-xl text-blue-100 mb-8 drop-shadow-md">
+        Junte-se a nós e ajude a transformar vidas através da solidariedade
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href="/contato#doar"
+          class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
+        >
+          Fazer uma Doação
+        </a>
+        <a
+          href="/contato"
+          class="bg-white/10 backdrop-blur-md border-2 border-white/30 text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
+        >
+          Entre em Contato
+        </a>
+      </div>
+    </div>
+  </Section>
+</Layout>

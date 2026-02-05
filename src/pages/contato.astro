@@ -1,0 +1,291 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Section from '../components/Section.astro';
+---
+
+<Layout title="Contato" description="Entre em contato com a A.R.L.S Enoch e saiba como ajudar">
+  <!-- Hero -->
+  <section class="gradient-animated text-white py-20 relative overflow-hidden particles-bg">
+    <div class="absolute inset-0 bg-gradient-blue-subtle opacity-90"></div>
+    <div class="container mx-auto px-4 relative z-10">
+      <h1 class="text-4xl md:text-5xl font-bold mb-4 animate-fade-in-up bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent drop-shadow-lg">Entre em Contato</h1>
+      <p class="text-xl text-blue-100 animate-fade-in-up drop-shadow-md" style="animation-delay: 0.2s;">Estamos aqui para ajudar e responder suas dúvidas</p>
+    </div>
+  </section>
+
+  <!-- Formulário de Contato -->
+  <Section
+    title="Envie Sua Mensagem"
+    className="bg-white"
+  >
+    <div class="max-w-2xl mx-auto reveal">
+      <form class="space-y-6">
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <label for="nome" class="block text-sm font-medium text-gray-700 mb-2">
+              Nome Completo *
+            </label>
+            <input
+              type="text"
+              id="nome"
+              name="nome"
+              required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 hover:border-blue-400 focus:shadow-lg"
+              placeholder="Seu nome"
+            />
+          </div>
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+              E-mail *
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 hover:border-blue-400 focus:shadow-lg"
+              placeholder="seu@email.com"
+            />
+          </div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <label for="telefone" class="block text-sm font-medium text-gray-700 mb-2">
+              Telefone
+            </label>
+            <input
+              type="tel"
+              id="telefone"
+              name="telefone"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 hover:border-blue-400 focus:shadow-lg"
+              placeholder="(00) 00000-0000"
+            />
+          </div>
+          <div>
+            <label for="assunto" class="block text-sm font-medium text-gray-700 mb-2">
+              Assunto *
+            </label>
+            <select
+              id="assunto"
+              name="assunto"
+              required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 hover:border-blue-400 focus:shadow-lg"
+            >
+              <option value="">Selecione um assunto</option>
+              <option value="doacao">Doação</option>
+              <option value="voluntariado">Voluntariado</option>
+              <option value="projetos">Projetos</option>
+              <option value="parceria">Parceria</option>
+              <option value="outro">Outro</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label for="mensagem" class="block text-sm font-medium text-gray-700 mb-2">
+            Mensagem *
+          </label>
+          <textarea
+            id="mensagem"
+            name="mensagem"
+            rows="6"
+            required
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 hover:border-blue-400 focus:shadow-lg resize-none"
+            placeholder="Escreva sua mensagem aqui..."
+          ></textarea>
+        </div>
+        <div>
+          <button
+            type="submit"
+            id="submit-btn"
+            class="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <span id="submit-text">Enviar Mensagem</span>
+            <span id="submit-loading" class="hidden">
+              <span class="inline-block spinner mr-2"></span>
+              Enviando...
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </Section>
+
+<script>
+  const form = document.querySelector('form');
+  const submitBtn = document.getElementById('submit-btn');
+  const submitText = document.getElementById('submit-text');
+  const submitLoading = document.getElementById('submit-loading');
+
+  if (form && submitBtn) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      submitText.classList.add('hidden');
+      submitLoading.classList.remove('hidden');
+      submitBtn.disabled = true;
+      
+      setTimeout(() => {
+        alert('Mensagem enviada com sucesso! Entraremos em contato em breve.');
+        form.reset();
+        submitText.classList.remove('hidden');
+        submitLoading.classList.add('hidden');
+        submitBtn.disabled = false;
+      }, 2000);
+    });
+  }
+
+  // Função para copiar chave PIX
+  function copyPixKey(button) {
+    const pixKeyElement = button.previousElementSibling;
+    const pixKey = pixKeyElement.textContent.trim();
+    
+    navigator.clipboard.writeText(pixKey).then(() => {
+      const originalText = button.innerHTML;
+      button.innerHTML = `
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        Copiado!
+      `;
+      button.classList.add('bg-green-600', 'hover:bg-green-700');
+      button.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+      
+      setTimeout(() => {
+        button.innerHTML = originalText;
+        button.classList.remove('bg-green-600', 'hover:bg-green-700');
+        button.classList.add('bg-blue-600', 'hover:bg-blue-700');
+      }, 2000);
+    }).catch(() => {
+      alert('Não foi possível copiar a chave PIX. Por favor, copie manualmente.');
+    });
+  }
+</script>
+
+  <!-- Informações de Contato -->
+  <Section
+    title="Informações de Contato"
+    className="bg-gray-50"
+  >
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="text-center p-6 bg-white rounded-lg shadow-md border border-gray-100">
+        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <h3 class="font-bold text-gradient-heading mb-2">E-mail</h3>
+        <p class="text-gradient-subtle font-medium">contato@arlsenoch.org.br</p>
+      </div>
+      <div class="text-center p-6 bg-white rounded-lg shadow-md border border-gray-100">
+        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+          </svg>
+        </div>
+        <h3 class="font-bold text-gradient-heading mb-2">Telefone</h3>
+        <p class="text-gradient-subtle font-medium">(00) 0000-0000</p>
+      </div>
+      <div class="text-center p-6 bg-white rounded-lg shadow-md border border-gray-100">
+        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        </div>
+        <h3 class="font-bold text-gradient-heading mb-2">Endereço</h3>
+        <p class="text-gradient-subtle font-medium">[Endereço da Instituição]</p>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Seção de Doação -->
+  <Section
+    id="doar"
+    title="Como Fazer uma Doação"
+    subtitle="Sua contribuição faz a diferença na vida de muitas pessoas"
+    className="bg-white"
+  >
+    <div class="max-w-4xl mx-auto">
+      <div class="grid md:grid-cols-2 gap-8 mb-8">
+        <div class="bg-gray-50 p-6 rounded-lg border border-gray-100">
+          <h3 class="text-xl font-bold text-gradient-heading mb-4">Doação por Transferência/PIX</h3>
+          <p class="text-gradient-subtle mb-4 font-medium">
+            Faça sua doação diretamente via transferência bancária ou PIX:
+          </p>
+          <div class="space-y-2 text-sm">
+            <p><strong>Banco:</strong> [Nome do Banco]</p>
+            <p><strong>Agência:</strong> [Número]</p>
+            <p><strong>Conta:</strong> [Número da Conta]</p>
+            <p><strong>PIX:</strong> [Chave PIX]</p>
+          </div>
+        </div>
+        <div class="bg-gray-50 p-6 rounded-lg border border-gray-100">
+          <h3 class="text-xl font-bold text-gradient-heading mb-4">Doação de Materiais</h3>
+          <p class="text-gradient-subtle mb-4 font-medium">
+            Aceitamos doações de:
+          </p>
+          <ul class="list-disc list-inside text-gray-600 space-y-1">
+            <li>Alimentos não perecíveis</li>
+            <li>Roupas e calçados</li>
+            <li>Brinquedos</li>
+            <li>Material de higiene</li>
+            <li>Material escolar</li>
+          </ul>
+          <p class="text-gray-600 mt-4 text-sm">
+            Entre em contato para combinar a entrega.
+          </p>
+        </div>
+      </div>
+      <div class="mb-8">
+        <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg border-2 border-blue-200 shadow-md">
+          <div class="flex items-start gap-4">
+            <div class="flex-shrink-0">
+              <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+              </div>
+            </div>
+            <div class="flex-1">
+              <h3 class="text-xl font-bold text-gray-900 mb-2">Doação Anônima via PIX</h3>
+              <p class="text-gray-700 mb-4">
+                Prefere fazer sua doação de forma anônima? Utilize nossa chave PIX exclusiva para doações anônimas. Sua identidade será mantida em total sigilo.
+              </p>
+              <div class="bg-white p-4 rounded-lg border border-blue-200 mb-4">
+                <p class="text-sm text-gray-600 mb-2 font-medium">Chave PIX para Doação Anônima:</p>
+                <div class="flex items-center justify-between gap-4">
+                  <code class="text-base font-mono text-gray-900 bg-gray-50 px-3 py-2 rounded border border-gray-200 flex-1 break-all">[Chave PIX Anônima]</code>
+                  <button
+                    onclick="copyPixKey(this)"
+                    class="flex-shrink-0 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 text-sm font-medium flex items-center gap-2"
+                    title="Copiar chave PIX"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                    Copiar
+                  </button>
+                </div>
+              </div>
+              <p class="text-sm text-gray-600 italic">
+                💙 Sua generosidade faz a diferença, mesmo sem revelar sua identidade.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <p class="text-gradient-subtle mb-4 font-medium">
+          Todas as doações são utilizadas exclusivamente para os projetos da instituição. 
+          Mantemos total transparência sobre o uso dos recursos.
+        </p>
+        <a
+          href="mailto:contato@arlsenoch.org.br"
+          class="inline-block bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
+        >
+          Entre em Contato para Mais Informações
+        </a>
+      </div>
+    </div>
+  </Section>
+</Layout>

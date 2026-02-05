@@ -1,0 +1,94 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+}
+
+const { title, subtitle } = Astro.props;
+---
+
+<section class="relative gradient-animated text-white overflow-hidden particles-bg">
+  <div class="absolute inset-0 bg-gradient-blue-subtle opacity-90"></div>
+  <div class="absolute inset-0">
+    <img
+      id="hero-image-1"
+      src="https://enoch.ornete.com/Loja/12356/Conteudo/slide002.jpg"
+      alt="A.R.L.S Enoch"
+      class="w-full h-full object-cover opacity-20 transition-opacity duration-1000"
+    />
+    <img
+      id="hero-image-2"
+      src="https://enoch.ornete.com/Loja/12356/Conteudo/slide00204.jpg"
+      alt="A.R.L.S Enoch"
+      class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000"
+    />
+    <img
+      id="hero-image-3"
+      src="https://enoch.ornete.com/Imagem/maconaria6.jpg"
+      alt="A.R.L.S Enoch"
+      class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000"
+    />
+  </div>
+  <div class="container mx-auto px-4 py-24 md:py-32 relative z-10">
+    <div class="max-w-3xl">
+      <h1 class="text-4xl md:text-6xl font-bold mb-6 animate-fade-in-up bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent drop-shadow-lg" style="animation-delay: 0.2s;">
+        {title}
+      </h1>
+      {subtitle && (
+        <p class="text-xl md:text-2xl mb-8 text-blue-100 animate-fade-in-up drop-shadow-md" style="animation-delay: 0.4s;">
+          {subtitle}
+        </p>
+      )}
+      <div class="flex flex-col sm:flex-row gap-4 animate-fade-in-up" style="animation-delay: 0.6s;">
+        <a
+          href="/contato#doar"
+          class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-all duration-300 text-center shadow-xl hover:shadow-2xl hover:scale-105 transform"
+        >
+          Fazer uma Doação
+        </a>
+        <a
+          href="/sobre"
+          class="bg-white/10 backdrop-blur-md border-2 border-white/30 text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-all duration-300 text-center shadow-xl hover:shadow-2xl hover:scale-105 transform"
+        >
+          Conheça Nossa História
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="absolute bottom-0 left-0 right-0 h-16 bg-white transform rotate-180">
+    <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+      <path d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="white"/>
+    </svg>
+  </div>
+</section>
+
+<script>
+  if (typeof window !== 'undefined') {
+    const image1 = document.getElementById('hero-image-1');
+    const image2 = document.getElementById('hero-image-2');
+    const image3 = document.getElementById('hero-image-3');
+    
+    if (image1 && image2 && image3) {
+      let currentImage = 1;
+      
+      setInterval(() => {
+        // Esconder todas as imagens primeiro
+        image1.style.opacity = '0';
+        image2.style.opacity = '0';
+        image3.style.opacity = '0';
+        
+        // Mostrar a próxima imagem
+        if (currentImage === 1) {
+          image2.style.opacity = '0.2';
+          currentImage = 2;
+        } else if (currentImage === 2) {
+          image3.style.opacity = '0.2';
+          currentImage = 3;
+        } else {
+          image1.style.opacity = '0.2';
+          currentImage = 1;
+        }
+      }, 3000);
+    }
+  }
+</script>

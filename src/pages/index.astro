@@ -1,0 +1,187 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import Section from '../components/Section.astro';
+import Card from '../components/Card.astro';
+---
+
+<Layout title="Início" description="A.R.L.S Enoch - Transformando vidas através da solidariedade e ações sociais">
+  <Hero
+    title="Transformando Vidas Através da Solidariedade"
+    subtitle="A.R.L.S Enoch é uma instituição de caridade dedicada a fazer a diferença na vida das pessoas através de ações solidárias e projetos sociais."
+  />
+
+  <!-- Sobre -->
+  <Section
+    title="Quem Somos"
+    subtitle="Uma instituição comprometida com o bem-estar social e a transformação de vidas"
+    className="bg-white"
+  >
+    <div class="grid md:grid-cols-2 gap-8 items-center">
+      <div class="reveal">
+        <h3 class="text-2xl font-bold text-gradient-heading mb-4">Nossa Missão</h3>
+        <p class="text-gradient-subtle mb-4 font-medium">
+          A A.R.L.S Enoch tem como missão promover ações de caridade, assistência social e desenvolvimento comunitário, 
+          sempre com foco no bem-estar e na dignidade das pessoas que atendemos.
+        </p>
+        <p class="text-gradient-subtle mb-4 font-medium">
+          Acreditamos que pequenas ações podem gerar grandes transformações e que juntos podemos construir um mundo mais justo e solidário.
+        </p>
+        <a
+          href="/sobre"
+          class="inline-block bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
+        >
+          Conheça Mais Sobre Nós
+        </a>
+      </div>
+      <div class="w-full h-80 bg-white rounded-lg overflow-hidden reveal group flex items-center justify-center p-8">
+        <img
+          src="https://enoch.ornete.com/Loja/17673/Site/Logotipo.jpg?20240622135039"
+          alt="Logotipo A.R.L.S Enoch"
+          class="max-w-full max-h-full object-contain transition-transform duration-500 group-hover:scale-105"
+        />
+      </div>
+    </div>
+  </Section>
+
+  <!-- Projetos em Destaque -->
+  <Section
+    title="Nossos Projetos"
+    subtitle="Conheça algumas das iniciativas que desenvolvemos para transformar vidas"
+    className="bg-gray-50"
+  >
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="reveal" style="animation-delay: 0.1s;">
+        <Card
+          title="Assistência Social"
+          description="Programas de assistência para famílias em situação de vulnerabilidade social, oferecendo apoio alimentar, vestuário e recursos básicos."
+          image="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=800&h=600&fit=crop&q=80"
+          link="/projetos"
+        />
+      </div>
+      <div class="reveal" style="animation-delay: 0.2s;">
+        <Card
+          title="Educação e Capacitação"
+          description="Cursos e workshops gratuitos para capacitação profissional e desenvolvimento de habilidades, promovendo a inserção no mercado de trabalho."
+          image="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&h=600&fit=crop&q=80"
+          link="/projetos"
+        />
+      </div>
+      <div class="reveal" style="animation-delay: 0.3s;">
+        <Card
+          title="Ações Comunitárias"
+          description="Eventos e atividades que promovem a integração social, fortalecendo os laços comunitários e criando espaços de convivência."
+          image="https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=800&h=600&fit=crop&q=80"
+          link="/projetos"
+        />
+      </div>
+    </div>
+    <div class="text-center mt-8 reveal">
+      <a
+        href="/projetos"
+        class="inline-block bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
+      >
+        Ver Todos os Projetos
+      </a>
+    </div>
+  </Section>
+
+  <!-- Estatísticas -->
+  <Section
+    className="gradient-animated text-white relative overflow-hidden"
+  >
+    <div class="absolute inset-0 bg-gradient-blue-subtle opacity-95"></div>
+    <div class="grid md:grid-cols-4 gap-8 text-center relative z-10">
+      <div class="reveal">
+        <div class="text-4xl md:text-5xl font-bold mb-2">500+</div>
+        <div class="text-blue-100">Famílias Atendidas</div>
+      </div>
+      <div class="reveal" style="animation-delay: 0.1s;">
+        <div class="text-4xl md:text-5xl font-bold mb-2">50+</div>
+        <div class="text-blue-100">Projetos Realizados</div>
+      </div>
+      <div class="reveal" style="animation-delay: 0.2s;">
+        <div class="text-4xl md:text-5xl font-bold mb-2">1000+</div>
+        <div class="text-blue-100">Voluntários</div>
+      </div>
+      <div class="reveal" style="animation-delay: 0.3s;">
+        <div class="text-4xl md:text-5xl font-bold mb-2">10+</div>
+        <div class="text-blue-100">Anos de Atuação</div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Como Ajudar -->
+  <Section
+    title="Como Você Pode Ajudar"
+    subtitle="Existem várias formas de contribuir com nossa causa e fazer a diferença"
+    className="bg-white"
+  >
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="text-center p-6 reveal hover-lift bg-gray-50 rounded-lg transition-all duration-300 border border-gray-100">
+        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-gradient-heading mb-3">Doações Financeiras</h3>
+        <p class="text-gradient-subtle font-medium">
+          Sua contribuição financeira ajuda a manter nossos projetos e ampliar nosso alcance.
+        </p>
+      </div>
+      <div class="text-center p-6 reveal hover-lift bg-gray-50 rounded-lg transition-all duration-300 border border-gray-100" style="animation-delay: 0.1s;">
+        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-gradient-heading mb-3">Voluntariado</h3>
+        <p class="text-gradient-subtle font-medium">
+          Doe seu tempo e habilidades para ajudar em nossos projetos e eventos.
+        </p>
+      </div>
+      <div class="text-center p-6 reveal hover-lift bg-gray-50 rounded-lg transition-all duration-300 border border-gray-100" style="animation-delay: 0.2s;">
+        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-gradient-heading mb-3">Doações de Materiais</h3>
+        <p class="text-gradient-subtle font-medium">
+          Alimentos, roupas, brinquedos e outros materiais são sempre bem-vindos.
+        </p>
+      </div>
+    </div>
+    <div class="text-center mt-8 reveal">
+      <a
+        href="/contato#doar"
+        class="inline-block bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
+      >
+        Quero Ajudar
+      </a>
+    </div>
+  </Section>
+
+  <!-- Localização -->
+  <Section
+    title="Nossa Localização"
+    subtitle="Venha nos visitar"
+    className="bg-gray-50"
+  >
+    <div class="reveal">
+      <div class="w-full rounded-lg overflow-hidden shadow-lg">
+        <iframe 
+          class="gp-google-maps" 
+          data-endereco="Brasil,SP,Campinas,Jardim%2bSanta%2bC%c3%a2ndida,R.%2bOlga%2bde%2bGeorgio%2bGeracci,231" 
+          height="450" 
+          src="https://www.google.com/maps?z=15&amp;q=Brasil,SP,Campinas,Jardim%2bSanta%2bC%c3%a2ndida,R.%2bOlga%2bde%2bGeorgio%2bGeracci,231&amp;output=embed" 
+          width="100%"
+          style="border:0;"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
+    </div>
+  </Section>
+</Layout>

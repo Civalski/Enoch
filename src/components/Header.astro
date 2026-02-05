@@ -1,0 +1,201 @@
+---
+const currentPath = Astro.url.pathname;
+---
+
+<header class="bg-white/95 backdrop-blur-md shadow-md sticky top-0 z-50 transition-all duration-300">
+  <nav class="container mx-auto px-4 py-4">
+    <div class="flex items-center justify-between">
+      <!-- Logo -->
+      <a href="/" class="flex items-center space-x-3 group">
+        <div class="h-12 w-auto flex items-center group-hover:scale-105 transition-transform duration-300">
+          <img
+            src="https://enoch.ornete.com/Loja/17673/Site/Logotipo.jpg?20240622135039"
+            alt="A.R.L.S Enoch"
+            class="h-full w-auto object-contain"
+          />
+        </div>
+        <div class="flex flex-col">
+          <span class="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">A.R.L.S Enoch</span>
+          <span class="text-xs text-gray-600">Instituição de Caridade</span>
+        </div>
+      </a>
+
+      <!-- Menu Desktop -->
+      <ul class="hidden md:flex items-center space-x-8">
+        <li>
+          <a
+            href="/"
+            class={`text-sm font-medium transition-all duration-300 relative group ${
+              currentPath === '/' ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
+            }`}
+          >
+            Início
+            <span class={`absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 transition-all duration-300 ${
+              currentPath === '/' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+            }`}></span>
+          </a>
+        </li>
+        <li>
+          <a
+            href="/sobre"
+            class={`text-sm font-medium transition-all duration-300 relative group ${
+              currentPath === '/sobre' ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
+            }`}
+          >
+            Sobre
+            <span class={`absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 transition-all duration-300 ${
+              currentPath === '/sobre' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+            }`}></span>
+          </a>
+        </li>
+        <li>
+          <a
+            href="/projetos"
+            class={`text-sm font-medium transition-all duration-300 relative group ${
+              currentPath === '/projetos' ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
+            }`}
+          >
+            Projetos
+            <span class={`absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 transition-all duration-300 ${
+              currentPath === '/projetos' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+            }`}></span>
+          </a>
+        </li>
+        <li>
+          <a
+            href="/contato"
+            class={`text-sm font-medium transition-all duration-300 relative group ${
+              currentPath === '/contato' ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
+            }`}
+          >
+            Contato
+            <span class={`absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 transition-all duration-300 ${
+              currentPath === '/contato' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+            }`}></span>
+          </a>
+        </li>
+        <li>
+          <a
+            href="/transparencia"
+            class={`text-sm font-medium transition-all duration-300 relative group ${
+              currentPath === '/transparencia' ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
+            }`}
+          >
+            Transparência
+            <span class={`absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 transition-all duration-300 ${
+              currentPath === '/transparencia' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+            }`}></span>
+          </a>
+        </li>
+        <li>
+          <a
+            href="/contato#doar"
+            class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-2 rounded-lg font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
+          >
+            Doar
+          </a>
+        </li>
+      </ul>
+
+      <!-- Menu Mobile Button -->
+      <button
+        id="mobile-menu-button"
+        class="md:hidden text-gray-700 focus:outline-none hover:text-blue-600 transition-colors duration-300"
+        aria-label="Menu"
+      >
+        <svg class="w-6 h-6 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Menu Mobile -->
+    <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4 animate-fade-in">
+      <ul class="flex flex-col space-y-4">
+        <li>
+          <a
+            href="/"
+            class={`block text-sm font-medium ${
+              currentPath === '/' ? 'text-blue-600' : 'text-gray-700'
+            }`}
+          >
+            Início
+          </a>
+        </li>
+        <li>
+          <a
+            href="/sobre"
+            class={`block text-sm font-medium ${
+              currentPath === '/sobre' ? 'text-blue-600' : 'text-gray-700'
+            }`}
+          >
+            Sobre
+          </a>
+        </li>
+        <li>
+          <a
+            href="/projetos"
+            class={`block text-sm font-medium ${
+              currentPath === '/projetos' ? 'text-blue-600' : 'text-gray-700'
+            }`}
+          >
+            Projetos
+          </a>
+        </li>
+        <li>
+          <a
+            href="/contato"
+            class={`block text-sm font-medium ${
+              currentPath === '/contato' ? 'text-blue-600' : 'text-gray-700'
+            }`}
+          >
+            Contato
+          </a>
+        </li>
+        <li>
+          <a
+            href="/transparencia"
+            class={`block text-sm font-medium ${
+              currentPath === '/transparencia' ? 'text-blue-600' : 'text-gray-700'
+            }`}
+          >
+            Transparência
+          </a>
+        </li>
+        <li>
+          <a
+            href="/contato#doar"
+            class="block bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-2 rounded-lg font-medium text-center"
+          >
+            Doar
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<script>
+  const mobileMenuButton = document.getElementById('mobile-menu-button');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const header = document.querySelector('header');
+
+  if (mobileMenuButton && mobileMenu) {
+    mobileMenuButton.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+  }
+
+  // Efeito de scroll no header
+  if (header) {
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 100) {
+        header.classList.add('shadow-lg');
+        header.classList.remove('shadow-md');
+      } else {
+        header.classList.add('shadow-md');
+        header.classList.remove('shadow-lg');
+      }
+    });
+  }
+</script>
