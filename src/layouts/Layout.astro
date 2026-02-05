@@ -7,9 +7,10 @@ import Preloader from '../components/Preloader.astro';
 interface Props {
   title: string;
   description?: string;
+  showPreloader?: boolean;
 }
 
-const { title, description = "A.R.L.S Enoch - Instituição de Caridade" } = Astro.props;
+const { title, description = "A.R.L.S Enoch - Instituição de Caridade", showPreloader = false } = Astro.props;
 ---
 
 <!doctype html>
@@ -28,7 +29,7 @@ const { title, description = "A.R.L.S Enoch - Instituição de Caridade" } = Ast
     <title>{title} - A.R.L.S Enoch</title>
   </head>
   <body class="min-h-screen flex flex-col bg-slate-50 text-slate-800">
-    <Preloader />
+    {showPreloader && <Preloader />}
     <Header />
     <main class="flex-grow">
       <slot />
