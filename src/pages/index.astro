@@ -8,37 +8,41 @@ import Card from '../components/Card.astro';
 <Layout title="Início" description="A.R.L.S Enoch - Transformando vidas através da solidariedade e ações sociais">
   <Hero
     title="Transformando Vidas Através da Solidariedade"
-    subtitle="A.R.L.S Enoch é uma instituição de caridade dedicada a fazer a diferença na vida das pessoas através de ações solidárias e projetos sociais."
+    subtitle="A.R.L.S Enoch é uma instituição dedicada a fazer a diferença na vida das pessoas através de ações solidárias e projetos sociais."
   />
 
   <!-- Sobre -->
   <Section
     title="Quem Somos"
     subtitle="Uma instituição comprometida com o bem-estar social e a transformação de vidas"
-    className="bg-white"
+    className="bg-white relative overflow-hidden"
   >
-    <div class="grid md:grid-cols-2 gap-8 items-center">
+    <div class="blob blob-1 top-0 left-0 -translate-x-1/2 -translate-y-1/2"></div>
+    <div class="blob blob-2 bottom-0 right-0 translate-x-1/3 translate-y-1/3"></div>
+    
+    <div class="grid md:grid-cols-2 gap-12 items-center relative z-10">
       <div class="reveal">
-        <h3 class="text-2xl font-bold text-gradient-heading mb-4">Nossa Missão</h3>
-        <p class="text-gradient-subtle mb-4 font-medium">
+        <h3 class="text-3xl font-bold text-gradient-heading mb-6">Nossa Missão</h3>
+        <p class="text-gray-600 mb-6 text-lg leading-relaxed">
           A A.R.L.S Enoch tem como missão promover ações de caridade, assistência social e desenvolvimento comunitário, 
           sempre com foco no bem-estar e na dignidade das pessoas que atendemos.
         </p>
-        <p class="text-gradient-subtle mb-4 font-medium">
+        <p class="text-gray-600 mb-8 text-lg leading-relaxed">
           Acreditamos que pequenas ações podem gerar grandes transformações e que juntos podemos construir um mundo mais justo e solidário.
         </p>
         <a
           href="/sobre"
-          class="inline-block bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
+          class="inline-block bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-lg font-bold hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1 transform"
         >
           Conheça Mais Sobre Nós
         </a>
       </div>
-      <div class="w-full h-80 bg-white rounded-lg overflow-hidden reveal group flex items-center justify-center p-8">
+      <div class="w-full h-96 glass-card rounded-2xl overflow-hidden reveal group flex items-center justify-center p-10 relative">
+        <div class="absolute inset-0 bg-gradient-blue-subtle opacity-5"></div>
         <img
           src="https://enoch.ornete.com/Loja/17673/Site/Logotipo.jpg?20240622135039"
           alt="Logotipo A.R.L.S Enoch"
-          class="max-w-full max-h-full object-contain transition-transform duration-500 group-hover:scale-105"
+          class="max-w-full max-h-full object-contain transition-transform duration-700 group-hover:scale-105 relative z-10"
         />
       </div>
     </div>
@@ -48,7 +52,7 @@ import Card from '../components/Card.astro';
   <Section
     title="Nossos Projetos"
     subtitle="Conheça algumas das iniciativas que desenvolvemos para transformar vidas"
-    className="bg-gray-50"
+    className="bg-gray-50/50 relative"
   >
     <div class="grid md:grid-cols-3 gap-8">
       <div class="reveal" style="animation-delay: 0.1s;">
@@ -76,10 +80,10 @@ import Card from '../components/Card.astro';
         />
       </div>
     </div>
-    <div class="text-center mt-8 reveal">
+    <div class="text-center mt-12 reveal">
       <a
         href="/projetos"
-        class="inline-block bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
+        class="inline-block bg-white text-blue-600 border-2 border-blue-600 px-8 py-3 rounded-lg font-bold hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-1 transform"
       >
         Ver Todos os Projetos
       </a>
@@ -88,25 +92,26 @@ import Card from '../components/Card.astro';
 
   <!-- Estatísticas -->
   <Section
-    className="gradient-animated text-white relative overflow-hidden"
+    className="gradient-animated text-white relative overflow-hidden py-24"
   >
-    <div class="absolute inset-0 bg-gradient-blue-subtle opacity-95"></div>
+    <div class="absolute inset-0 bg-black/10"></div>
+    <div class="particles-bg absolute inset-0"></div>
     <div class="grid md:grid-cols-4 gap-8 text-center relative z-10">
-      <div class="reveal">
-        <div class="text-4xl md:text-5xl font-bold mb-2">500+</div>
-        <div class="text-blue-100">Famílias Atendidas</div>
+      <div class="reveal group">
+        <div class="text-5xl md:text-6xl font-extrabold mb-2 group-hover:scale-110 transition-transform duration-300">500+</div>
+        <div class="text-blue-100 font-medium text-lg">Famílias Atendidas</div>
       </div>
-      <div class="reveal" style="animation-delay: 0.1s;">
-        <div class="text-4xl md:text-5xl font-bold mb-2">50+</div>
-        <div class="text-blue-100">Projetos Realizados</div>
+      <div class="reveal group" style="animation-delay: 0.1s;">
+        <div class="text-5xl md:text-6xl font-extrabold mb-2 group-hover:scale-110 transition-transform duration-300">50+</div>
+        <div class="text-blue-100 font-medium text-lg">Projetos Realizados</div>
       </div>
-      <div class="reveal" style="animation-delay: 0.2s;">
-        <div class="text-4xl md:text-5xl font-bold mb-2">1000+</div>
-        <div class="text-blue-100">Voluntários</div>
+      <div class="reveal group" style="animation-delay: 0.2s;">
+        <div class="text-5xl md:text-6xl font-extrabold mb-2 group-hover:scale-110 transition-transform duration-300">1000+</div>
+        <div class="text-blue-100 font-medium text-lg">Voluntários</div>
       </div>
-      <div class="reveal" style="animation-delay: 0.3s;">
-        <div class="text-4xl md:text-5xl font-bold mb-2">10+</div>
-        <div class="text-blue-100">Anos de Atuação</div>
+      <div class="reveal group" style="animation-delay: 0.3s;">
+        <div class="text-5xl md:text-6xl font-extrabold mb-2 group-hover:scale-110 transition-transform duration-300">10+</div>
+        <div class="text-blue-100 font-medium text-lg">Anos de Atuação</div>
       </div>
     </div>
   </Section>
@@ -115,47 +120,50 @@ import Card from '../components/Card.astro';
   <Section
     title="Como Você Pode Ajudar"
     subtitle="Existem várias formas de contribuir com nossa causa e fazer a diferença"
-    className="bg-white"
+    className="bg-white relative overflow-hidden"
   >
-    <div class="grid md:grid-cols-3 gap-8">
-      <div class="text-center p-6 reveal hover-lift bg-gray-50 rounded-lg transition-all duration-300 border border-gray-100">
-        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="blob blob-2 top-0 right-0 translate-x-1/3 -translate-y-1/2"></div>
+    <div class="blob blob-1 bottom-0 left-0 -translate-x-1/2 translate-y-1/2"></div>
+
+    <div class="grid md:grid-cols-3 gap-8 relative z-10">
+      <div class="text-center p-8 reveal hover-lift glass-card rounded-2xl transition-all duration-300">
+        <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl rotate-3 flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:rotate-6 transition-transform duration-300">
+          <svg class="w-10 h-10 text-white -rotate-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
-        <h3 class="text-xl font-bold text-gradient-heading mb-3">Doações Financeiras</h3>
-        <p class="text-gradient-subtle font-medium">
+        <h3 class="text-xl font-bold text-gray-800 mb-3">Doações Financeiras</h3>
+        <p class="text-gray-600 font-medium leading-relaxed">
           Sua contribuição financeira ajuda a manter nossos projetos e ampliar nosso alcance.
         </p>
       </div>
-      <div class="text-center p-6 reveal hover-lift bg-gray-50 rounded-lg transition-all duration-300 border border-gray-100" style="animation-delay: 0.1s;">
-        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="text-center p-8 reveal hover-lift glass-card rounded-2xl transition-all duration-300" style="animation-delay: 0.1s;">
+        <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl -rotate-3 flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:-rotate-6 transition-transform duration-300">
+          <svg class="w-10 h-10 text-white rotate-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
           </svg>
         </div>
-        <h3 class="text-xl font-bold text-gradient-heading mb-3">Voluntariado</h3>
-        <p class="text-gradient-subtle font-medium">
+        <h3 class="text-xl font-bold text-gray-800 mb-3">Voluntariado</h3>
+        <p class="text-gray-600 font-medium leading-relaxed">
           Doe seu tempo e habilidades para ajudar em nossos projetos e eventos.
         </p>
       </div>
-      <div class="text-center p-6 reveal hover-lift bg-gray-50 rounded-lg transition-all duration-300 border border-gray-100" style="animation-delay: 0.2s;">
-        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="text-center p-8 reveal hover-lift glass-card rounded-2xl transition-all duration-300" style="animation-delay: 0.2s;">
+        <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl rotate-3 flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:rotate-6 transition-transform duration-300">
+          <svg class="w-10 h-10 text-white -rotate-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
           </svg>
         </div>
-        <h3 class="text-xl font-bold text-gradient-heading mb-3">Doações de Materiais</h3>
-        <p class="text-gradient-subtle font-medium">
+        <h3 class="text-xl font-bold text-gray-800 mb-3">Doações de Materiais</h3>
+        <p class="text-gray-600 font-medium leading-relaxed">
           Alimentos, roupas, brinquedos e outros materiais são sempre bem-vindos.
         </p>
       </div>
     </div>
-    <div class="text-center mt-8 reveal">
+    <div class="text-center mt-12 reveal">
       <a
         href="/contato#doar"
-        class="inline-block bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
+        class="inline-block bg-gradient-to-r from-blue-600 to-blue-700 text-white px-10 py-4 rounded-xl font-bold hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-1 transform"
       >
         Quero Ajudar
       </a>
@@ -166,10 +174,10 @@ import Card from '../components/Card.astro';
   <Section
     title="Nossa Localização"
     subtitle="Venha nos visitar"
-    className="bg-gray-50"
+    className="bg-gray-50/50"
   >
     <div class="reveal">
-      <div class="w-full rounded-lg overflow-hidden shadow-lg">
+      <div class="w-full rounded-2xl overflow-hidden shadow-2xl ring-1 ring-gray-200">
         <iframe 
           class="gp-google-maps" 
           data-endereco="Brasil,SP,Campinas,Jardim%2bSanta%2bC%c3%a2ndida,R.%2bOlga%2bde%2bGeorgio%2bGeracci,231" 

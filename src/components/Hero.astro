@@ -7,88 +7,139 @@ interface Props {
 const { title, subtitle } = Astro.props;
 ---
 
-<section class="relative gradient-animated text-white overflow-hidden particles-bg">
-  <div class="absolute inset-0 bg-gradient-blue-subtle opacity-90"></div>
+<section class="relative text-white overflow-hidden particles-bg min-h-screen flex items-center bg-black">
+  <div class="absolute inset-0 bg-black/40 z-0"></div>
   <div class="absolute inset-0">
-    <img
-      id="hero-image-1"
-      src="https://enoch.ornete.com/Loja/12356/Conteudo/slide002.jpg"
-      alt="A.R.L.S Enoch"
-      class="w-full h-full object-cover opacity-20 transition-opacity duration-1000"
-    />
-    <img
-      id="hero-image-2"
-      src="https://enoch.ornete.com/Loja/12356/Conteudo/slide00204.jpg"
-      alt="A.R.L.S Enoch"
+    <video
+      id="hero-video-1"
       class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000"
-    />
-    <img
-      id="hero-image-3"
-      src="https://enoch.ornete.com/Imagem/maconaria6.jpg"
-      alt="A.R.L.S Enoch"
+      muted
+      playsinline
+      preload="auto"
+    ></video>
+    <video
+      id="hero-video-2"
       class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000"
-    />
+      muted
+      playsinline
+      preload="auto"
+    ></video>
   </div>
+  
   <div class="container mx-auto px-4 py-24 md:py-32 relative z-10">
-    <div class="max-w-3xl">
-      <h1 class="text-4xl md:text-6xl font-bold mb-6 animate-fade-in-up bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent drop-shadow-lg" style="animation-delay: 0.2s;">
-        {title}
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-5xl md:text-7xl font-extrabold mb-8 animate-fade-in-up leading-tight tracking-tight drop-shadow-lg" style="animation-delay: 0.2s;">
+        <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-blue-200 to-blue-500">
+          {title}
+        </span>
       </h1>
       {subtitle && (
-        <p class="text-xl md:text-2xl mb-8 text-blue-100 animate-fade-in-up drop-shadow-md" style="animation-delay: 0.4s;">
+        <p class="text-xl md:text-2xl mb-10 text-blue-100 font-medium animate-fade-in-up max-w-2xl mx-auto leading-relaxed drop-shadow-md" style="animation-delay: 0.4s;">
           {subtitle}
         </p>
       )}
-      <div class="flex flex-col sm:flex-row gap-4 animate-fade-in-up" style="animation-delay: 0.6s;">
+      <div class="flex flex-col sm:flex-row gap-5 justify-center animate-fade-in-up" style="animation-delay: 0.6s;">
         <a
           href="/contato#doar"
-          class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-all duration-300 text-center shadow-xl hover:shadow-2xl hover:scale-105 transform"
+          class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-10 py-4 rounded-xl font-bold hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-1 transform text-lg ring-2 ring-blue-500/50"
         >
           Fazer uma Doação
         </a>
         <a
           href="/sobre"
-          class="bg-white/10 backdrop-blur-md border-2 border-white/30 text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-all duration-300 text-center shadow-xl hover:shadow-2xl hover:scale-105 transform"
+          class="bg-white/10 backdrop-blur-md border border-white/40 text-white px-10 py-4 rounded-xl font-bold hover:bg-white/20 transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-1 transform text-lg"
         >
           Conheça Nossa História
         </a>
       </div>
     </div>
   </div>
-  <div class="absolute bottom-0 left-0 right-0 h-16 bg-white transform rotate-180">
-    <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
-      <path d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="white"/>
+
+  <div class="absolute bottom-0 left-0 right-0 z-20">
+    <svg viewBox="0 0 1440 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full text-white fill-current">
+      <path d="M0 160L48 144C96 128 192 96 288 90.7C384 85.3 480 106.7 576 122.7C672 138.7 768 149.3 864 144C960 138.7 1056 117.3 1152 106.7C1248 96 1344 96 1392 96L1440 96V200H1392C1344 200 1248 200 1152 200C1056 200 960 200 864 200C768 200 672 200 576 200C480 200 384 200 288 200C192 200 96 200 48 200H0Z" fill-opacity="0.6"/>
+      <path d="M0 180L48 165.3C96 150.7 192 121.3 288 112C384 102.7 480 113.3 576 128C672 142.7 768 161.3 864 165.3C960 169.3 1056 158.7 1152 144C1248 129.3 1344 110.7 1392 101.3L1440 92V200H1392C1344 200 1248 200 1152 200C1056 200 960 200 864 200C768 200 672 200 576 200C480 200 384 200 288 200C192 200 96 200 48 200H0Z" />
     </svg>
   </div>
 </section>
 
 <script>
   if (typeof window !== 'undefined') {
-    const image1 = document.getElementById('hero-image-1');
-    const image2 = document.getElementById('hero-image-2');
-    const image3 = document.getElementById('hero-image-3');
+    const videoSources = [
+      '/video1.mp4',
+      '/video2.mp4',
+      '/video3.mp4',
+      '/video4.mp4',
+      '/video5.mp4'
+    ];
     
-    if (image1 && image2 && image3) {
-      let currentImage = 1;
+    const video1 = document.getElementById('hero-video-1') as HTMLVideoElement;
+    const video2 = document.getElementById('hero-video-2') as HTMLVideoElement;
+    
+    if (video1 && video2) {
+      let currentSourceIndex = 0;
+      let activeVideo = 1; // 1 or 2
+      let timeoutId: number | null = null;
       
-      setInterval(() => {
-        // Esconder todas as imagens primeiro
-        image1.style.opacity = '0';
-        image2.style.opacity = '0';
-        image3.style.opacity = '0';
+      const MAX_DURATION = 5000; // 5 seconds
+      
+      const playNextVideo = () => {
+        // Determine which video element to use next
+        const nextVideoEl = activeVideo === 1 ? video2 : video1;
+        const currentVideoEl = activeVideo === 1 ? video1 : video2;
         
-        // Mostrar a próxima imagem
-        if (currentImage === 1) {
-          image2.style.opacity = '0.2';
-          currentImage = 2;
-        } else if (currentImage === 2) {
-          image3.style.opacity = '0.2';
-          currentImage = 3;
-        } else {
-          image1.style.opacity = '0.2';
-          currentImage = 1;
-        }
-      }, 3000);
+        // Setup next video
+        nextVideoEl.src = videoSources[currentSourceIndex];
+        nextVideoEl.load();
+        
+        const onCanPlay = () => {
+          // Remove listener to avoid duplicates
+          nextVideoEl.removeEventListener('canplay', onCanPlay);
+          
+          // Play next video
+          nextVideoEl.play().then(() => {
+            // Fade in next, Fade out current
+            nextVideoEl.style.opacity = '0.4';
+            currentVideoEl.style.opacity = '0';
+            
+            // Update active tracker
+            activeVideo = activeVideo === 1 ? 2 : 1;
+            
+            // Setup transition to NEXT video after this one finishes or times out
+            // Clear any existing timeout
+            if (timeoutId) clearTimeout(timeoutId);
+            
+            // 1. Timeout Handler (Max 5s)
+            timeoutId = setTimeout(() => {
+              advanceToNext();
+            }, MAX_DURATION) as unknown as number;
+            
+            // 2. Ended Handler (If video < 5s)
+            nextVideoEl.onended = () => {
+              if (timeoutId) clearTimeout(timeoutId);
+              advanceToNext();
+            };
+            
+          }).catch(e => {
+            console.error("Autoplay failed", e);
+            advanceToNext(); // Try next if fail
+          });
+        };
+        
+        nextVideoEl.addEventListener('canplay', onCanPlay);
+        
+        // Handle loading errors or stalls (optional safety)
+        nextVideoEl.onerror = () => advanceToNext();
+      };
+      
+      const advanceToNext = () => {
+        currentSourceIndex = (currentSourceIndex + 1) % videoSources.length;
+        playNextVideo();
+      };
+      
+      // Start the cycle
+      // Initialize first video immediately
+      playNextVideo();
     }
   }
 </script>

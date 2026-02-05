@@ -9,28 +9,28 @@ interface Props {
 const { title, description, image = "https://via.placeholder.com/400x300/E5E7EB/6B7280?text=Imagem", link } = Astro.props;
 ---
 
-<div class="bg-white rounded-lg shadow-lg overflow-hidden hover-lift group cursor-pointer border border-gray-100">
+<div class="glass-card rounded-2xl overflow-hidden hover-lift group cursor-pointer transition-all duration-300">
   {image && (
-    <div class="w-full h-48 bg-gray-200 overflow-hidden relative">
+    <div class="w-full h-56 bg-gray-200 overflow-hidden relative">
       <img
         src={image}
         alt={title}
-        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
       />
-      <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-300"></div>
     </div>
   )}
-  <div class="p-6">
-    <h3 class="text-xl font-bold text-gradient-heading mb-3 group-hover:text-blue-600 transition-all duration-300">{title}</h3>
-    <p class="text-gradient-subtle mb-4 font-medium">{description}</p>
+  <div class="p-8">
+    <h3 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-blue-500 mb-3 group-hover:from-blue-600 group-hover:to-blue-400 transition-all duration-300">{title}</h3>
+    <p class="text-gray-600 mb-6 leading-relaxed">{description}</p>
     {link && (
       <a
         href={link}
-        class="text-blue-600 font-medium hover:text-blue-700 transition-all duration-300 inline-flex items-center group/link"
+        class="text-blue-600 font-semibold hover:text-blue-700 transition-all duration-300 inline-flex items-center group/link"
       >
         Saiba mais
-        <svg class="w-4 h-4 ml-1 transition-transform duration-300 group-hover/link:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        <svg class="w-5 h-5 ml-2 transition-transform duration-300 group-hover/link:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
         </svg>
       </a>
     )}

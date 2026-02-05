@@ -1,0 +1,60 @@
+
+<div id="preloader" class="fixed inset-0 z-[100] flex items-center justify-center bg-black transition-opacity duration-700">
+  <div class="flex flex-col items-center gap-6">
+    <!-- Pulse Effect -->
+    <div class="relative w-24 h-24">
+      <div class="absolute inset-0 rounded-full border-4 border-t-blue-500 border-r-transparent border-b-blue-700 border-l-transparent animate-spin"></div>
+      <div class="absolute inset-2 rounded-full border-4 border-t-transparent border-r-blue-300 border-b-transparent border-l-blue-600 animate-spin-reverse"></div>
+      
+      <!-- Logo -->
+      <div class="absolute inset-0 flex items-center justify-center p-4">
+        <img 
+          src="https://enoch.ornete.com/Loja/17673/Site/Logotipo.jpg?20240622135039" 
+          alt="A.R.L.S Enoch Logo" 
+          class="w-full h-full object-contain rounded-full opacity-90 animate-pulse"
+        />
+      </div>
+    </div>
+    
+    <!-- Loading text with tracking animation -->
+    <div class="text-blue-500 font-medium tracking-[0.2em] text-sm uppercase animate-pulse">
+      Carregando
+    </div>
+  </div>
+</div>
+
+<style>
+  @keyframes spin-reverse {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(-360deg); }
+  }
+  
+  .animate-spin-reverse {
+    animation: spin-reverse 1.5s linear infinite;
+  }
+</style>
+
+<script>
+  const hidePreloader = () => {
+    const preloader = document.getElementById('preloader');
+    if (preloader) {
+      // Fade out
+      preloader.style.opacity = '0';
+      
+      // Remove from DOM after transition
+      setTimeout(() => {
+        preloader.style.display = 'none';
+        // Unlock scroll if we were locking it (though body doesn't need explicit lock if we just overlay)
+      }, 700); // Matches duration-700
+    }
+  };
+
+  // Wait for everything (including videos) or a fallback timeout
+  window.addEventListener('load', () => {
+    // Small delay to ensure smooth visual
+    setTimeout(hidePreloader, 800);
+  });
+
+  // Fallback: Remove loader after 4 seconds max even if load hangs
+  setTimeout(hidePreloader, 4000);
+</script>
