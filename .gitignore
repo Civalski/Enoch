@@ -1,6 +1,8 @@
 # build output
 dist/
 .output/
+.next/
+.open-next/
 
 # dependencies
 node_modules/
@@ -13,14 +15,19 @@ pnpm-debug.log*
 
 # environment variables
 .env
-.env.production
+.env.*
+.dev.vars
 
 # macOS-specific files
 .DS_Store
 
-# IDEs
+# IDE / local tooling
 .idea/
 .vscode/
+.astro/
 *.swp
 *.swo
 *~
+
+
+/src/generated/prisma

@@ -1,0 +1,285 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum TenantRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+/// Permissões de edição no site público (tenant institucional); OWNER e ADMIN ignoram a lista.
+enum SitePermission {
+  BLOG
+  TRANSPARENCY
+  CONTACT_INBOX
+  ABOUT
+  PROJECTS
+  INSTITUTIONAL
+}
+
+/// Categoria de material na página pública /estudos.
+enum StudyResourceKind {
+  artigo
+  livro
+  video
+  material_educacional
+}
+
+/// Categoria de artigos do blog (por tenant; gestor pode criar novas além das três padrão).
+model BlogPostCategory {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @db.Uuid
+  slug      String
+  label     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  posts  BlogPost[]
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+}
+
+/// Despesa registada para transparência (destinação por frente de atuação).
+enum TransparencyExpenseCategory {
+  assistencia_social
+  projetos_educacionais
+  acoes_saude
+  infraestrutura
+}
+
+/// Perfil de aplicação; id alinhado ao auth.users (Supabase Auth).
+model UserProfile {
+  id        String   @id @db.Uuid
+  email     String
+  fullName  String?
+  /// E-mail de contacto (opcional; distinto do endereço técnico de autenticação em `email`).
+  contactEmail String? @db.VarChar(320)
+  phone     String?  @db.VarChar(32)
+  address   String?  @db.Text
+  cpf       String?  @db.VarChar(11)
+  rg        String?  @db.VarChar(32)
+  description String? @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  memberships TenantMember[]
+}
+
+/// Organização (tenant) para multi-tenancy.
+model Tenant {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  members              TenantMember[]
+  blogPostCategories   BlogPostCategory[]
+  blogPosts            BlogPost[]
+  projects             Project[]
+  donations            Donation[]
+  transparencyExpenses TransparencyExpense[]
+  contactMessages      ContactMessage[]
+  aboutTeamMembers     AboutTeamMember[]
+  studyResources       StudyResource[]
+  institutionalContent InstitutionalSiteContent?
+}
+
+/// Textos, contacto e conteúdo JSON (início, sobre, contato) do site público; um por tenant.
+model InstitutionalSiteContent {
+  id     String @id @default(uuid()) @db.Uuid
+  tenantId String @unique @db.Uuid
+  tenant  Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  orgName         String? @db.VarChar(200)
+  footerTagline   String? @db.Text
+  contactEmail    String? @db.VarChar(320)
+  contactPhone    String? @db.VarChar(120)
+  address         String? @db.Text
+  facebookUrl     String? @db.VarChar(2000)
+  instagramUrl    String? @db.VarChar(2000)
+  whatsappUrl     String? @db.VarChar(2000)
+  mapEmbedUrl     String? @db.VarChar(4000)
+  copyrightLine   String? @db.VarChar(500)
+  logoUrl         String? @db.VarChar(2000)
+  /// Linha pequena abaixo do nome no cabeçalho (ex.: «Instituição de Caridade»).
+  headerTagline   String? @db.VarChar(500)
+
+  homeContent    Json?
+  aboutContent   Json?
+  contatoContent Json?
+  projetosContent Json?
+  /// Textos da página pública /blog (hero, listagem, meta).
+  blogContent Json?
+  /// Textos da página pública /estudos (título, subtítulo no topo, meta).
+  estudosContent Json?
+  /// Rótulos do menu: mapa `href` → texto (só chaves conhecidas; vazio = default em código).
+  headerNavLabels Json?
+
+  /// Slugs de `blog.ts` que o gestor removeu do site (conteúdo de exemplo, sem tabela `BlogPost`).
+  hiddenStaticBlogSlugs     String[] @default([])
+  /// Títulos de `projects-static` removidos do site da mesma forma.
+  hiddenStaticProjectTitles String[] @default([])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/// Doação registrada para transparência (tenant público institucional).
+model Donation {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @db.Uuid
+  donorName String
+  amount    Decimal  @db.Decimal(12, 2)
+  donatedAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, donatedAt(sort: Desc)])
+}
+
+model TransparencyExpense {
+  id          String                      @id @default(uuid()) @db.Uuid
+  tenantId    String                      @db.Uuid
+  category    TransparencyExpenseCategory
+  amount      Decimal                     @db.Decimal(12, 2)
+  spentAt     DateTime
+  description String?                     @db.VarChar(500)
+  createdAt   DateTime                    @default(now())
+  updatedAt   DateTime                    @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, spentAt(sort: Desc)])
+}
+
+model BlogPost {
+  id            String       @id @default(uuid()) @db.Uuid
+  tenantId      String       @db.Uuid
+  slug          String
+  title         String
+  excerpt       String
+  coverImageUrl String
+  bodyMarkdown  String       @db.Text
+  publishedAt   DateTime
+  categoryId    String         @db.Uuid
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  tenant   Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  category BlogPostCategory  @relation(fields: [categoryId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  @@unique([tenantId, slug])
+  @@index([tenantId, publishedAt(sort: Desc)])
+  @@index([categoryId])
+}
+
+/// Membros da secção "Nossa Equipe" em /sobre.
+model AboutTeamMember {
+  id           String   @id @default(uuid()) @db.Uuid
+  tenantId     String   @db.Uuid
+  name         String   @db.VarChar(200)
+  roleTitle    String   @db.VarChar(200)
+  imageUrl     String   @db.VarChar(2000)
+  displayOrder Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, displayOrder])
+}
+
+/// Projetos exibidos em /projetos (conteúdo por tenant).
+model Project {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @db.Uuid
+  title       String
+  description String   @db.Text
+  imageUrl    String
+  /// Ordem de apresentação (menor = primeiro).
+  displayOrder Int     @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, displayOrder])
+}
+
+/// Materiais de estudo (ex.: ligação para Google Drive) em /estudos, por tenant.
+model StudyResource {
+  id            String            @id @default(uuid()) @db.Uuid
+  tenantId      String            @db.Uuid
+  kind          StudyResourceKind
+  title         String            @db.VarChar(500)
+  description   String?           @db.Text
+  linkUrl       String?           @db.VarChar(2000)
+  /// Ordem dentro da categoria (menor = primeiro).
+  displayOrder  Int               @default(0)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, kind, displayOrder])
+}
+
+/// Mensagem recebida pelo formulário público de contacto (tenant institucional).
+model ContactMessage {
+  id        String    @id @default(uuid()) @db.Uuid
+  tenantId  String    @db.Uuid
+  name      String    @db.VarChar(200)
+  email     String    @db.VarChar(320)
+  phone     String?   @db.VarChar(40)
+  subject   String    @db.VarChar(32)
+  body      String    @db.Text
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, createdAt(sort: Desc)])
+}
+
+/// Contador por IP (hachada) e janela temporal para limitar abuso do formulário de contacto.
+model ContactFormRate {
+  id          String   @id @default(uuid()) @db.Uuid
+  ipKey       String   @db.VarChar(64)
+  windowStart DateTime
+  count       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([ipKey, windowStart])
+  @@index([windowStart])
+}
+
+model TenantMember {
+  id        String     @id @default(uuid()) @db.Uuid
+  tenantId  String     @db.Uuid
+  userId    String     @db.Uuid
+  role      TenantRole @default(MEMBER)
+  /// Efetivo para MEMBER; OWNER e ADMIN tratam-se como todas as permissões em código.
+  permissions SitePermission[] @default([])
+  createdAt DateTime   @default(now())
+
+  tenant Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, userId])
+  @@index([userId])
+}
