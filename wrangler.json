@@ -15,6 +15,6 @@
     }
   ],
   "vars": {
-    "NEXT_PUBLIC_SITE_URL": "https://enoch.arkersoft.workers.dev"
+    "NEXT_PUBLIC_SITE_URL": "https://site-enoch.arkersoft.workers.dev"
   }
 }

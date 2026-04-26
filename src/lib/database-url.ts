@@ -9,9 +9,12 @@ type HyperdriveLike = { connectionString: string };
 export function getDatabaseUrl(): string {
   try {
     const { env } = getCloudflareContext();
-    const hyper = (env as { HYPERDRIVE?: HyperdriveLike }).HYPERDRIVE;
-    if (hyper?.connectionString) {
-      return hyper.connectionString;
+    const e = env as { HYPERDRIVE?: HyperdriveLike; DATABASE_URL?: string };
+    if (e.HYPERDRIVE?.connectionString) {
+      return e.HYPERDRIVE.connectionString;
+    }
+    if (typeof e.DATABASE_URL === "string" && e.DATABASE_URL.length > 0) {
+      return e.DATABASE_URL;
     }
   } catch {
     // SSG, or dev without OpenNext worker context
