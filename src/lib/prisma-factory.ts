@@ -20,11 +20,16 @@ import { getDatabaseUrl, isDatabaseSslInsecure } from "@/lib/database-url";
 export function createPrismaClient() {
   const connectionString = getDatabaseUrl();
 
-  // Build adapter options following the official OpenNext pattern.
-  // `maxUses: 1` is critical for Workers — prevents pool reuse across requests.
+  // Build adapter options for pg.Pool
+  // Instead of maxUses: 1 (which destroys the connection immediately and causes spam),
+  // we use max: 1 (one concurrent connection) and idleTimeoutMillis: 10.
+  // This ensures the connection is closed gracefully right after the request ends,
+  // before Cloudflare freezes the socket, avoiding "Connection terminated unexpectedly".
   const adapterOptions: Record<string, unknown> = {
     connectionString,
-    maxUses: 1,
+    max: 1,
+    idleTimeoutMillis: 10,
+    connectionTimeoutMillis: 5000,
   };
 
   // In production (Workers), relax SSL verification for Supabase pooler.
