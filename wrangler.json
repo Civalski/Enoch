@@ -21,6 +21,8 @@
     }
   ],
   "vars": {
-    "NEXT_PUBLIC_SITE_URL": "https://site-enoch.arkersoft.workers.dev"
+    "NEXT_PUBLIC_SITE_URL": "https://site-enoch.arkersoft.workers.dev",
+    "NEXTJS_ENV": "production",
+    "NODE_ENV": "production"
   }
 }
