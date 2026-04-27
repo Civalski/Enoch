@@ -50,14 +50,19 @@ function buildViewFromRow(
 
 /** Conteúdo institucional do site público (merge com defaults se não houver registo). */
 export async function getPublicSiteView(): Promise<PublicSiteView> {
-  const tenant = await resolvePublicBlogTenant();
-  if (!tenant) {
+  try {
+    const tenant = await resolvePublicBlogTenant();
+    if (!tenant) {
+      return buildViewFromRow(null);
+    }
+    const row = await getPrisma().institutionalSiteContent.findUnique({
+      where: { tenantId: tenant.id },
+    });
+    return buildViewFromRow(row);
+  } catch (error) {
+    console.error("getPublicSiteView failed; serving default public content.", error);
     return buildViewFromRow(null);
   }
-  const row = await getPrisma().institutionalSiteContent.findUnique({
-    where: { tenantId: tenant.id },
-  });
-  return buildViewFromRow(row);
 }
 
 export const getPublicInstitutionalContent = getPublicSiteView;

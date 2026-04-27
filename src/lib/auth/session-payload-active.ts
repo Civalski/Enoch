@@ -11,13 +11,18 @@ export async function isSessionPayloadActive(v: { login: string; userId?: string
   if (!v.userId) {
     return normalizeLogin(v.login) === getAdminLoginNormalized();
   }
-  const tenant = await resolvePublicBlogTenant();
-  if (!tenant) {
+  try {
+    const tenant = await resolvePublicBlogTenant();
+    if (!tenant) {
+      return false;
+    }
+    const m = await getPrisma().tenantMember.findFirst({
+      where: { userId: v.userId, tenantId: tenant.id },
+      select: { id: true },
+    });
+    return m != null;
+  } catch (error) {
+    console.error("isSessionPayloadActive: DB check failed; treating session as inactive.", error);
     return false;
   }
-  const m = await getPrisma().tenantMember.findFirst({
-    where: { userId: v.userId, tenantId: tenant.id },
-    select: { id: true },
-  });
-  return m != null;
 }
