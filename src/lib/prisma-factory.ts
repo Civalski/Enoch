@@ -1,8 +1,8 @@
 import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "@prisma/client";
 import { parse } from "pg-connection-string";
 import type { PoolConfig } from "pg";
 import { getDatabaseUrl, isDatabaseSslInsecure } from "@/lib/database-url";
+import { getPrismaClientModule } from "@/lib/prisma-runtime";
 
 /**
  * Com `connectionString`, o `pg` faz `Object.assign({}, config, parse(url))` e o
@@ -24,6 +24,7 @@ function buildPgPoolConfig(url: string): PoolConfig {
 }
 
 export function createPrismaClient() {
+  const { PrismaClient } = getPrismaClientModule();
   const url = getDatabaseUrl();
   const adapter = new PrismaPg(buildPgPoolConfig(url));
   return new PrismaClient({ adapter });

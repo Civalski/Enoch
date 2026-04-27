@@ -1,8 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import { getPrisma } from "@/lib/prisma";
+import { getPrismaClientModule } from "@/lib/prisma-runtime";
 import { requirePublicInstitutionalWriter } from "@/lib/institutional-site/writer-auth";
 import {
   aboutContentEqualToDefault,
@@ -30,6 +31,9 @@ import type {
   HomeContentV1,
   ProjetosContentV1,
 } from "@/lib/institutional-site/types";
+
+/** Valores runtime (`JsonNull`); tipos usam `import type { Prisma }`. */
+const PrismaJson = getPrismaClientModule().Prisma;
 
 const MAX = {
   orgName: 200,
@@ -80,18 +84,18 @@ export async function saveInstitutionalContentAction(
       select: { homeContent: true, aboutContent: true, projetosContent: true },
     });
 
-    const homeJson: Prisma.InputJsonValue | typeof Prisma.JsonNull =
+    const homeJson: Prisma.InputJsonValue | typeof PrismaJson.JsonNull =
       existing?.homeContent != null
         ? (existing.homeContent as Prisma.InputJsonValue)
-        : Prisma.JsonNull;
-    const aboutJson: Prisma.InputJsonValue | typeof Prisma.JsonNull =
+        : PrismaJson.JsonNull;
+    const aboutJson: Prisma.InputJsonValue | typeof PrismaJson.JsonNull =
       existing?.aboutContent != null
         ? (existing.aboutContent as Prisma.InputJsonValue)
-        : Prisma.JsonNull;
-    const projetosJson: Prisma.InputJsonValue | typeof Prisma.JsonNull =
+        : PrismaJson.JsonNull;
+    const projetosJson: Prisma.InputJsonValue | typeof PrismaJson.JsonNull =
       existing?.projetosContent != null
         ? (existing.projetosContent as Prisma.InputJsonValue)
-        : Prisma.JsonNull;
+        : PrismaJson.JsonNull;
     await getPrisma().institutionalSiteContent.upsert({
       where: { tenantId },
       create: {
@@ -169,13 +173,13 @@ export async function saveHeaderBrandingObjectAction(data: {
         whatsappUrl: null,
         mapEmbedUrl: null,
         copyrightLine: null,
-        homeContent: Prisma.JsonNull,
-        aboutContent: Prisma.JsonNull,
-        contatoContent: Prisma.JsonNull,
-        projetosContent: Prisma.JsonNull,
-        blogContent: Prisma.JsonNull,
-        estudosContent: Prisma.JsonNull,
-        headerNavLabels: Prisma.JsonNull,
+        homeContent: PrismaJson.JsonNull,
+        aboutContent: PrismaJson.JsonNull,
+        contatoContent: PrismaJson.JsonNull,
+        projetosContent: PrismaJson.JsonNull,
+        blogContent: PrismaJson.JsonNull,
+        estudosContent: PrismaJson.JsonNull,
+        headerNavLabels: PrismaJson.JsonNull,
       },
       update: {
         orgName: orgName || null,
@@ -199,10 +203,10 @@ export async function saveContatoContentObjectAction(
 ): Promise<InstitutionalFormState> {
   try {
     const { tenantId } = await requirePublicInstitutionalWriter();
-    const contatoJson: Prisma.InputJsonValue | typeof Prisma.JsonNull = contatoContentEqualToDefault(
+    const contatoJson: Prisma.InputJsonValue | typeof PrismaJson.JsonNull = contatoContentEqualToDefault(
       contatoData,
     )
-      ? Prisma.JsonNull
+      ? PrismaJson.JsonNull
       : (contatoData as unknown as Prisma.InputJsonValue);
 
     await getPrisma().institutionalSiteContent.upsert({
@@ -220,13 +224,13 @@ export async function saveContatoContentObjectAction(
         mapEmbedUrl: null,
         copyrightLine: null,
         logoUrl: null,
-        homeContent: Prisma.JsonNull,
-        aboutContent: Prisma.JsonNull,
+        homeContent: PrismaJson.JsonNull,
+        aboutContent: PrismaJson.JsonNull,
         contatoContent: contatoJson,
-        projetosContent: Prisma.JsonNull,
-        blogContent: Prisma.JsonNull,
-        estudosContent: Prisma.JsonNull,
-        headerNavLabels: Prisma.JsonNull,
+        projetosContent: PrismaJson.JsonNull,
+        blogContent: PrismaJson.JsonNull,
+        estudosContent: PrismaJson.JsonNull,
+        headerNavLabels: PrismaJson.JsonNull,
       },
       update: { contatoContent: contatoJson },
     });
@@ -244,10 +248,10 @@ export async function saveEstudosContentObjectAction(
 ): Promise<InstitutionalFormState> {
   try {
     const { tenantId } = await requirePublicInstitutionalWriter();
-    const estudosJson: Prisma.InputJsonValue | typeof Prisma.JsonNull = estudosContentEqualToDefault(
+    const estudosJson: Prisma.InputJsonValue | typeof PrismaJson.JsonNull = estudosContentEqualToDefault(
       estudosData,
     )
-      ? Prisma.JsonNull
+      ? PrismaJson.JsonNull
       : (estudosData as unknown as Prisma.InputJsonValue);
 
     await getPrisma().institutionalSiteContent.upsert({
@@ -265,13 +269,13 @@ export async function saveEstudosContentObjectAction(
         mapEmbedUrl: null,
         copyrightLine: null,
         logoUrl: null,
-        homeContent: Prisma.JsonNull,
-        aboutContent: Prisma.JsonNull,
-        contatoContent: Prisma.JsonNull,
-        projetosContent: Prisma.JsonNull,
-        blogContent: Prisma.JsonNull,
+        homeContent: PrismaJson.JsonNull,
+        aboutContent: PrismaJson.JsonNull,
+        contatoContent: PrismaJson.JsonNull,
+        projetosContent: PrismaJson.JsonNull,
+        blogContent: PrismaJson.JsonNull,
         estudosContent: estudosJson,
-        headerNavLabels: Prisma.JsonNull,
+        headerNavLabels: PrismaJson.JsonNull,
       },
       update: { estudosContent: estudosJson },
     });
@@ -303,10 +307,10 @@ export async function saveHeaderNavLabelsObjectAction(
     if (inboxV && inboxV !== HEADER_NAV_INBOX_DEFAULT_LABEL) {
       overrides[HEADER_NAV_INBOX_HREF] = inboxV.slice(0, 80);
     }
-    const headerNavJson: Prisma.InputJsonValue | typeof Prisma.JsonNull = headerNavLabelsEqualToDefault(
+    const headerNavJson: Prisma.InputJsonValue | typeof PrismaJson.JsonNull = headerNavLabelsEqualToDefault(
       overrides,
     )
-      ? Prisma.JsonNull
+      ? PrismaJson.JsonNull
       : (overrides as unknown as Prisma.InputJsonValue);
 
     await getPrisma().institutionalSiteContent.upsert({
@@ -324,11 +328,11 @@ export async function saveHeaderNavLabelsObjectAction(
         mapEmbedUrl: null,
         copyrightLine: null,
         logoUrl: null,
-        homeContent: Prisma.JsonNull,
-        aboutContent: Prisma.JsonNull,
-        contatoContent: Prisma.JsonNull,
-        projetosContent: Prisma.JsonNull,
-        blogContent: Prisma.JsonNull,
+        homeContent: PrismaJson.JsonNull,
+        aboutContent: PrismaJson.JsonNull,
+        contatoContent: PrismaJson.JsonNull,
+        projetosContent: PrismaJson.JsonNull,
+        blogContent: PrismaJson.JsonNull,
         headerNavLabels: headerNavJson,
       },
       update: { headerNavLabels: headerNavJson },
@@ -351,10 +355,10 @@ export async function saveHomePageContentAction(
   try {
     const { tenantId } = await requirePublicInstitutionalWriter();
     const homeData = readHomeFromFormData(formData);
-    const homeJson: Prisma.InputJsonValue | typeof Prisma.JsonNull = homeContentEqualToDefault(
+    const homeJson: Prisma.InputJsonValue | typeof PrismaJson.JsonNull = homeContentEqualToDefault(
       homeData,
     )
-      ? Prisma.JsonNull
+      ? PrismaJson.JsonNull
       : (homeData as unknown as Prisma.InputJsonValue);
 
     await getPrisma().institutionalSiteContent.upsert({
@@ -373,9 +377,9 @@ export async function saveHomePageContentAction(
         copyrightLine: null,
         logoUrl: null,
         homeContent: homeJson,
-        aboutContent: Prisma.JsonNull,
-        contatoContent: Prisma.JsonNull,
-        projetosContent: Prisma.JsonNull,
+        aboutContent: PrismaJson.JsonNull,
+        contatoContent: PrismaJson.JsonNull,
+        projetosContent: PrismaJson.JsonNull,
       },
       update: { homeContent: homeJson },
     });
@@ -394,10 +398,10 @@ export async function saveHomeContentObjectAction(
 ): Promise<InstitutionalFormState> {
   try {
     const { tenantId } = await requirePublicInstitutionalWriter();
-    const homeJson: Prisma.InputJsonValue | typeof Prisma.JsonNull = homeContentEqualToDefault(
+    const homeJson: Prisma.InputJsonValue | typeof PrismaJson.JsonNull = homeContentEqualToDefault(
       homeData,
     )
-      ? Prisma.JsonNull
+      ? PrismaJson.JsonNull
       : (homeData as unknown as Prisma.InputJsonValue);
 
     await getPrisma().institutionalSiteContent.upsert({
@@ -416,9 +420,9 @@ export async function saveHomeContentObjectAction(
         copyrightLine: null,
         logoUrl: null,
         homeContent: homeJson,
-        aboutContent: Prisma.JsonNull,
-        contatoContent: Prisma.JsonNull,
-        projetosContent: Prisma.JsonNull,
+        aboutContent: PrismaJson.JsonNull,
+        contatoContent: PrismaJson.JsonNull,
+        projetosContent: PrismaJson.JsonNull,
       },
       update: { homeContent: homeJson },
     });
@@ -437,10 +441,10 @@ export async function saveBlogContentObjectAction(
 ): Promise<InstitutionalFormState> {
   try {
     const { tenantId } = await requirePublicInstitutionalWriter();
-    const blogJson: Prisma.InputJsonValue | typeof Prisma.JsonNull = blogContentEqualToDefault(
+    const blogJson: Prisma.InputJsonValue | typeof PrismaJson.JsonNull = blogContentEqualToDefault(
       blogData,
     )
-      ? Prisma.JsonNull
+      ? PrismaJson.JsonNull
       : (blogData as unknown as Prisma.InputJsonValue);
 
     await getPrisma().institutionalSiteContent.upsert({
@@ -458,12 +462,12 @@ export async function saveBlogContentObjectAction(
         mapEmbedUrl: null,
         copyrightLine: null,
         logoUrl: null,
-        homeContent: Prisma.JsonNull,
-        aboutContent: Prisma.JsonNull,
-        contatoContent: Prisma.JsonNull,
-        projetosContent: Prisma.JsonNull,
+        homeContent: PrismaJson.JsonNull,
+        aboutContent: PrismaJson.JsonNull,
+        contatoContent: PrismaJson.JsonNull,
+        projetosContent: PrismaJson.JsonNull,
         blogContent: blogJson,
-        headerNavLabels: Prisma.JsonNull,
+        headerNavLabels: PrismaJson.JsonNull,
       },
       update: { blogContent: blogJson },
     });
@@ -483,10 +487,10 @@ export async function saveAboutPageContentAction(
   try {
     const { tenantId } = await requirePublicInstitutionalWriter();
     const aboutData = readAboutFromFormData(formData);
-    const aboutJson: Prisma.InputJsonValue | typeof Prisma.JsonNull = aboutContentEqualToDefault(
+    const aboutJson: Prisma.InputJsonValue | typeof PrismaJson.JsonNull = aboutContentEqualToDefault(
       aboutData,
     )
-      ? Prisma.JsonNull
+      ? PrismaJson.JsonNull
       : (aboutData as unknown as Prisma.InputJsonValue);
 
     await getPrisma().institutionalSiteContent.upsert({
@@ -504,10 +508,10 @@ export async function saveAboutPageContentAction(
         mapEmbedUrl: null,
         copyrightLine: null,
         logoUrl: null,
-        homeContent: Prisma.JsonNull,
+        homeContent: PrismaJson.JsonNull,
         aboutContent: aboutJson,
-        contatoContent: Prisma.JsonNull,
-        projetosContent: Prisma.JsonNull,
+        contatoContent: PrismaJson.JsonNull,
+        projetosContent: PrismaJson.JsonNull,
       },
       update: { aboutContent: aboutJson },
     });
@@ -526,10 +530,10 @@ export async function saveAboutContentObjectAction(
 ): Promise<InstitutionalFormState> {
   try {
     const { tenantId } = await requirePublicInstitutionalWriter();
-    const aboutJson: Prisma.InputJsonValue | typeof Prisma.JsonNull = aboutContentEqualToDefault(
+    const aboutJson: Prisma.InputJsonValue | typeof PrismaJson.JsonNull = aboutContentEqualToDefault(
       aboutData,
     )
-      ? Prisma.JsonNull
+      ? PrismaJson.JsonNull
       : (aboutData as unknown as Prisma.InputJsonValue);
 
     await getPrisma().institutionalSiteContent.upsert({
@@ -547,10 +551,10 @@ export async function saveAboutContentObjectAction(
         mapEmbedUrl: null,
         copyrightLine: null,
         logoUrl: null,
-        homeContent: Prisma.JsonNull,
+        homeContent: PrismaJson.JsonNull,
         aboutContent: aboutJson,
-        contatoContent: Prisma.JsonNull,
-        projetosContent: Prisma.JsonNull,
+        contatoContent: PrismaJson.JsonNull,
+        projetosContent: PrismaJson.JsonNull,
       },
       update: { aboutContent: aboutJson },
     });
@@ -569,10 +573,10 @@ export async function saveProjetosContentObjectAction(
 ): Promise<InstitutionalFormState> {
   try {
     const { tenantId } = await requirePublicInstitutionalWriter();
-    const projetosJson: Prisma.InputJsonValue | typeof Prisma.JsonNull = projetosContentEqualToDefault(
+    const projetosJson: Prisma.InputJsonValue | typeof PrismaJson.JsonNull = projetosContentEqualToDefault(
       data,
     )
-      ? Prisma.JsonNull
+      ? PrismaJson.JsonNull
       : (data as unknown as Prisma.InputJsonValue);
 
     await getPrisma().institutionalSiteContent.upsert({
@@ -590,9 +594,9 @@ export async function saveProjetosContentObjectAction(
         mapEmbedUrl: null,
         copyrightLine: null,
         logoUrl: null,
-        homeContent: Prisma.JsonNull,
-        aboutContent: Prisma.JsonNull,
-        contatoContent: Prisma.JsonNull,
+        homeContent: PrismaJson.JsonNull,
+        aboutContent: PrismaJson.JsonNull,
+        contatoContent: PrismaJson.JsonNull,
         projetosContent: projetosJson,
       },
       update: { projetosContent: projetosJson },
