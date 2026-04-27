@@ -2,6 +2,26 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 type HyperdriveLike = { connectionString: string };
 
+function envTruthy(name: string): boolean {
+  const v = process.env[name]?.trim().toLowerCase();
+  return v === "1" || v === "true" || v === "yes";
+}
+
+/**
+ * Quando verdadeiro, o pool `pg` não exige cadeia de confiança (ver `prisma-factory`).
+ * - `next dev` (`NODE_ENV=development`): activo por omissão (proxies / certificados internos).
+ * - `next start` / Workers: só com `DATABASE_SSL_INSECURE`; ou desactivar relax em dev com `DATABASE_SSL_STRICT`.
+ */
+export function isDatabaseSslInsecure(): boolean {
+  if (envTruthy("DATABASE_SSL_STRICT")) {
+    return false;
+  }
+  if (envTruthy("DATABASE_SSL_INSECURE")) {
+    return true;
+  }
+  return process.env.NODE_ENV === "development";
+}
+
 /**
  * Cloudflare Workers block TCP to localhost, RFC1918, etc. The runtime surfaces
  * that as: "proxy request failed, cannot connect to the specified address".
@@ -40,8 +60,15 @@ function enhanceSupabasePostgresUrl(connectionString: string): string {
   if (!/supabase\.(co|com)/i.test(connectionString)) {
     return connectionString;
   }
+  const sslInsecure = isDatabaseSslInsecure();
   let s = connectionString;
-  if (/[?&]sslmode=require(?=&|$)/i.test(s)) {
+  if (sslInsecure) {
+    if (/[?&]sslmode=verify-full(?=&|$)/i.test(s)) {
+      s = s.replace(/([?&])sslmode=verify-full(?=&|$)/i, "$1sslmode=require");
+    } else if (!/sslmode=/i.test(s)) {
+      s += (s.includes("?") ? "&" : "?") + "sslmode=require";
+    }
+  } else if (/[?&]sslmode=require(?=&|$)/i.test(s)) {
     s = s.replace(/([?&])sslmode=require(?=&|$)/i, "$1sslmode=verify-full");
   } else if (!/sslmode=/i.test(s)) {
     s += (s.includes("?") ? "&" : "?") + "sslmode=verify-full";
