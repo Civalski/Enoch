@@ -30,9 +30,9 @@ function assertPostgresHostReachableFromWorkers(connectionString: string): void 
   }
 }
 
-/** Supabase exige TLS; sem `sslmode=require` o driver pode falhar de forma pouco clara no workerd. */
+/** Supabase exige TLS; pooler usa `*.pooler.supabase.com` (não só `supabase.co`). */
 function ensureSslModeRequireForSupabase(connectionString: string): string {
-  if (!/supabase\.co/i.test(connectionString) || /sslmode=/i.test(connectionString)) {
+  if (!/supabase\.(co|com)/i.test(connectionString) || /sslmode=/i.test(connectionString)) {
     return connectionString;
   }
   return connectionString + (connectionString.includes("?") ? "&" : "?") + "sslmode=require";
