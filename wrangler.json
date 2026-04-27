@@ -22,6 +22,9 @@
   ],
   "vars": {
     "NEXT_PUBLIC_SITE_URL": "https://site-enoch.arkersoft.workers.dev",
+    "NEXT_PUBLIC_SUPABASE_URL": "https://onpbpjpicxahnwrdzrbx.supabase.co",
+    "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY": "sb_publishable_1i8IS4kZ0Tqct0JWzezwsw_ubc8S7_3",
+    "BLOG_TENANT_SLUG": "teste-mobwc656-sdaks",
     "NEXTJS_ENV": "production",
     "NODE_ENV": "production"
   }

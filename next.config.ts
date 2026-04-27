@@ -21,6 +21,7 @@ const nextConfig: NextConfig = {
     "pg-pool",
     "pgpass",
   ],
+
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "enoch.ornete.com", pathname: "/**" },
