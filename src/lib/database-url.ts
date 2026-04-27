@@ -30,6 +30,14 @@ function assertPostgresHostReachableFromWorkers(connectionString: string): void 
   }
 }
 
+/** Supabase exige TLS; sem `sslmode=require` o driver pode falhar de forma pouco clara no workerd. */
+function ensureSslModeRequireForSupabase(connectionString: string): string {
+  if (!/supabase\.co/i.test(connectionString) || /sslmode=/i.test(connectionString)) {
+    return connectionString;
+  }
+  return connectionString + (connectionString.includes("?") ? "&" : "?") + "sslmode=require";
+}
+
 /**
  * Resolves the Postgres connection string: Hyperdrive (Workers) when the binding
  * exists, otherwise `DATABASE_URL` (local dev, Vercel, `next build` / SSG).
@@ -41,12 +49,13 @@ export function getDatabaseUrl(): string {
     inWorker = true;
     const e = env as { HYPERDRIVE?: HyperdriveLike; DATABASE_URL?: string };
     if (e.HYPERDRIVE?.connectionString) {
-      assertPostgresHostReachableFromWorkers(e.HYPERDRIVE.connectionString);
+      // Não validar host: a string do binding é gerida pelo Hyperdrive e pode não ser um host "público" parseável.
       return e.HYPERDRIVE.connectionString;
     }
     if (typeof e.DATABASE_URL === "string" && e.DATABASE_URL.length > 0) {
-      assertPostgresHostReachableFromWorkers(e.DATABASE_URL);
-      return e.DATABASE_URL;
+      const u = ensureSslModeRequireForSupabase(e.DATABASE_URL);
+      assertPostgresHostReachableFromWorkers(u);
+      return u;
     }
   } catch (err) {
     if (inWorker) throw err;
@@ -58,8 +67,9 @@ export function getDatabaseUrl(): string {
       "DATABASE_URL is not set (or Hyperdrive is not bound as HYPERDRIVE in wrangler).",
     );
   }
+  const resolved = ensureSslModeRequireForSupabase(url);
   if (inWorker) {
-    assertPostgresHostReachableFromWorkers(url);
+    assertPostgresHostReachableFromWorkers(resolved);
   }
-  return url;
+  return resolved;
 }
