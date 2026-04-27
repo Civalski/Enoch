@@ -1,3 +1,7 @@
 import { defineCloudflareConfig } from "@opennextjs/cloudflare";
 
-export default defineCloudflareConfig({});
+/** Evita recursão: `opennextjs-cloudflare build` invoca `buildCommand` (não o script `build`). */
+export default {
+  ...defineCloudflareConfig({}),
+  buildCommand: "npm run build:next",
+};

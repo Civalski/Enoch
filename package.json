@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "node scripts/next-dev.mjs",
     "dev:cloudflare": "next dev",
-    "build": "next build",
+    "build:next": "next build",
+    "build": "npx opennextjs-cloudflare build",
     "analyze": "cross-env ANALYZE=true next build",
     "start": "next start",
     "preview": "node scripts/opennext-cloudflare-preview.mjs",
