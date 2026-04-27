@@ -11,26 +11,31 @@ import { getHiddenStaticBlogSlugSet } from "@/lib/institutional-site/hidden-seed
  * — Com vários tenants e sem env, devolve null (é preciso definir o slug).
  */
 export async function resolvePublicBlogTenant(): Promise<{ id: string; slug: string } | null> {
-  const envSlug = process.env.BLOG_TENANT_SLUG?.trim();
-  if (envSlug) {
-    const tenant = await getPrisma().tenant.findUnique({
-      where: { slug: envSlug },
+  try {
+    const envSlug = process.env.BLOG_TENANT_SLUG?.trim();
+    if (envSlug) {
+      const tenant = await getPrisma().tenant.findUnique({
+        where: { slug: envSlug },
+        select: { id: true, slug: true },
+      });
+      return tenant;
+    }
+
+    const rows = await getPrisma().tenant.findMany({
       select: { id: true, slug: true },
+      orderBy: { createdAt: "asc" },
+      take: 2,
     });
-    return tenant;
+
+    if (rows.length === 1) {
+      return rows[0]!;
+    }
+
+    return null;
+  } catch (error) {
+    console.error("Public tenant resolution failed; serving static/default public content.", error);
+    return null;
   }
-
-  const rows = await getPrisma().tenant.findMany({
-    select: { id: true, slug: true },
-    orderBy: { createdAt: "asc" },
-    take: 2,
-  });
-
-  if (rows.length === 1) {
-    return rows[0]!;
-  }
-
-  return null;
 }
 
 function publishedDateOnly(d: Date): string {

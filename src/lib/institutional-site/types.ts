@@ -26,7 +26,8 @@ export type HelpColumn = {
 
 export type HomeContentV1 = {
   meta?: PageMeta;
-  hero?: { title?: string; subtitle?: string };
+  /** `imageUrl` vazio/omitido: usa a imagem de fundo predefinida em código. */
+  hero?: { title?: string; subtitle?: string; imageUrl?: string };
   quemSomos?: {
     sectionTitle?: string;
     sectionSubtitle?: string;

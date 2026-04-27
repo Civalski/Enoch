@@ -1,0 +1,101 @@
+
+> site-enoch@0.0.1 preview
+> node scripts/opennext-cloudflare-preview.mjs
+
+
+┌─────────────────────────────┐
+│ OpenNext — Cloudflare build │
+└─────────────────────────────┘
+
+App directory: C:\Users\Alisson Civalski\Documents\Enoch\Enoch
+Next.js version : 15.5.15
+@opennextjs/cloudflare version: 1.19.4
+@opennextjs/aws version: 3.10.4
+
+┌─────────────────────────────────┐
+│ OpenNext — Building Next.js app │
+└─────────────────────────────────┘
+
+
+> site-enoch@0.0.1 build:next
+> next build
+
+   ▲ Next.js 15.5.15
+   - Environments: .env
+   - Experiments (use with caution):
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 2.7s
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/22) ...
+   Generating static pages (5/22) 
+   Generating static pages (10/22) 
+   Generating static pages (16/22) 
+ ✓ Generating static pages (22/22)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                 Size  First Load JS
+┌ ƒ /                                    12.5 kB         118 kB
+├ ƒ /_not-found                            993 B         103 kB
+├ ƒ /admpainel                           1.04 kB         103 kB
+├ ƒ /api/auth/panel-session                147 B         102 kB
+├ ƒ /app                                   147 B         102 kB
+├ ƒ /app/blog                              147 B         102 kB
+├ ƒ /app/blog/[postId]/editar              123 B         109 kB
+├ ƒ /app/blog/novo                         123 B         109 kB
+├ ƒ /app/contato                           147 B         102 kB
+├ ƒ /app/email                           3.68 kB         109 kB
+├ ƒ /app/estudos                           147 B         102 kB
+├ ƒ /app/institucional                   1.54 kB         107 kB
+├ ƒ /app/projetos                          147 B         102 kB
+├ ƒ /app/projetos/[projectId]/editar     2.02 kB         108 kB
+├ ƒ /app/projetos/novo                   2.02 kB         108 kB
+├ ƒ /app/transparencia/doacoes           1.41 kB         122 kB
+├ ƒ /app/usuarios                        5.29 kB         107 kB
+├ ƒ /auth/callback                         147 B         102 kB
+├ ƒ /blog                                5.17 kB         111 kB
+├ ƒ /blog/[slug]                         1.71 kB         107 kB
+├ ƒ /cadastro                              147 B         102 kB
+├ ƒ /como-ajudar                           645 B         106 kB
+├ ƒ /contato                             5.98 kB         112 kB
+├ ƒ /estudos                             4.73 kB         110 kB
+├ ƒ /estudos/editar/[id]                 1.49 kB         107 kB
+├ ƒ /estudos/novo                        1.49 kB         107 kB
+├ ƒ /login                                 147 B         102 kB
+├ ƒ /projetos                            6.19 kB         112 kB
+├ ƒ /sobre                               6.77 kB         112 kB
+└ ƒ /transparencia                       4.06 kB         125 kB
++ First Load JS shared by all             102 kB
+  ├ chunks/255-4f212684648fcab9.js         46 kB
+  ├ chunks/4bd1b696-c023c6e3521b1417.js  54.2 kB
+  └ other shared chunks (total)             2 kB
+
+
+ƒ Middleware                               35 kB
+
+ƒ  (Dynamic)  server-rendered on demand
+
+
+┌──────────────────────────────┐
+│ OpenNext — Generating bundle │
+└──────────────────────────────┘
+
+Bundling middleware function...
+Bundling static assets...
+Bundling cache assets...
+Building server function: default...
+Applying code patches: 5.932s
+# copyPackageTemplateFiles
+[35m⚙️ Bundling the OpenNext server...
+[0m
+[35mWorker saved in `.open-next\worker.js` 🚀
+[0m
+OpenNext build complete.
+
+┌───────────────────────────────┐
+│ OpenNext — Cloudflare preview │
+└───────────────────────────────┘
+

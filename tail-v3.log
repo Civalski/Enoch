@@ -1,0 +1,112 @@
+{
+    "wallTime": 14,
+    "cpuTime": 13,
+    "truncated": false,
+    "executionModel": "stateless",
+    "outcome": "ok",
+    "scriptVersion": {
+        "id": "200af2c3-3ecb-43ea-8323-7f1975d08374"
+    },
+    "scriptName": "site-enoch",
+    "diagnosticsChannelEvents": [],
+    "exceptions": [],
+    "logs": [
+        {
+            "message": [
+                "Error: [unenv] fs.readFileSync is not implemented yet!"
+            ],
+            "level": "error",
+            "timestamp": 1777258546274
+        },
+        {
+            "message": [
+                "Error: [unenv] fs.readFileSync is not implemented yet!"
+            ],
+            "level": "error",
+            "timestamp": 1777258546274
+        }
+    ],
+    "eventTimestamp": 1777258546273,
+    "event": {
+        "request": {
+            "url": "https://site-enoch.arkersoft.workers.dev/",
+            "method": "GET",
+            "headers": {
+                "accept-encoding": "gzip, br",
+                "cf-connecting-ip": "2a09:bac5:dcc:297d::422:14",
+                "cf-ipcountry": "BR",
+                "cf-ray": "9f2a8cda2ff175cf",
+                "cf-visitor": "{\"scheme\":\"https\"}",
+                "connection": "Keep-Alive",
+                "host": "site-enoch.arkersoft.workers.dev",
+                "user-agent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; pt-BR) WindowsPowerShell/5.1.26100.8115",
+                "x-forwarded-proto": "https",
+                "x-real-ip": "2a09:bac5:dcc:297d::422:14"
+            },
+            "cf": {
+                "httpProtocol": "HTTP/1.1",
+                "requestPriority": "",
+                "edgeRequestKeepAliveStatus": 1,
+                "requestHeaderNames": {},
+                "clientTcpRtt": 0,
+                "clientQuicRtt": 0,
+                "colo": "GRU",
+                "asn": 13335,
+                "asOrganization": "Cloudflare London, LLC",
+                "country": "BR",
+                "isEUCountry": false,
+                "city": "São Paulo",
+                "continent": "SA",
+                "region": "São Paulo",
+                "regionCode": "SP",
+                "timezone": "America/Sao_Paulo",
+                "longitude": "-46.63611",
+                "latitude": "-23.5475",
+                "postalCode": "01000-000",
+                "tlsVersion": "TLSv1.3",
+                "tlsCipher": "AEAD-AES256-GCM-SHA384",
+                "tlsClientRandom": "XksiM3Cp/6+5HNMKNGafEHMi4TB5D1NGwM6PtbtY3mc=",
+                "tlsClientCiphersSha1": "kTkJ+HAwBvIuoPFncb1wEDLcgfg=",
+                "tlsClientExtensionsSha1": "Bxwn0Bs0z+5dY69ZcqleTRGmlpE=",
+                "tlsClientExtensionsSha1Le": "sb2ftGg4/laBHA9Q/MJ4X/0+cJY=",
+                "tlsExportedAuthenticator": {
+                    "clientHandshake": "f89207192e68a419f2d39d4612eda0080c14c174bd35e6475e777370b80d87a2eef527ff37e224c09e80cdf5db9708c3",
+                    "serverHandshake": "4683e6c6dec715c253c20a559472af13bbf14bbc2a3701bb1f76d2572ba8a586f08acc0097a365d81bba056014ee6062",
+                    "clientFinished": "0b0b4a6ae3e2b446133ddd9f72b312b4c559c5c9abd7ee211b5eaf6162aef0e3d07625d5d0e90625ea3f0e3611757080",
+                    "serverFinished": "4dcb8e6f790df32e32c692e66bc16b146aa0ee55df9432f281a466fe8f0b1fd7dcc7b36b5fa4bf8a24371981f8a01174"
+                },
+                "tlsClientHelloLength": "450",
+                "tlsClientAuth": {
+                    "certPresented": "0",
+                    "certVerified": "NONE",
+                    "certRevoked": "0",
+                    "certIssuerDN": "",
+                    "certSubjectDN": "",
+                    "certIssuerDNRFC2253": "",
+                    "certSubjectDNRFC2253": "",
+                    "certIssuerDNLegacy": "",
+                    "certSubjectDNLegacy": "",
+                    "certSerial": "",
+                    "certIssuerSerial": "",
+                    "certSKI": "",
+                    "certIssuerSKI": "",
+                    "certFingerprintSHA1": "",
+                    "certFingerprintSHA256": "",
+                    "certNotBefore": "",
+                    "certNotAfter": "",
+                    "certRFC9440": "",
+                    "certRFC9440TooLarge": false,
+                    "certChainRFC9440": "",
+                    "certChainRFC9440TooLarge": false
+                },
+                "verifiedBotCategory": "",
+                "edgeL4": {
+                    "deliveryRate": 0
+                }
+            }
+        },
+        "response": {
+            "status": 500
+        }
+    }
+}

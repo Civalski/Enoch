@@ -28,7 +28,7 @@ if (!fs.existsSync(workerPath)) {
 }
 
 process.env.OPEN_NEXT_DEPLOY = "true";
-r = spawnSync("npx", ["wrangler", "deploy", ...passthrough], {
+r = spawnSync("npx", ["wrangler", "deploy", "--keep-vars", ...passthrough], {
   cwd: root,
   stdio: "inherit",
   shell: true,

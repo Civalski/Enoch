@@ -1,0 +1,37 @@
+WARN OpenNext is not fully compatible with Windows.
+WARN For optimal performance, it is recommended to use Windows Subsystem for Linux (WSL).
+WARN While OpenNext may function on Windows, it could encounter unpredictable failures during runtime.
+(node:19984) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:13176) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+WARN OpenNext is not fully compatible with Windows.
+WARN For optimal performance, it is recommended to use Windows Subsystem for Linux (WSL).
+WARN While OpenNext may function on Windows, it could encounter unpredictable failures during runtime.
+*** Received structured exception #0xc0000005: access violation; stack: 7ff8dd292f57 7ff61abf44ad 7ff61abf4573 7ff61abcd14c 7ff61abcd100 7ff61a0a4158 7ff61a0a48d0 7ff618c6612a 7ff61a2505e6 7ff61a257fe6 7ff61a2507f4 7ff61a257fe6 7ff61a24db5b 7ff618c520a5 7ff61bf7a3cf 7ff92db5e8d6 7ff92f1ac3fb
+C:\Users\Alisson Civalski\Documents\Enoch\Enoch\node_modules\miniflare\dist\src\index.js:87889
+      throw new MiniflareCoreError(
+            ^
+
+MiniflareCoreError [ERR_RUNTIME_FAILURE]: The Workers runtime failed to start. There is likely additional logging output above.
+    at #assembleAndUpdateConfig (C:\Users\Alisson Civalski\Documents\Enoch\Enoch\node_modules\miniflare\dist\src\index.js:87889:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Mutex.runWith (C:\Users\Alisson Civalski\Documents\Enoch\Enoch\node_modules\miniflare\dist\src\index.js:57215:48)
+    at async #waitForReady (C:\Users\Alisson Civalski\Documents\Enoch\Enoch\node_modules\miniflare\dist\src\index.js:88002:5)
+    at async _Miniflare._getProxyClient (C:\Users\Alisson Civalski\Documents\Enoch\Enoch\node_modules\miniflare\dist\src\index.js:88179:5)
+    at async _Miniflare.getBindings (C:\Users\Alisson Civalski\Documents\Enoch\Enoch\node_modules\miniflare\dist\src\index.js:88198:25)
+    at async getPlatformProxy (C:\Users\Alisson Civalski\Documents\Enoch\Enoch\node_modules\wrangler\wrangler-dist\cli.js:318395:20)
+    at async getEnvFromPlatformProxy (file:///C:/Users/Alisson%20Civalski/Documents/Enoch/Enoch/node_modules/@opennextjs/cloudflare/dist/cli/commands/utils/helpers.js:36:19)
+    at async previewCommand (file:///C:/Users/Alisson%20Civalski/Documents/Enoch/Enoch/node_modules/@opennextjs/cloudflare/dist/cli/commands/preview.js:16:21) {
+  code: 'ERR_RUNTIME_FAILURE',
+  cause: undefined
+}
+
+Node.js v24.14.1

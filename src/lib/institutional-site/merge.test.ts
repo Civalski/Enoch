@@ -70,6 +70,7 @@ describe("mergeHomeContent", () => {
     const h = mergeHomeContent({ hero: { title: "T" } });
     expect(h.hero?.title).toBe("T");
     expect(h.hero?.subtitle).toBe(DEFAULT_HOME_V1.hero?.subtitle);
+    expect(h.hero?.imageUrl).toBe(DEFAULT_HOME_V1.hero?.imageUrl);
   });
 
   it("merges mission image url in quemSomos", () => {

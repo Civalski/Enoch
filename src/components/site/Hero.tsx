@@ -1,28 +1,29 @@
 import type { ReactNode } from "react";
-import Image from "next/image";
 import Link from "next/link";
-
-/** Imagem atual do hero (Unsplash; next.config). */
-const HERO_IMAGE =
-  "https://images.unsplash.com/photo-1682176162491-2e63972a1d9b?q=80&w=1920&h=1080&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 
 type Props = {
   title: ReactNode;
   subtitle?: ReactNode;
+  /** URL absoluta da imagem de fundo (definida no CMS na página inicial). */
+  imageSrc: string;
 };
 
-export function Hero({ title, subtitle }: Props) {
+/**
+ * Fundo com `<img>` em vez de `next/image`: evita falhas do optimizador em produção (p.ex. OpenNext em Workers)
+ * e permite qualquer URL configurada no CMS sem `remotePatterns`.
+ */
+export function Hero({ title, subtitle, imageSrc }: Props) {
   return (
     <section className="relative text-white overflow-hidden min-h-screen flex items-center bg-black">
       <div className="absolute inset-0 z-0">
-        <Image
-          src={HERO_IMAGE}
-          alt="Esquadro e compasso sobre livro aberto, símbolos da maçonaria e do trabalho em silêncio"
-          fill
-          className="object-cover object-center scale-105"
-          priority
-          quality={88}
-          sizes="100vw"
+        {/* eslint-disable-next-line @next/next/no-img-element -- fundo a largura completa; URL arbitrária do CMS */}
+        <img
+          src={imageSrc}
+          alt="Imagem de fundo do destaque na página inicial"
+          className="absolute inset-0 h-full w-full object-cover object-center scale-105"
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
         />
       </div>
       <div className="absolute inset-0 bg-black/40 z-[1] particles-bg" />

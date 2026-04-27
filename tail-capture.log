@@ -1,0 +1,13 @@
+
+ ⛅️ wrangler 4.84.1 (update available 4.85.0)
+─────────────────────────────────────────────
+Successfully created tail, expires at 2026-04-27T05:28:09Z
+Connected to site-enoch, waiting for logs...
+GET https://site-enoch.arkersoft.workers.dev/ - Ok @ 26/04/2026, 23:29:35
+  (error) Error: Connection terminated unexpectedly
+  (error) Error: Connection terminated unexpectedly
+GET https://site-enoch.arkersoft.workers.dev/favicon.ico - Ok @ 26/04/2026, 23:29:36
+  (error) Error: Connection terminated unexpectedly
+GET https://site-enoch.arkersoft.workers.dev/ - Ok @ 26/04/2026, 23:30:36
+  (error) Error: Connection terminated unexpectedly
+  (error) Error: Connection terminated unexpectedly

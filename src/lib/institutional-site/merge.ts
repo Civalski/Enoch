@@ -105,6 +105,7 @@ export function mergeHomeContent(patch: Prisma.JsonValue | null | undefined): Ho
     hero: {
       title: typeof hero.title === "string" ? hero.title : base.hero?.title,
       subtitle: typeof hero.subtitle === "string" ? hero.subtitle : base.hero?.subtitle,
+      imageUrl: typeof hero.imageUrl === "string" ? hero.imageUrl : base.hero?.imageUrl,
     },
     quemSomos: {
       sectionTitle:

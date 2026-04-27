@@ -52,9 +52,9 @@ No **Supabase** → **Authentication** → **URL configuration**:
 ### Erro 500 / digest no site (Workers)
 
 1. **Postgres no Worker**: o secret `DATABASE_URL` (ou o binding [Hyperdrive](#postgres-e-hyperdrive) em `wrangler.json` + novo deploy) tem de existir. Sem isso, o layout público (Prisma) falha. Ver [Wrangler: tail](https://developers.cloudflare.com/workers/observability/) ou **Workers → site-enoch → Observability** para a exceção real.
-2. **Build de produção** para o Worker: use **`npm run deploy`** (OpenNext + `wrangler deploy` com a stack correta). O projeto usa **Prisma 6** com o gerador clássico `prisma-client-js` (sem Prisma 7 + WASM, que o runtime `workerd` bloqueia com `WebAssembly.Module(): Wasm code generation disallowed by embedder`).
+2. **Build de produção** para o Worker: use **`npm run deploy`** (OpenNext + `wrangler deploy --keep-vars`). O projeto usa **Prisma** com `engineType = "client"` + `@prisma/adapter-pg`, evitando o engine Rust no `workerd`.
 3. **Windows**: o aviso do OpenNext aplica-se; se o `opennextjs-cloudflare build` falhar, use [WSL](https://learn.microsoft.com/windows/wsl/) ou um agente Linux/CI.
-4. **`[unenv] fs.readFile` no Worker**: algum código (dependência ou padrão antigo) tentou `fs` no `workerd`. Reduz-se o risco com **`getPrisma()`** por pedido (React `cache` + `max: 1` no pool) em [`src/lib/prisma.ts`](src/lib/prisma.ts) / [`src/lib/prisma-factory.ts`](src/lib/prisma-factory.ts) em linha com [OpenNext + Prisma](https://opennext.js.org/cloudflare/howtos/db#postgresql). Evite `next/font` no layout (o projecto usa link à Google Fonts + CSS). Scripts CLI importam de `prisma-factory` (não de `prisma.ts`, que traz `server-only`).
+4. **`[unenv] fs.*` no Worker**: algum código (dependência ou padrão antigo) tentou `fs` no `workerd`. Para Prisma em Workers, mantenha `engineType = "client"` no [`prisma/schema.prisma`](prisma/schema.prisma), use **`getPrisma()`** por pedido (React `cache` + `max: 1` no pool) em [`src/lib/prisma.ts`](src/lib/prisma.ts) / [`src/lib/prisma-factory.ts`](src/lib/prisma-factory.ts), e evite `next/font` no layout (o projecto usa link à Google Fonts + CSS). Scripts CLI importam de `prisma-factory` (não de `prisma.ts`, que traz `server-only`).
 
 ## Scripts
 

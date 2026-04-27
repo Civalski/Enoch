@@ -1,7 +1,8 @@
-// Prisma 6 + `driverAdapters` + `pg` em Workers (OpenNext) — o motor Prisma 7 em WASM
-// falha no workerd (`WebAssembly.Module(): … disallowed by embedter`). Não subir a 7 sem verificar.
+// Cloudflare Workers / OpenNext: gerar o cliente sem engine Rust para evitar
+// sondagens de filesystem/OpenSSL no runtime (`fs.readdir`/`libssl`).
 generator client {
-  provider = "prisma-client-js"
+  provider   = "prisma-client-js"
+  engineType = "client"
 }
 
 datasource db {

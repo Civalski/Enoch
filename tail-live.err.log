@@ -1,0 +1,7 @@
+This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason:
+APIError: A request to the Cloudflare API (/accounts/240b107039a4ec617ea73dc258838035/workers/scripts/site-enoch/tails/dfd2d438bd114c10add28d041c1887e8) failed.
+    at throwFetchError (C:\Users\Alisson Civalski\Documents\Enoch\Enoch\node_modules\wrangler\wrangler-dist\cli.js:131899:18)
+    at fetchResult (C:\Users\Alisson Civalski\Documents\Enoch\Enoch\node_modules\wrangler\wrangler-dist\cli.js:131781:5)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async deleteTail (C:\Users\Alisson Civalski\Documents\Enoch\Enoch\node_modules\wrangler\wrangler-dist\cli.js:243337:5)
+    at async _WebSocket.exit (C:\Users\Alisson Civalski\Documents\Enoch\Enoch\node_modules\wrangler\wrangler-dist\cli.js:292513:11)

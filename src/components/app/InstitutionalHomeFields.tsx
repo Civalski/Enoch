@@ -46,6 +46,16 @@ export function InstitutionalHomeFields({ home }: Props) {
           Subtítulo
           <textarea name="home_hero_subtitle" defaultValue={h.subtitle ?? ""} rows={3} className={inp} maxLength={12000} />
         </label>
+        <label className={lab}>
+          Imagem de fundo do destaque (URL; opcional — vazio = predefinida)
+          <input
+            name="home_hero_imageUrl"
+            defaultValue={h.imageUrl ?? ""}
+            className={inp}
+            maxLength={2000}
+            placeholder="https://…"
+          />
+        </label>
       </div>
 
       <div className="space-y-3">

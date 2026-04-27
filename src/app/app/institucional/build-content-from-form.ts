@@ -131,6 +131,7 @@ export function readHomeFromFormData(fd: FormData): HomeContentV1 {
     hero: {
       title: get(fd, "home_hero_title", M.title),
       subtitle: get(fd, "home_hero_subtitle", M.body),
+      imageUrl: get(fd, "home_hero_imageUrl", M.url),
     },
     quemSomos: {
       sectionTitle: get(fd, "home_quem_sectionTitle", M.title),

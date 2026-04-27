@@ -33,6 +33,7 @@ describe("readHomeFromFormData", () => {
         home_meta_description: "Desc",
         home_hero_title: "H",
         home_hero_subtitle: "S",
+        home_hero_imageUrl: "https://exemplo.com/hero-bg.jpg",
         home_quem_sectionTitle: "QS",
         home_quem_sectionSubtitle: "QSS",
         home_quem_missionHeading: "M",
@@ -78,6 +79,7 @@ describe("readHomeFromFormData", () => {
     );
     expect(form.meta?.title).toBe("Início");
     expect(form.hero?.title).toBe("H");
+    expect(form.hero?.imageUrl).toBe("https://exemplo.com/hero-bg.jpg");
     expect(form.quemSomos?.missionImageUrl).toBe("https://exemplo.com/missao.png");
     expect(form.projetosTeaser?.cards?.[0]?.link).toBe("/projetos");
     expect(form.stats?.items).toHaveLength(4);

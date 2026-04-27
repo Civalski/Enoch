@@ -1,0 +1,441 @@
+{
+    "wallTime": 89,
+    "cpuTime": 30,
+    "truncated": false,
+    "executionModel": "stateless",
+    "outcome": "ok",
+    "scriptVersion": {
+        "id": "e9a29bf4-7e66-431b-9325-a638d31c0e3b"
+    },
+    "scriptName": "site-enoch",
+    "diagnosticsChannelEvents": [],
+    "exceptions": [],
+    "logs": [
+        {
+            "message": [
+                "Error: Connection terminated unexpectedly"
+            ],
+            "level": "error",
+            "timestamp": 1777256877713
+        },
+        {
+            "message": [
+                "Error: Connection terminated unexpectedly"
+            ],
+            "level": "error",
+            "timestamp": 1777256877730
+        }
+    ],
+    "eventTimestamp": 1777256877690,
+    "event": {
+        "request": {
+            "url": "https://site-enoch.arkersoft.workers.dev/",
+            "method": "GET",
+            "headers": {
+                "accept-encoding": "gzip, br",
+                "cf-connecting-ip": "2a09:bac5:dcb:274b::3ea:13",
+                "cf-ipcountry": "BR",
+                "cf-ray": "9f2a641d88352d34",
+                "cf-visitor": "{\"scheme\":\"https\"}",
+                "connection": "Keep-Alive",
+                "host": "site-enoch.arkersoft.workers.dev",
+                "user-agent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; pt-BR) WindowsPowerShell/5.1.26100.8115",
+                "x-forwarded-proto": "https",
+                "x-real-ip": "2a09:bac5:dcb:274b::3ea:13"
+            },
+            "cf": {
+                "httpProtocol": "HTTP/1.1",
+                "requestPriority": "",
+                "edgeRequestKeepAliveStatus": 1,
+                "requestHeaderNames": {},
+                "clientTcpRtt": 0,
+                "clientQuicRtt": 0,
+                "colo": "GRU",
+                "asn": 13335,
+                "asOrganization": "Cloudflare London, LLC",
+                "country": "BR",
+                "isEUCountry": false,
+                "city": "São Paulo",
+                "continent": "SA",
+                "region": "São Paulo",
+                "regionCode": "SP",
+                "timezone": "America/Sao_Paulo",
+                "longitude": "-46.63611",
+                "latitude": "-23.5475",
+                "postalCode": "01000-000",
+                "tlsVersion": "TLSv1.3",
+                "tlsCipher": "AEAD-AES256-GCM-SHA384",
+                "tlsClientRandom": "kXTkww9YridWpNAks852CeYxaJfauYYiAUFM1Z1QwWo=",
+                "tlsClientCiphersSha1": "kTkJ+HAwBvIuoPFncb1wEDLcgfg=",
+                "tlsClientExtensionsSha1": "Bxwn0Bs0z+5dY69ZcqleTRGmlpE=",
+                "tlsClientExtensionsSha1Le": "sb2ftGg4/laBHA9Q/MJ4X/0+cJY=",
+                "tlsExportedAuthenticator": {
+                    "clientHandshake": "fadecf82465800681cce4705cfa0bc149e583fe3a4c3e45d8eaa38d2d0e2daa95eaede245d13ebad625833fd6824e014",
+                    "serverHandshake": "7741127b94e1fda98ead2372576a3f306af5740ccb4f2d640c16214422c2827994c83c83445e1b6f70f3f129568f4334",
+                    "clientFinished": "292a6569c7dff42d2993ae61467fa76eae262ffcb2a758f6b27074f477bc291112e78a2cac0e021fb061b4421ea047bc",
+                    "serverFinished": "8011b4475533a3dd6bd4679c1f4a3bf3e78e234381169b010e9d3bafb6325bb86772460db27709f965c76a5e40c2b09a"
+                },
+                "tlsClientHelloLength": "450",
+                "tlsClientAuth": {
+                    "certPresented": "0",
+                    "certVerified": "NONE",
+                    "certRevoked": "0",
+                    "certIssuerDN": "",
+                    "certSubjectDN": "",
+                    "certIssuerDNRFC2253": "",
+                    "certSubjectDNRFC2253": "",
+                    "certIssuerDNLegacy": "",
+                    "certSubjectDNLegacy": "",
+                    "certSerial": "",
+                    "certIssuerSerial": "",
+                    "certSKI": "",
+                    "certIssuerSKI": "",
+                    "certFingerprintSHA1": "",
+                    "certFingerprintSHA256": "",
+                    "certNotBefore": "",
+                    "certNotAfter": "",
+                    "certRFC9440": "",
+                    "certRFC9440TooLarge": false,
+                    "certChainRFC9440": "",
+                    "certChainRFC9440TooLarge": false
+                },
+                "verifiedBotCategory": "",
+                "edgeL4": {
+                    "deliveryRate": 0
+                }
+            }
+        },
+        "response": {
+            "status": 500
+        }
+    }
+}
+{
+    "wallTime": 89,
+    "cpuTime": 28,
+    "truncated": false,
+    "executionModel": "stateless",
+    "outcome": "ok",
+    "scriptVersion": {
+        "id": "e9a29bf4-7e66-431b-9325-a638d31c0e3b"
+    },
+    "scriptName": "site-enoch",
+    "diagnosticsChannelEvents": [],
+    "exceptions": [],
+    "logs": [
+        {
+            "message": [
+                "Error: Connection terminated unexpectedly"
+            ],
+            "level": "error",
+            "timestamp": 1777256975938
+        },
+        {
+            "message": [
+                "Error: Connection terminated unexpectedly"
+            ],
+            "level": "error",
+            "timestamp": 1777256975953
+        }
+    ],
+    "eventTimestamp": 1777256975900,
+    "event": {
+        "request": {
+            "url": "https://site-enoch.arkersoft.workers.dev/",
+            "method": "GET",
+            "headers": {
+                "accept-encoding": "gzip, br",
+                "cf-connecting-ip": "2a09:bac1:1140:b0::3ea:13",
+                "cf-ipcountry": "BR",
+                "cf-ray": "9f2a66835ef92d34",
+                "cf-visitor": "{\"scheme\":\"https\"}",
+                "connection": "Keep-Alive",
+                "host": "site-enoch.arkersoft.workers.dev",
+                "user-agent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; pt-BR) WindowsPowerShell/5.1.26100.8115",
+                "x-forwarded-proto": "https",
+                "x-real-ip": "2a09:bac1:1140:b0::3ea:13"
+            },
+            "cf": {
+                "httpProtocol": "HTTP/1.1",
+                "requestPriority": "",
+                "edgeRequestKeepAliveStatus": 1,
+                "requestHeaderNames": {},
+                "clientTcpRtt": 0,
+                "clientQuicRtt": 0,
+                "colo": "GRU",
+                "asn": 13335,
+                "asOrganization": "Cloudflare London, LLC",
+                "country": "BR",
+                "isEUCountry": false,
+                "city": "São Paulo",
+                "continent": "SA",
+                "region": "São Paulo",
+                "regionCode": "SP",
+                "timezone": "America/Sao_Paulo",
+                "longitude": "-46.63611",
+                "latitude": "-23.5475",
+                "postalCode": "01000-000",
+                "tlsVersion": "TLSv1.3",
+                "tlsCipher": "AEAD-AES256-GCM-SHA384",
+                "tlsClientRandom": "a93L/U/KoJgO+bkrt5pUhNrOfxRsTcbhbHcLCqOXIBc=",
+                "tlsClientCiphersSha1": "kTkJ+HAwBvIuoPFncb1wEDLcgfg=",
+                "tlsClientExtensionsSha1": "Bxwn0Bs0z+5dY69ZcqleTRGmlpE=",
+                "tlsClientExtensionsSha1Le": "sb2ftGg4/laBHA9Q/MJ4X/0+cJY=",
+                "tlsExportedAuthenticator": {
+                    "clientHandshake": "95eca73278d4d1cd553c730f560210a5b630654b19fa42ce2ff02c4e1fb4c9639c914e827f6b17d9179966f4fae45c69",
+                    "serverHandshake": "3d95f6284c5a50780d3c4af98493d5a4d0ff5d12755ba2d3069ed9c0bf1691cb0395e704ee05654224c6db504af793f1",
+                    "clientFinished": "8f77ff86d85a9de580ed4f10c19a987a7beb0cda05b296a55f01e19c39f1140e0f58478db1aa3418069bdd6a4e17b571",
+                    "serverFinished": "f1e5c11fa1309f29c43e9b9d8bdc3e61ac024d3bc6d39d893269d55ec480bc86a8ecda04314886cbe2e7ce7d32ff7011"
+                },
+                "tlsClientHelloLength": "450",
+                "tlsClientAuth": {
+                    "certPresented": "0",
+                    "certVerified": "NONE",
+                    "certRevoked": "0",
+                    "certIssuerDN": "",
+                    "certSubjectDN": "",
+                    "certIssuerDNRFC2253": "",
+                    "certSubjectDNRFC2253": "",
+                    "certIssuerDNLegacy": "",
+                    "certSubjectDNLegacy": "",
+                    "certSerial": "",
+                    "certIssuerSerial": "",
+                    "certSKI": "",
+                    "certIssuerSKI": "",
+                    "certFingerprintSHA1": "",
+                    "certFingerprintSHA256": "",
+                    "certNotBefore": "",
+                    "certNotAfter": "",
+                    "certRFC9440": "",
+                    "certRFC9440TooLarge": false,
+                    "certChainRFC9440": "",
+                    "certChainRFC9440TooLarge": false
+                },
+                "verifiedBotCategory": "",
+                "edgeL4": {
+                    "deliveryRate": 0
+                }
+            }
+        },
+        "response": {
+            "status": 500
+        }
+    }
+}
+{
+    "wallTime": 36,
+    "cpuTime": 17,
+    "truncated": false,
+    "executionModel": "stateless",
+    "outcome": "ok",
+    "scriptVersion": {
+        "id": "e9a29bf4-7e66-431b-9325-a638d31c0e3b"
+    },
+    "scriptName": "site-enoch",
+    "diagnosticsChannelEvents": [],
+    "exceptions": [],
+    "logs": [
+        {
+            "message": [
+                "Error: Connection terminated unexpectedly"
+            ],
+            "level": "error",
+            "timestamp": 1777256976073
+        }
+    ],
+    "eventTimestamp": 1777256976054,
+    "event": {
+        "request": {
+            "url": "https://site-enoch.arkersoft.workers.dev/favicon.ico",
+            "method": "GET",
+            "headers": {
+                "accept-encoding": "gzip, br",
+                "cf-connecting-ip": "2a09:bac1:1140:b0::3ea:13",
+                "cf-ipcountry": "BR",
+                "cf-ray": "9f2a668448f32d34",
+                "cf-visitor": "{\"scheme\":\"https\"}",
+                "connection": "Keep-Alive",
+                "host": "site-enoch.arkersoft.workers.dev",
+                "user-agent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; pt-BR) WindowsPowerShell/5.1.26100.8115",
+                "x-forwarded-proto": "https",
+                "x-real-ip": "2a09:bac1:1140:b0::3ea:13"
+            },
+            "cf": {
+                "httpProtocol": "HTTP/1.1",
+                "requestPriority": "",
+                "edgeRequestKeepAliveStatus": 1,
+                "requestHeaderNames": {},
+                "clientTcpRtt": 0,
+                "clientQuicRtt": 0,
+                "colo": "GRU",
+                "asn": 13335,
+                "asOrganization": "Cloudflare London, LLC",
+                "country": "BR",
+                "isEUCountry": false,
+                "city": "São Paulo",
+                "continent": "SA",
+                "region": "São Paulo",
+                "regionCode": "SP",
+                "timezone": "America/Sao_Paulo",
+                "longitude": "-46.63611",
+                "latitude": "-23.5475",
+                "postalCode": "01000-000",
+                "tlsVersion": "TLSv1.3",
+                "tlsCipher": "AEAD-AES256-GCM-SHA384",
+                "tlsClientRandom": "a93L/U/KoJgO+bkrt5pUhNrOfxRsTcbhbHcLCqOXIBc=",
+                "tlsClientCiphersSha1": "kTkJ+HAwBvIuoPFncb1wEDLcgfg=",
+                "tlsClientExtensionsSha1": "Bxwn0Bs0z+5dY69ZcqleTRGmlpE=",
+                "tlsClientExtensionsSha1Le": "sb2ftGg4/laBHA9Q/MJ4X/0+cJY=",
+                "tlsExportedAuthenticator": {
+                    "clientHandshake": "95eca73278d4d1cd553c730f560210a5b630654b19fa42ce2ff02c4e1fb4c9639c914e827f6b17d9179966f4fae45c69",
+                    "serverHandshake": "3d95f6284c5a50780d3c4af98493d5a4d0ff5d12755ba2d3069ed9c0bf1691cb0395e704ee05654224c6db504af793f1",
+                    "clientFinished": "8f77ff86d85a9de580ed4f10c19a987a7beb0cda05b296a55f01e19c39f1140e0f58478db1aa3418069bdd6a4e17b571",
+                    "serverFinished": "f1e5c11fa1309f29c43e9b9d8bdc3e61ac024d3bc6d39d893269d55ec480bc86a8ecda04314886cbe2e7ce7d32ff7011"
+                },
+                "tlsClientHelloLength": "450",
+                "tlsClientAuth": {
+                    "certPresented": "0",
+                    "certVerified": "NONE",
+                    "certRevoked": "0",
+                    "certIssuerDN": "",
+                    "certSubjectDN": "",
+                    "certIssuerDNRFC2253": "",
+                    "certSubjectDNRFC2253": "",
+                    "certIssuerDNLegacy": "",
+                    "certSubjectDNLegacy": "",
+                    "certSerial": "",
+                    "certIssuerSerial": "",
+                    "certSKI": "",
+                    "certIssuerSKI": "",
+                    "certFingerprintSHA1": "",
+                    "certFingerprintSHA256": "",
+                    "certNotBefore": "",
+                    "certNotAfter": "",
+                    "certRFC9440": "",
+                    "certRFC9440TooLarge": false,
+                    "certChainRFC9440": "",
+                    "certChainRFC9440TooLarge": false
+                },
+                "verifiedBotCategory": "",
+                "edgeL4": {
+                    "deliveryRate": 0
+                }
+            }
+        },
+        "response": {
+            "status": 500
+        }
+    }
+}
+{
+    "wallTime": 90,
+    "cpuTime": 38,
+    "truncated": false,
+    "executionModel": "stateless",
+    "outcome": "ok",
+    "scriptVersion": {
+        "id": "e9a29bf4-7e66-431b-9325-a638d31c0e3b"
+    },
+    "scriptName": "site-enoch",
+    "diagnosticsChannelEvents": [],
+    "exceptions": [],
+    "logs": [
+        {
+            "message": [
+                "Error: Connection terminated unexpectedly"
+            ],
+            "level": "error",
+            "timestamp": 1777257036080
+        },
+        {
+            "message": [
+                "Error: Connection terminated unexpectedly"
+            ],
+            "level": "error",
+            "timestamp": 1777257036095
+        }
+    ],
+    "eventTimestamp": 1777257036051,
+    "event": {
+        "request": {
+            "url": "https://site-enoch.arkersoft.workers.dev/",
+            "method": "GET",
+            "headers": {
+                "accept-encoding": "gzip, br",
+                "cf-connecting-ip": "2a09:bac5:dcc:274b::3ea:13",
+                "cf-ipcountry": "BR",
+                "cf-ray": "9f2a67fb4a962d34",
+                "cf-visitor": "{\"scheme\":\"https\"}",
+                "connection": "Keep-Alive",
+                "host": "site-enoch.arkersoft.workers.dev",
+                "user-agent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; pt-BR) WindowsPowerShell/5.1.26100.8115",
+                "x-forwarded-proto": "https",
+                "x-real-ip": "2a09:bac5:dcc:274b::3ea:13"
+            },
+            "cf": {
+                "httpProtocol": "HTTP/1.1",
+                "requestPriority": "",
+                "edgeRequestKeepAliveStatus": 1,
+                "requestHeaderNames": {},
+                "clientTcpRtt": 0,
+                "clientQuicRtt": 0,
+                "colo": "GRU",
+                "asn": 13335,
+                "asOrganization": "Cloudflare London, LLC",
+                "country": "BR",
+                "isEUCountry": false,
+                "city": "São Paulo",
+                "continent": "SA",
+                "region": "São Paulo",
+                "regionCode": "SP",
+                "timezone": "America/Sao_Paulo",
+                "longitude": "-46.63611",
+                "latitude": "-23.5475",
+                "postalCode": "01000-000",
+                "tlsVersion": "TLSv1.3",
+                "tlsCipher": "AEAD-AES256-GCM-SHA384",
+                "tlsClientRandom": "cLZQj4CwChzEvN+DC+55zQpeFiE7JLXwjXNfwBjMqIs=",
+                "tlsClientCiphersSha1": "kTkJ+HAwBvIuoPFncb1wEDLcgfg=",
+                "tlsClientExtensionsSha1": "Bxwn0Bs0z+5dY69ZcqleTRGmlpE=",
+                "tlsClientExtensionsSha1Le": "sb2ftGg4/laBHA9Q/MJ4X/0+cJY=",
+                "tlsExportedAuthenticator": {
+                    "clientHandshake": "0c14ef2343a69c781d737b7df05157ca52c68ce74e85ad82558421a9d8d3339ccbb15d7762a13abf7a7d03708f7af9ca",
+                    "serverHandshake": "806211e3c2121432a6b8bb3ab45bcad008df3f44d68ee10dcc283de9bf8b3b551c1235b5eeaad7a4563af91e67ef8020",
+                    "clientFinished": "104caab9de4045dadedca75151cd516d9abd166bc6273641ec34aa602c50b712ab910a9351d75852a770d3cdf56487f8",
+                    "serverFinished": "476e39e8fed4774a8e9a681cb5a9a06c8848679d60fc7228eeffc151687ebf3fbd5ac80152d1ea62d533fb3044bfa7a6"
+                },
+                "tlsClientHelloLength": "450",
+                "tlsClientAuth": {
+                    "certPresented": "0",
+                    "certVerified": "NONE",
+                    "certRevoked": "0",
+                    "certIssuerDN": "",
+                    "certSubjectDN": "",
+                    "certIssuerDNRFC2253": "",
+                    "certSubjectDNRFC2253": "",
+                    "certIssuerDNLegacy": "",
+                    "certSubjectDNLegacy": "",
+                    "certSerial": "",
+                    "certIssuerSerial": "",
+                    "certSKI": "",
+                    "certIssuerSKI": "",
+                    "certFingerprintSHA1": "",
+                    "certFingerprintSHA256": "",
+                    "certNotBefore": "",
+                    "certNotAfter": "",
+                    "certRFC9440": "",
+                    "certRFC9440TooLarge": false,
+                    "certChainRFC9440": "",
+                    "certChainRFC9440TooLarge": false
+                },
+                "verifiedBotCategory": "",
+                "edgeL4": {
+                    "deliveryRate": 0
+                }
+            }
+        },
+        "response": {
+            "status": 500
+        }
+    }
+}

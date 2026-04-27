@@ -7,6 +7,16 @@ function envTruthy(name: string): boolean {
   return v === "1" || v === "true" || v === "yes";
 }
 
+export function stripWorkerUnsupportedTlsFileParams(connectionString: string): string {
+  let s = connectionString.replace(
+    /([?&])(sslcert|sslkey|sslrootcert)=[^&]*(?=&|$)/gi,
+    (_m, prefix: string) => (prefix === "?" ? "?" : ""),
+  );
+  s = s.replace(/\?&/, "?");
+  s = s.replace(/[?&]$/, "");
+  return s;
+}
+
 /**
  * Quando verdadeiro, o pool `pg` não exige cadeia de confiança (ver `prisma-factory`).
  * - `next dev` (`NODE_ENV=development`): activo por omissão (proxies / certificados internos).
@@ -51,12 +61,14 @@ function assertPostgresHostReachableFromWorkers(connectionString: string): void 
 }
 
 /**
- * Supabase (Prisma + Workers): TLS com `verify-full` (comportamento actual do node-pg para
- * `require`; evita o aviso de depreciação em pg v9 / pg-connection-string v3).
+ * Supabase (Prisma + Workers): manter TLS activo sem impor `verify-full` por omissão.
+ * O `pg` actual trata `sslmode=require` como `verify-full`, o que pode falhar com
+ * cadeias intermédias do pooler; `uselibpqcompat=true` repõe a semântica libpq
+ * (TLS obrigatório, sem verificação rígida de cadeia) até o ecossistema estabilizar.
  * No pooler de transacções (6543 / `*.pooler.supabase.*`), `pgbouncer=true` é obrigatório
  * para o Prisma — sem isto as ligações caem com "Connection terminated unexpectedly".
  */
-function enhanceSupabasePostgresUrl(connectionString: string): string {
+export function enhanceSupabasePostgresUrl(connectionString: string): string {
   if (!/supabase\.(co|com)/i.test(connectionString)) {
     return connectionString;
   }
@@ -68,10 +80,14 @@ function enhanceSupabasePostgresUrl(connectionString: string): string {
     } else if (!/sslmode=/i.test(s)) {
       s += (s.includes("?") ? "&" : "?") + "sslmode=require";
     }
-  } else if (/[?&]sslmode=require(?=&|$)/i.test(s)) {
-    s = s.replace(/([?&])sslmode=require(?=&|$)/i, "$1sslmode=verify-full");
   } else if (!/sslmode=/i.test(s)) {
-    s += (s.includes("?") ? "&" : "?") + "sslmode=verify-full";
+    s += (s.includes("?") ? "&" : "?") + "sslmode=require";
+  }
+  if (
+    /[?&]sslmode=require(?=&|$)/i.test(s) &&
+    !/[?&]uselibpqcompat=true(?=&|$)/i.test(s)
+  ) {
+    s += "&uselibpqcompat=true";
   }
   const hostPath = s.split("?")[0] ?? s;
   const isTransactionPooler =
@@ -94,10 +110,12 @@ export function getDatabaseUrl(): string {
     const e = env as { HYPERDRIVE?: HyperdriveLike; DATABASE_URL?: string };
     if (e.HYPERDRIVE?.connectionString) {
       // Não validar host: a string do binding é gerida pelo Hyperdrive e pode não ser um host "público" parseável.
-      return e.HYPERDRIVE.connectionString;
+      return stripWorkerUnsupportedTlsFileParams(e.HYPERDRIVE.connectionString);
     }
     if (typeof e.DATABASE_URL === "string" && e.DATABASE_URL.length > 0) {
-      const u = enhanceSupabasePostgresUrl(e.DATABASE_URL);
+      const u = stripWorkerUnsupportedTlsFileParams(
+        enhanceSupabasePostgresUrl(e.DATABASE_URL),
+      );
       assertPostgresHostReachableFromWorkers(u);
       return u;
     }
@@ -111,7 +129,7 @@ export function getDatabaseUrl(): string {
       "DATABASE_URL is not set (or Hyperdrive is not bound as HYPERDRIVE in wrangler).",
     );
   }
-  const resolved = enhanceSupabasePostgresUrl(url);
+  const resolved = stripWorkerUnsupportedTlsFileParams(enhanceSupabasePostgresUrl(url));
   if (inWorker) {
     assertPostgresHostReachableFromWorkers(resolved);
   }

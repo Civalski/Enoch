@@ -10,6 +10,7 @@ import { Preloader } from "@/components/site/Preloader";
 import { Section } from "@/components/site/Section";
 import { HomeProjetosBlock } from "@/components/site/home/HomeProjetosBlock";
 import { HomeStatsComoLocBlock } from "@/components/site/home/HomeStatsComoLocBlock";
+import { DEFAULT_HERO_BACKGROUND_IMAGE } from "@/lib/institutional-site/defaults";
 import type { HomeContentV1, PublicSiteView } from "@/lib/institutional-site/types";
 
 type Props = { site: PublicSiteView; canManage: boolean };
@@ -25,6 +26,8 @@ export function HomePageView({ site, canManage }: Props) {
   const sc = site.scalars;
   const mapSrc = sc.mapEmbedUrl;
   const missionImageSrc = (h.quemSomos?.missionImageUrl ?? "").trim() || sc.logoUrl;
+  const rawHeroImageUrl = (h.hero?.imageUrl ?? "").trim();
+  const heroImageSrc = rawHeroImageUrl || DEFAULT_HERO_BACKGROUND_IMAGE;
 
   const pushHome = useCallback(
     (fn: (p: HomeContentV1) => HomeContentV1) => {
@@ -49,7 +52,24 @@ export function HomePageView({ site, canManage }: Props) {
   return (
     <div className={canManage && dirty ? "pb-24" : undefined}>
       <Preloader logoUrl={sc.logoUrl} orgName={sc.orgName} />
+      {canManage ? (
+        <div className="relative z-30 border-b border-amber-200 bg-amber-50/95 px-4 py-2 text-slate-800">
+          <p className="mb-1 text-xs text-amber-900/90">
+            Imagem de fundo do destaque (URL). Vazio = imagem predefinida. Guarde as alterações em baixo
+            para aplicar.
+          </p>
+          <InlinePencilText
+            block
+            enabled
+            value={h.hero?.imageUrl ?? ""}
+            onChange={(v) => pushHome((p) => ({ ...p, hero: { ...p.hero, imageUrl: v } }))}
+            className="w-full break-all text-sm font-mono"
+            editLabel="Editar URL da imagem de fundo do destaque"
+          />
+        </div>
+      ) : null}
       <Hero
+        imageSrc={heroImageSrc}
         title={
           canManage ? (
             <InlinePencilText

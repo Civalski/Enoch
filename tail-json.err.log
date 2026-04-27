@@ -1,0 +1,8 @@
+This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason:
+TypeError: fetch failed
+    at Object.processResponse (C:\Users\Alisson Civalski\Documents\Enoch\Enoch\node_modules\wrangler\wrangler-dist\cli.js:36074:21)
+    at C:\Users\Alisson Civalski\Documents\Enoch\Enoch\node_modules\wrangler\wrangler-dist\cli.js:36460:23
+    at node:internal/process/task_queues:150:7
+    at AsyncResource.runInAsyncScope (node:async_hooks:228:14)
+    at AsyncResource.runMicrotask (node:internal/process/task_queues:147:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)

@@ -7,7 +7,7 @@ import { spawnSync } from "node:child_process";
 
 process.env.OPEN_NEXT_DEPLOY = "true";
 const passthrough = process.argv.slice(2);
-const args = ["wrangler", "deploy", "--minify", ...passthrough];
+const args = ["wrangler", "deploy", "--minify", "--keep-vars", ...passthrough];
 const result = spawnSync("npx", args, {
   stdio: "inherit",
   shell: true,

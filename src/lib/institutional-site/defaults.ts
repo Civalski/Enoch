@@ -12,6 +12,10 @@ import type {
 export const DEFAULT_LOGO_URL =
   "https://enoch.ornete.com/Loja/17673/Site/Logotipo.jpg?20240622135039";
 
+/** Imagem de fundo do hero na página inicial (editável no CMS; fallback quando `hero.imageUrl` vazio). */
+export const DEFAULT_HERO_BACKGROUND_IMAGE =
+  "https://images.unsplash.com/photo-1682176162491-2e63972a1d9b?q=80&w=1920&h=1080&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+
 export const DEFAULT_SCALARS: ScalarFields = {
   orgName: "A.R.L.S Enoch",
   headerTagline: "Instituição de Caridade",
@@ -39,6 +43,7 @@ export const DEFAULT_HOME_V1: HomeContentV1 = {
     title: "Transformando Vidas Através da Solidariedade",
     subtitle:
       "A.R.L.S Enoch é uma instituição dedicada a fazer a diferença na vida das pessoas através de ações solidárias e projetos sociais.",
+    imageUrl: DEFAULT_HERO_BACKGROUND_IMAGE,
   },
   quemSomos: {
     sectionTitle: "Quem Somos",
