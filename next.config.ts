@@ -8,7 +8,6 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["@radix-ui/react-alert-dialog", "@supabase/supabase-js"],
   },
-  // Prisma com `runtime = "cloudflare"` (injectado em `scripts/prisma-wasm-toggle.mjs` no `npm run deploy`) usa WASM.
   webpack: (config) => {
     config.experiments = { ...config.experiments, asyncWebAssembly: true };
     return config;

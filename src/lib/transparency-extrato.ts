@@ -1,5 +1,5 @@
 import { calendarMonthKey, formatMonthLabelPt } from "@/lib/donations-months";
-import type { TransparencyExpenseCategory } from "@/generated/prisma/client";
+import type { TransparencyExpenseCategory } from "@prisma/client";
 
 export type ExtratoExpenseLine = {
   id: string;

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { createMemberFormAction, type UsuariosMemberFormState } from "@/app/app/(backoffice)/usuarios/actions";
 import { ALL_SITE_PERMISSIONS } from "@/lib/permissions/site-permission-logic";
-import type { SitePermission, TenantRole } from "@/generated/prisma/client";
+import type { SitePermission, TenantRole } from "@prisma/client";
 import { UsuariosMemberListRow } from "./UsuariosMemberListRow";
 import { UserProfileOptionalFields } from "./UserProfileOptionalFields";
 

@@ -10,7 +10,7 @@ import {
   updateMemberUserDataFormAction,
   type UsuariosMemberFormState,
 } from "@/app/app/(backoffice)/usuarios/actions";
-import type { TenantRole } from "@/generated/prisma/client";
+import type { TenantRole } from "@prisma/client";
 import { accountIdentifierForDisplay } from "@/lib/auth/login-identity";
 import type { UsuarioRow } from "./UsuariosManager";
 import { UsuariosMemberListRowModals } from "./UsuariosMemberListRowModals";

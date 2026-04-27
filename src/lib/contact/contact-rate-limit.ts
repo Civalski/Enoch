@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
-import { Prisma } from "@/generated/prisma/client";
-import type { PrismaClient } from "@/generated/prisma/client";
+import { Prisma } from "@prisma/client";
+import type { PrismaClient } from "@prisma/client";
 
 /** Janela deslizante alinhada em blocos (ex.: 15 minutos UTC a partir de epoch). */
 export const CONTACT_FORM_RATE_WINDOW_MS = 15 * 60 * 1000;

@@ -17,7 +17,7 @@ import {
   TRANSPARENCY_CATEGORY_PRESENTATION,
   TRANSPARENCY_EXPENSE_CATEGORY_ORDER,
 } from "@/lib/transparency-categories";
-import type { TransparencyExpenseCategory } from "@/generated/prisma/client";
+import type { TransparencyExpenseCategory } from "@prisma/client";
 import type { DonationPublicRow } from "@/lib/donations-data";
 
 export type TransparencyDonationRow = {

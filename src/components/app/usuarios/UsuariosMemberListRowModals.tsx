@@ -4,7 +4,7 @@ import { useEffect, type ReactNode } from "react";
 import type { UsuariosMemberFormState } from "@/app/app/(backoffice)/usuarios/actions";
 import { accountIdentifierForDisplay } from "@/lib/auth/login-identity";
 import { ALL_SITE_PERMISSIONS } from "@/lib/permissions/site-permission-logic";
-import type { SitePermission } from "@/generated/prisma/client";
+import type { SitePermission } from "@prisma/client";
 import type { UsuarioRow } from "./UsuariosManager";
 import { UserProfileOptionalFields } from "./UserProfileOptionalFields";
 

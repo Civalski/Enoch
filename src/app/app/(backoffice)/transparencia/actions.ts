@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { requireSitePermission } from "@/lib/permissions/site-permissions";
 import { getPrisma } from "@/lib/prisma";
-import type { TransparencyExpenseCategory } from "@/generated/prisma/client";
+import type { TransparencyExpenseCategory } from "@prisma/client";
 import type { DonationFormState } from "./donation-form-state";
 import type { TransparencyExpenseFormState } from "./expense-form-state";
 import { isTransparencyExpenseCategory } from "@/lib/transparency-categories";

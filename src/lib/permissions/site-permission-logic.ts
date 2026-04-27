@@ -1,4 +1,4 @@
-import type { SitePermission, TenantRole } from "@/generated/prisma/client";
+import type { SitePermission, TenantRole } from "@prisma/client";
 
 export const ALL_SITE_PERMISSIONS: readonly SitePermission[] = [
   "BLOG",

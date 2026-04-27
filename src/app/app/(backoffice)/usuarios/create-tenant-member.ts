@@ -5,7 +5,7 @@ import { AuthApiError } from "@supabase/supabase-js";
 import { getPrisma } from "@/lib/prisma";
 import { requirePublicSiteMembersManager } from "@/lib/permissions/site-permissions";
 import { ALL_SITE_PERMISSIONS } from "@/lib/permissions/site-permission-logic";
-import type { SitePermission } from "@/generated/prisma/client";
+import type { SitePermission } from "@prisma/client";
 import { createSupabaseAdminClient } from "@/utils/supabase/admin";
 import { resolveAuthEmail } from "@/lib/auth/login-identity";
 import {

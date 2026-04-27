@@ -1,6 +1,6 @@
 /**
  * Valores alinhados ao enum `StudyResourceKind` (Prisma).
- * Usar isto em componentes `use client` em vez de `@/generated/prisma/client` para não embutir o runtime do Prisma.
+ * Usar isto em componentes `use client` em vez de `@prisma/client` para não embutir o runtime do Prisma.
  */
 export const STUDY_RESOURCE_KINDS = [
   "artigo",

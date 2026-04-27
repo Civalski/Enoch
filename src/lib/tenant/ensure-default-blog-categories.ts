@@ -1,4 +1,4 @@
-import type { Prisma } from "@/generated/prisma/client";
+import type { Prisma } from "@prisma/client";
 import { getPrisma } from "@/lib/prisma";
 
 const DEFAULT: { slug: string; label: string }[] = [

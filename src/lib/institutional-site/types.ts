@@ -1,6 +1,6 @@
 /** Estruturas JSON (v1) guardadas em InstitutionalSiteContent — merge com defaults no código. */
 
-import type { Prisma } from "@/generated/prisma/client";
+import type { Prisma } from "@prisma/client";
 
 export type PageMeta = {
   title?: string;

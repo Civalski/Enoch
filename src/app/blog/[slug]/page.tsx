@@ -17,8 +17,7 @@ type Params = { slug: string };
 
 export const dynamic = "force-dynamic";
 
-/** Sem `generateStaticParams`: a lista de slugs vem de Prisma/merge e quebrava o `next build` com
- * cliente `runtime = "cloudflare"` (WASM) no passo "Collecting page data". Os slugs resolvem em runtime. */
+/** Sem `generateStaticParams`: a lista de slugs vem de Prisma/merge; mantemos rotas resolvidas em runtime. */
 
 export async function generateMetadata({
   params,

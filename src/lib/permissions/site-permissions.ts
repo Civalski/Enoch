@@ -4,7 +4,7 @@ import { isPublicVisitorPreviewSession } from "@/lib/permissions/visitor-preview
 import { ensureUserProvisioning } from "@/lib/tenant/provisioning";
 import { listTenantsForUser, type TenantMembershipRow } from "@/lib/tenant/active-tenant";
 import { resolvePublicBlogTenant } from "@/lib/blog-data";
-import type { SitePermission, TenantRole } from "@/generated/prisma/client";
+import type { SitePermission, TenantRole } from "@prisma/client";
 import {
   toSiteCapabilities,
   memberHasSitePermission,

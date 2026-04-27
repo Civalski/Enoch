@@ -1,4 +1,4 @@
-import type { TransparencyExpenseCategory } from "@/generated/prisma/client";
+import type { TransparencyExpenseCategory } from "@prisma/client";
 
 export const TRANSPARENCY_EXPENSE_CATEGORY_ORDER = [
   "assistencia_social",

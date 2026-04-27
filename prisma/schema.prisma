@@ -1,18 +1,12 @@
-// Cliente gerado por defeito: Node (`npm run dev`, CI, Vercel).
-// Para Cloudflare Workers, `scripts/opennext-cloudflare-bundle.mjs` adiciona temporariamente
-// `runtime = "cloudflare"` e corre `prisma generate` antes do `opennextjs-cloudflare build`.
-
-// Cliente gerado por defeito: Node (`npm run dev`, CI, Vercel).
-// Para Cloudflare Workers, `scripts/opennext-cloudflare-bundle.mjs` adiciona temporariamente
-// `runtime = "cloudflare"` e corre `prisma generate` antes do `opennextjs-cloudflare build`.
-// O `prisma-client` (Prisma 7) exige `output` explícito.
+// Prisma 6 + `driverAdapters` + `pg` em Workers (OpenNext) — o motor Prisma 7 em WASM
+// falha no workerd (`WebAssembly.Module(): … disallowed by embedter`). Não subir a 7 sem verificar.
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 enum TenantRole {

@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { Prisma } from "@/generated/prisma/client";
+import { Prisma } from "@prisma/client";
 import { getPrisma } from "@/lib/prisma";
 import { requirePublicInstitutionalWriter } from "@/lib/institutional-site/writer-auth";
 import {

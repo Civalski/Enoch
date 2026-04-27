@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { getPrisma } from "@/lib/prisma";
 import { requirePublicSiteMembersManager } from "@/lib/permissions/site-permissions";
 import { ALL_SITE_PERMISSIONS } from "@/lib/permissions/site-permission-logic";
-import type { SitePermission } from "@/generated/prisma/client";
+import type { SitePermission } from "@prisma/client";
 import { createSupabaseAdminClient } from "@/utils/supabase/admin";
 import { isMasterPanelTenantUserId } from "@/lib/auth/admin-master";
 import {

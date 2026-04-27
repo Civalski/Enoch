@@ -1,4 +1,4 @@
-import type { Prisma } from "@/generated/prisma/client";
+import type { Prisma } from "@prisma/client";
 import {
   DEFAULT_ABOUT_V1,
   DEFAULT_BLOG_V1,
