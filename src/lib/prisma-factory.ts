@@ -1,31 +1,38 @@
 import { PrismaPg } from "@prisma/adapter-pg";
-import { parse } from "pg-connection-string";
-import type { PoolConfig } from "pg";
+import { PrismaClient } from "@prisma/client";
 import { getDatabaseUrl, isDatabaseSslInsecure } from "@/lib/database-url";
-import { getPrismaClientModule } from "@/lib/prisma-runtime";
 
 /**
- * Com `connectionString`, o `pg` faz `Object.assign({}, config, parse(url))` e o
- * `ssl` vindo do URL (ex.: sslmode=verify-full) substitui um `ssl` explícito.
- * Sem `connectionString`, o `ssl` que passamos mantém-se.
+ * Creates a new PrismaClient per request.
+ *
+ * Follows the official OpenNext + Prisma + PostgreSQL pattern:
+ * @see https://opennext.js.org/cloudflare/howtos/db#postgresql-1
+ *
+ * Key decisions:
+ * - `maxUses: 1` prevents connection reuse across requests, which causes
+ *   "Connection terminated unexpectedly" errors in Cloudflare Workers.
+ * - Imports from `@prisma/client` directly (not `/wasm`). OpenNext patches the
+ *   generated client to use the WASM query engine for the workerd runtime.
+ * - SSL config: In production Workers, Supabase's transaction pooler (:6543)
+ *   requires TLS, but the workerd TLS stack may not validate the full cert chain.
+ *   We set `ssl: { rejectUnauthorized: false }` to avoid "Connection terminated".
  */
-function buildPgPoolConfig(url: string): PoolConfig {
-  if (!isDatabaseSslInsecure()) {
-    return { connectionString: url, max: 1 };
-  }
-  const parsed = parse(url) as PoolConfig & { connectionString?: string };
-  const spread = { ...parsed };
-  delete spread.connectionString;
-  return {
-    ...spread,
-    max: 1,
-    ssl: { rejectUnauthorized: false },
-  };
-}
-
 export function createPrismaClient() {
-  const { PrismaClient } = getPrismaClientModule();
-  const url = getDatabaseUrl();
-  const adapter = new PrismaPg(buildPgPoolConfig(url));
+  const connectionString = getDatabaseUrl();
+
+  // Build adapter options following the official OpenNext pattern.
+  // `maxUses: 1` is critical for Workers — prevents pool reuse across requests.
+  const adapterOptions: Record<string, unknown> = {
+    connectionString,
+    maxUses: 1,
+  };
+
+  // In production (Workers), relax SSL verification for Supabase pooler.
+  // The workerd TLS implementation may reject Supabase's cert chain.
+  if (isDatabaseSslInsecure()) {
+    adapterOptions.ssl = { rejectUnauthorized: false };
+  }
+
+  const adapter = new PrismaPg(adapterOptions as ConstructorParameters<typeof PrismaPg>[0]);
   return new PrismaClient({ adapter });
 }

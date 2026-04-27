@@ -25,6 +25,7 @@
     "NEXT_PUBLIC_SUPABASE_URL": "https://onpbpjpicxahnwrdzrbx.supabase.co",
     "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY": "sb_publishable_1i8IS4kZ0Tqct0JWzezwsw_ubc8S7_3",
     "BLOG_TENANT_SLUG": "teste-mobwc656-sdaks",
+    "DATABASE_SSL_INSECURE": "true",
     "NEXTJS_ENV": "production",
     "NODE_ENV": "production"
   }

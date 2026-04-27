@@ -1,9 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import type { Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { getPrisma } from "@/lib/prisma";
-import { getPrismaClientModule } from "@/lib/prisma-runtime";
 import { requirePublicInstitutionalWriter } from "@/lib/institutional-site/writer-auth";
 import {
   aboutContentEqualToDefault,
@@ -33,7 +32,7 @@ import type {
 } from "@/lib/institutional-site/types";
 
 /** Valores runtime (`JsonNull`); tipos usam `import type { Prisma }`. */
-const PrismaJson = getPrismaClientModule().Prisma;
+const PrismaJson = Prisma;
 
 const MAX = {
   orgName: 200,
