@@ -30,12 +30,29 @@ function assertPostgresHostReachableFromWorkers(connectionString: string): void 
   }
 }
 
-/** Supabase exige TLS; pooler usa `*.pooler.supabase.com` (não só `supabase.co`). */
-function ensureSslModeRequireForSupabase(connectionString: string): string {
-  if (!/supabase\.(co|com)/i.test(connectionString) || /sslmode=/i.test(connectionString)) {
+/**
+ * Supabase (Prisma + Workers): TLS com `verify-full` (comportamento actual do node-pg para
+ * `require`; evita o aviso de depreciação em pg v9 / pg-connection-string v3).
+ * No pooler de transacções (6543 / `*.pooler.supabase.*`), `pgbouncer=true` é obrigatório
+ * para o Prisma — sem isto as ligações caem com "Connection terminated unexpectedly".
+ */
+function enhanceSupabasePostgresUrl(connectionString: string): string {
+  if (!/supabase\.(co|com)/i.test(connectionString)) {
     return connectionString;
   }
-  return connectionString + (connectionString.includes("?") ? "&" : "?") + "sslmode=require";
+  let s = connectionString;
+  if (/[?&]sslmode=require(?=&|$)/i.test(s)) {
+    s = s.replace(/([?&])sslmode=require(?=&|$)/i, "$1sslmode=verify-full");
+  } else if (!/sslmode=/i.test(s)) {
+    s += (s.includes("?") ? "&" : "?") + "sslmode=verify-full";
+  }
+  const hostPath = s.split("?")[0] ?? s;
+  const isTransactionPooler =
+    /pooler\.supabase\.(com|co)/i.test(hostPath) || /:6543([/?]|$)/.test(hostPath);
+  if (isTransactionPooler && !/[?&]pgbouncer=true(?=&|$)/i.test(s)) {
+    s += (s.includes("?") ? "&" : "?") + "pgbouncer=true";
+  }
+  return s;
 }
 
 /**
@@ -53,7 +70,7 @@ export function getDatabaseUrl(): string {
       return e.HYPERDRIVE.connectionString;
     }
     if (typeof e.DATABASE_URL === "string" && e.DATABASE_URL.length > 0) {
-      const u = ensureSslModeRequireForSupabase(e.DATABASE_URL);
+      const u = enhanceSupabasePostgresUrl(e.DATABASE_URL);
       assertPostgresHostReachableFromWorkers(u);
       return u;
     }
@@ -67,7 +84,7 @@ export function getDatabaseUrl(): string {
       "DATABASE_URL is not set (or Hyperdrive is not bound as HYPERDRIVE in wrangler).",
     );
   }
-  const resolved = ensureSslModeRequireForSupabase(url);
+  const resolved = enhanceSupabasePostgresUrl(url);
   if (inWorker) {
     assertPostgresHostReachableFromWorkers(resolved);
   }
