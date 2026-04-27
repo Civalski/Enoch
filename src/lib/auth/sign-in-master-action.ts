@@ -1,6 +1,5 @@
 "use server";
 
-import { createHash, timingSafeEqual } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
@@ -18,17 +17,25 @@ import { resolvePublicBlogTenant } from "@/lib/blog-data";
 
 export type SignInMasterResult = { error: string } | undefined;
 
-function sha256(s: string) {
-  return createHash("sha256").update(s, "utf8").digest("hex");
+async function sha256(s: string) {
+  const hash = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s));
+  return Array.from(new Uint8Array(hash))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
 }
 
-function safePasswordEqual(input: string, fromEnv: string) {
-  const a = sha256(input);
-  const b = sha256(fromEnv);
+async function safePasswordEqual(input: string, fromEnv: string) {
+  const a = await sha256(input);
+  const b = await sha256(fromEnv);
   if (a.length !== b.length) {
     return false;
   }
-  return timingSafeEqual(Buffer.from(a, "utf8"), Buffer.from(b, "utf8"));
+  // Constant-time comparison for strings
+  let d = 0;
+  for (let i = 0; i < a.length; i++) {
+    d |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return d === 0;
 }
 
 function isMasterLoginAttempt(raw: string): boolean {
@@ -53,7 +60,8 @@ export async function signInWithMasterAction(input: {
     if (!fromEnv) {
       return { error: "Falta ADMIN_PASSWORD no ambiente (servidor)." };
     }
-    if (!safePasswordEqual(input.password, fromEnv)) {
+    const isPasswordCorrect = await safePasswordEqual(input.password, fromEnv);
+    if (!isPasswordCorrect) {
       return { error: AUTH_FAIL };
     }
     const token = await createSessionValue(input.login.trim());
