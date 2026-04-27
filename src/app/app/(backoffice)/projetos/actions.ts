@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getStaticProjectByTitle } from "@/lib/projects-static";
 import { requireSitePermission } from "@/lib/permissions/site-permissions";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import type { ProjectFormState } from "./project-form-state";
 
 async function requireWriterTenant() {
@@ -40,7 +40,7 @@ export async function createProjectFormAction(
     }
     const displayOrder = parseIntOrder(String(formData.get("displayOrder") ?? "0"));
 
-    await prisma.project.create({
+    await getPrisma().project.create({
       data: { tenantId, title, description, imageUrl, displayOrder },
     });
 
@@ -63,7 +63,7 @@ export async function updateProjectFormAction(
     if (!id) {
       return { ok: false, message: "Projeto inválido." };
     }
-    const existing = await prisma.project.findFirst({
+    const existing = await getPrisma().project.findFirst({
       where: { id, tenantId },
     });
     if (!existing) {
@@ -84,7 +84,7 @@ export async function updateProjectFormAction(
     }
     const displayOrder = parseIntOrder(String(formData.get("displayOrder") ?? "0"));
 
-    await prisma.project.update({
+    await getPrisma().project.update({
       where: { id },
       data: { title, description, imageUrl, displayOrder },
     });
@@ -104,14 +104,14 @@ export async function deleteProjectAction(formData: FormData) {
   if (!id) {
     throw new Error("Projeto inválido.");
   }
-  const existing = await prisma.project.findFirst({
+  const existing = await getPrisma().project.findFirst({
     where: { id, tenantId },
   });
   if (!existing) {
     throw new Error("Projeto não encontrado.");
   }
 
-  await prisma.project.delete({ where: { id } });
+  await getPrisma().project.delete({ where: { id } });
 
   revalidatePath("/projetos");
   revalidatePath("/app/projetos");
@@ -129,7 +129,7 @@ export async function hideStaticProjectAction(formData: FormData) {
     throw new Error("Não é um bloco de exemplo do repositório.");
   }
 
-  const current = await prisma.institutionalSiteContent.findUnique({
+  const current = await getPrisma().institutionalSiteContent.findUnique({
     where: { tenantId },
     select: { hiddenStaticProjectTitles: true },
   });
@@ -137,7 +137,7 @@ export async function hideStaticProjectAction(formData: FormData) {
     ...new Set([...(current?.hiddenStaticProjectTitles ?? []), title]),
   ];
 
-  await prisma.institutionalSiteContent.upsert({
+  await getPrisma().institutionalSiteContent.upsert({
     where: { tenantId },
     create: { tenantId, hiddenStaticProjectTitles },
     update: { hiddenStaticProjectTitles },

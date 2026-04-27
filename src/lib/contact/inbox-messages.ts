@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { resolvePublicBlogTenant } from "@/lib/blog-data";
 
 export type InboxMessageRow = {
@@ -18,7 +18,7 @@ export async function getInstitutionalContactInboxMessages(): Promise<InboxMessa
     return [];
   }
 
-  const raw = await prisma.contactMessage.findMany({
+  const raw = await getPrisma().contactMessage.findMany({
     where: { tenantId: tenant.id },
     orderBy: { createdAt: "desc" },
     take: 100,

@@ -1,7 +1,7 @@
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 
 export async function listTenantsForUser(userId: string) {
-  return prisma.tenantMember.findMany({
+  return getPrisma().tenantMember.findMany({
     where: { userId },
     include: { tenant: true },
     orderBy: { createdAt: "asc" },

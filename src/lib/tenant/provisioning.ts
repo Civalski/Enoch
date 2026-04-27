@@ -1,6 +1,6 @@
 import { getSimpleAuthUserId } from "@/lib/auth/simple-session";
 import { resolvePublicBlogTenant } from "@/lib/blog-data";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { makeTenantSlug } from "@/lib/tenant/slug";
 import { ensureDefaultBlogCategories } from "@/lib/tenant/ensure-default-blog-categories";
 
@@ -16,25 +16,25 @@ import { ensureDefaultBlogCategories } from "@/lib/tenant/ensure-default-blog-ca
  */
 export async function ensureUserProvisioning(userId: string, email: string) {
   const safeEmail = email.trim();
-  await prisma.userProfile.upsert({
+  await getPrisma().userProfile.upsert({
     where: { id: userId },
     create: { id: userId, email: safeEmail },
     update: { email: safeEmail },
   });
 
-  const membershipCount = await prisma.tenantMember.count({
+  const membershipCount = await getPrisma().tenantMember.count({
     where: { userId },
   });
 
   const publicT = await resolvePublicBlogTenant();
   if (publicT) {
-    const inPublic = await prisma.tenantMember.findFirst({
+    const inPublic = await getPrisma().tenantMember.findFirst({
       where: { userId, tenantId: publicT.id },
     });
     if (!inPublic && (userId === getSimpleAuthUserId() || membershipCount === 0)) {
       // upsert: pedidos paralelos (ex.: layout + /blog) podem ambos passar o guard e
       // o segundo create() falhava com P2002; idempotente.
-      await prisma.tenantMember.upsert({
+      await getPrisma().tenantMember.upsert({
         where: {
           tenantId_userId: { tenantId: publicT.id, userId },
         },
@@ -54,7 +54,7 @@ export async function ensureUserProvisioning(userId: string, email: string) {
   const name = `Organização de ${local}`;
   const slug = makeTenantSlug(safeEmail);
 
-  await prisma.$transaction(async (tx) => {
+  await getPrisma().$transaction(async (tx) => {
     const tenant = await tx.tenant.create({
       data: { name, slug },
     });

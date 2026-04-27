@@ -4,7 +4,7 @@ import { BlogEditorForm } from "@/components/app/BlogEditorForm";
 import { requireServerUser } from "@/lib/auth/server";
 import { ensureUserProvisioning } from "@/lib/tenant/provisioning";
 import { getPublicSiteMembership, memberHasSitePermission } from "@/lib/permissions/site-permissions";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { getPostBySlug } from "@/lib/blog";
 
 type SearchParams = Promise<{ exemplo?: string }>;
@@ -21,7 +21,7 @@ export default async function NovoBlogPostPage({ searchParams }: { searchParams:
     redirect("/blog");
   }
 
-  const categories = await prisma.blogPostCategory.findMany({
+  const categories = await getPrisma().blogPostCategory.findMany({
     where: { tenantId: m.tenantId },
     orderBy: { label: "asc" },
     select: { id: true, slug: true, label: true },

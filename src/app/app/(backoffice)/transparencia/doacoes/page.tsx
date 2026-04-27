@@ -13,7 +13,7 @@ import {
 import { requireServerUser } from "@/lib/auth/server";
 import { ensureUserProvisioning } from "@/lib/tenant/provisioning";
 import { getSiteCapabilities, requirePublicSiteContext } from "@/lib/permissions/site-permissions";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 
 export default async function CadastroDoacoesPage() {
   const user = await requireServerUser();
@@ -29,12 +29,12 @@ export default async function CadastroDoacoesPage() {
 
   const { tenantId } = await requirePublicSiteContext();
   const [donationRows, expenseRows] = await Promise.all([
-    prisma.donation.findMany({
+    getPrisma().donation.findMany({
       where: { tenantId },
       orderBy: { donatedAt: "desc" },
       take: 200,
     }),
-    prisma.transparencyExpense.findMany({
+    getPrisma().transparencyExpense.findMany({
       where: { tenantId },
       orderBy: { spentAt: "desc" },
       take: 200,

@@ -3,6 +3,8 @@
 @tailwind utilities;
 
 :root {
+  /* Não usar `next/font/google` no Cloudflare Worker (acesso a ficheiro/manifesto via `fs` sem suporte unenv) */
+  --font-outfit: "Outfit", ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-outfit), sans-serif;
   --color-primary: #2563eb;
   --color-secondary: #4f46e5;

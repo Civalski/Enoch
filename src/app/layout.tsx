@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { ConditionalSiteFooter } from "@/components/site/ConditionalSiteFooter";
@@ -9,13 +8,6 @@ import { isPublicVisitorPreviewSession } from "@/lib/permissions/visitor-preview
 import { getCanManagePublicSiteMembers, getSiteCapabilities } from "@/lib/permissions/site-permissions";
 import { getPublicSiteView } from "@/lib/institutional-site/public";
 import { withContactInboxNavItem } from "@/lib/institutional-site/merge";
-
-const outfit = Outfit({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  variable: "--font-outfit",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: {
@@ -36,8 +28,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const headerNav = withContactInboxNavItem(site.headerNav, caps.contactInbox, site.headerNavLabelsRaw);
   const isLoggedInPublic = !visitorPreview && user != null;
   return (
-    <html lang="pt-BR" className={outfit.variable} style={{ colorScheme: "light" }}>
+    <html lang="pt-BR" style={{ colorScheme: "light" }}>
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet"
+        />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <meta name="color-scheme" content="light" />
         <meta name="theme-color" content="#f8fafc" />

@@ -4,18 +4,21 @@
  * Uso: npx tsx scripts/prune-site-members-except-master.ts
  */
 import "dotenv/config";
-import { prisma } from "../src/lib/prisma";
+import { createPrismaClient } from "../src/lib/prisma-factory";
 import { getSimpleAuthUserId } from "../src/lib/auth/simple-session";
 import { resolvePublicBlogTenant } from "../src/lib/blog-data";
 import { createSupabaseAdminClient } from "../src/utils/supabase/admin";
 
 async function main() {
+  const prisma = createPrismaClient();
+  try {
   const masterId = getSimpleAuthUserId();
   const publicT = await resolvePublicBlogTenant();
   if (!publicT) {
     console.error(
       "Não foi possível resolver o tenant do site público. Defina BLOG_TENANT_SLUG ou use uma base com um único tenant.",
     );
+    await prisma.$disconnect();
     process.exit(1);
   }
   const members = await prisma.tenantMember.findMany({
@@ -51,11 +54,12 @@ async function main() {
     }
   }
   console.log("Concluído.");
+  } finally {
+    await prisma.$disconnect();
+  }
 }
 
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(() => prisma.$disconnect());
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

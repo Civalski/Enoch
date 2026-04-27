@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { Prisma } from "@/generated/prisma/client";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { requirePublicInstitutionalWriter } from "@/lib/institutional-site/writer-auth";
 import {
   aboutContentEqualToDefault,
@@ -75,7 +75,7 @@ export async function saveInstitutionalContentAction(
       return { ok: false, message: "URL do mapa é demasiado longo." };
     }
 
-    const existing = await prisma.institutionalSiteContent.findUnique({
+    const existing = await getPrisma().institutionalSiteContent.findUnique({
       where: { tenantId },
       select: { homeContent: true, aboutContent: true, projetosContent: true },
     });
@@ -92,7 +92,7 @@ export async function saveInstitutionalContentAction(
       existing?.projetosContent != null
         ? (existing.projetosContent as Prisma.InputJsonValue)
         : Prisma.JsonNull;
-    await prisma.institutionalSiteContent.upsert({
+    await getPrisma().institutionalSiteContent.upsert({
       where: { tenantId },
       create: {
         tenantId,
@@ -153,7 +153,7 @@ export async function saveHeaderBrandingObjectAction(data: {
     const logoSt = u.value;
     const logoOut = logoSt && logoSt.length > 0 ? trim(logoSt, MAX.logo) : null;
 
-    await prisma.institutionalSiteContent.upsert({
+    await getPrisma().institutionalSiteContent.upsert({
       where: { tenantId },
       create: {
         tenantId,
@@ -205,7 +205,7 @@ export async function saveContatoContentObjectAction(
       ? Prisma.JsonNull
       : (contatoData as unknown as Prisma.InputJsonValue);
 
-    await prisma.institutionalSiteContent.upsert({
+    await getPrisma().institutionalSiteContent.upsert({
       where: { tenantId },
       create: {
         tenantId,
@@ -250,7 +250,7 @@ export async function saveEstudosContentObjectAction(
       ? Prisma.JsonNull
       : (estudosData as unknown as Prisma.InputJsonValue);
 
-    await prisma.institutionalSiteContent.upsert({
+    await getPrisma().institutionalSiteContent.upsert({
       where: { tenantId },
       create: {
         tenantId,
@@ -309,7 +309,7 @@ export async function saveHeaderNavLabelsObjectAction(
       ? Prisma.JsonNull
       : (overrides as unknown as Prisma.InputJsonValue);
 
-    await prisma.institutionalSiteContent.upsert({
+    await getPrisma().institutionalSiteContent.upsert({
       where: { tenantId },
       create: {
         tenantId,
@@ -357,7 +357,7 @@ export async function saveHomePageContentAction(
       ? Prisma.JsonNull
       : (homeData as unknown as Prisma.InputJsonValue);
 
-    await prisma.institutionalSiteContent.upsert({
+    await getPrisma().institutionalSiteContent.upsert({
       where: { tenantId },
       create: {
         tenantId,
@@ -400,7 +400,7 @@ export async function saveHomeContentObjectAction(
       ? Prisma.JsonNull
       : (homeData as unknown as Prisma.InputJsonValue);
 
-    await prisma.institutionalSiteContent.upsert({
+    await getPrisma().institutionalSiteContent.upsert({
       where: { tenantId },
       create: {
         tenantId,
@@ -443,7 +443,7 @@ export async function saveBlogContentObjectAction(
       ? Prisma.JsonNull
       : (blogData as unknown as Prisma.InputJsonValue);
 
-    await prisma.institutionalSiteContent.upsert({
+    await getPrisma().institutionalSiteContent.upsert({
       where: { tenantId },
       create: {
         tenantId,
@@ -489,7 +489,7 @@ export async function saveAboutPageContentAction(
       ? Prisma.JsonNull
       : (aboutData as unknown as Prisma.InputJsonValue);
 
-    await prisma.institutionalSiteContent.upsert({
+    await getPrisma().institutionalSiteContent.upsert({
       where: { tenantId },
       create: {
         tenantId,
@@ -532,7 +532,7 @@ export async function saveAboutContentObjectAction(
       ? Prisma.JsonNull
       : (aboutData as unknown as Prisma.InputJsonValue);
 
-    await prisma.institutionalSiteContent.upsert({
+    await getPrisma().institutionalSiteContent.upsert({
       where: { tenantId },
       create: {
         tenantId,
@@ -575,7 +575,7 @@ export async function saveProjetosContentObjectAction(
       ? Prisma.JsonNull
       : (data as unknown as Prisma.InputJsonValue);
 
-    await prisma.institutionalSiteContent.upsert({
+    await getPrisma().institutionalSiteContent.upsert({
       where: { tenantId },
       create: {
         tenantId,

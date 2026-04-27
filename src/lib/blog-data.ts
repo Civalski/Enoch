@@ -1,6 +1,6 @@
 import type { BlogPost } from "@/lib/blog";
 import { getAllPosts as getStaticPosts, getPostBySlug as getStaticPostBySlug } from "@/lib/blog";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { readingTimeFromMarkdown } from "@/lib/blog-markdown";
 import { getHiddenStaticBlogSlugSet } from "@/lib/institutional-site/hidden-seed-content";
 
@@ -13,14 +13,14 @@ import { getHiddenStaticBlogSlugSet } from "@/lib/institutional-site/hidden-seed
 export async function resolvePublicBlogTenant(): Promise<{ id: string; slug: string } | null> {
   const envSlug = process.env.BLOG_TENANT_SLUG?.trim();
   if (envSlug) {
-    const tenant = await prisma.tenant.findUnique({
+    const tenant = await getPrisma().tenant.findUnique({
       where: { slug: envSlug },
       select: { id: true, slug: true },
     });
     return tenant;
   }
 
-  const rows = await prisma.tenant.findMany({
+  const rows = await getPrisma().tenant.findMany({
     select: { id: true, slug: true },
     orderBy: { createdAt: "asc" },
     take: 2,
@@ -70,7 +70,7 @@ export async function getDbPostsForPublicBlog(): Promise<BlogPost[]> {
   const tenantId = await getPublicBlogTenantId();
   if (!tenantId) return [];
 
-  const rows = await prisma.blogPost.findMany({
+  const rows = await getPrisma().blogPost.findMany({
     where: { tenantId },
     orderBy: { publishedAt: "desc" },
     select: {
@@ -108,7 +108,7 @@ export async function getAllPostsMerged(): Promise<BlogPost[]> {
 export async function getMergedPostBySlug(slug: string): Promise<BlogPost | undefined> {
   const tenantId = await getPublicBlogTenantId();
   if (tenantId) {
-    const row = await prisma.blogPost.findUnique({
+    const row = await getPrisma().blogPost.findUnique({
       where: { tenantId_slug: { tenantId, slug } },
       select: {
         id: true,

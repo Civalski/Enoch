@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { getSiteCapabilities } from "@/lib/permissions/site-permissions";
 import { resolvePublicBlogTenant } from "@/lib/blog-data";
 import { getHiddenStaticProjectTitleSet } from "@/lib/institutional-site/hidden-seed-content";
@@ -49,7 +49,7 @@ export async function getMergedProjetos(): Promise<MergedProject[]> {
     return STATIC_PROJETOS.map(staticToMerged);
   }
 
-  const rows = await prisma.project.findMany({
+  const rows = await getPrisma().project.findMany({
     where: { tenantId },
     orderBy: [{ displayOrder: "asc" }, { title: "asc" }],
     select: { id: true, title: true, description: true, imageUrl: true, displayOrder: true },
@@ -76,7 +76,7 @@ export async function getMergedProjetos(): Promise<MergedProject[]> {
 }
 
 export async function getProjectForEdit(tenantId: string, id: string) {
-  return prisma.project.findFirst({
+  return getPrisma().project.findFirst({
     where: { id, tenantId },
     select: { id: true, title: true, description: true, imageUrl: true, displayOrder: true },
   });

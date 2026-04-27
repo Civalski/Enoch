@@ -1,21 +1,13 @@
 import "server-only";
 
-import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "@/generated/prisma/client";
-import { getDatabaseUrl } from "@/lib/database-url";
+import { cache } from "react";
+import { createPrismaClient } from "@/lib/prisma-factory";
 
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
-};
+/**
+ * Prisma por pedido (React `cache`), como em
+ * https://opennext.js.org/cloudflare/howtos/db#postgresql — evita reutilizar a mesma
+ * ligação/pool entre pedidos no Cloudflare Workers.
+ */
+export const getPrisma = cache(createPrismaClient);
 
-function createPrismaClient() {
-  const url = getDatabaseUrl();
-  const adapter = new PrismaPg({ connectionString: url });
-  return new PrismaClient({ adapter });
-}
-
-export const prisma = globalForPrisma.prisma ?? createPrismaClient();
-
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prisma;
-}
+export { createPrismaClient } from "@/lib/prisma-factory";

@@ -2,6 +2,10 @@
 // Para Cloudflare Workers, `scripts/opennext-cloudflare-bundle.mjs` adiciona temporariamente
 // `runtime = "cloudflare"` e corre `prisma generate` antes do `opennextjs-cloudflare build`.
 
+// Cliente gerado por defeito: Node (`npm run dev`, CI, Vercel).
+// Para Cloudflare Workers, `scripts/opennext-cloudflare-bundle.mjs` adiciona temporariamente
+// `runtime = "cloudflare"` e corre `prisma generate` antes do `opennextjs-cloudflare build`.
+// O `prisma-client` (Prisma 7) exige `output` explícito.
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"

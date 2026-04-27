@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { getServerUser } from "@/lib/auth/server";
 import { ensureUserProvisioning } from "@/lib/tenant/provisioning";
 import { getCanManagePublicSiteMembers, requirePublicSiteMembersManager } from "@/lib/permissions/site-permissions";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { isMasterPanelTenantUserId } from "@/lib/auth/admin-master";
 import { UsuariosManager } from "@/components/app/usuarios/UsuariosManager";
 
@@ -32,7 +32,7 @@ export default async function UsuariosPage() {
 
   const { tenantId } = await requirePublicSiteMembersManager();
 
-  const raw = await prisma.tenantMember.findMany({
+  const raw = await getPrisma().tenantMember.findMany({
     where: { tenantId },
     include: {
       user: {

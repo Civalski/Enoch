@@ -1,5 +1,5 @@
 import { resolvePublicBlogTenant } from "@/lib/blog-data";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import {
   mergeAboutContent,
   mergeBlogContent,
@@ -54,7 +54,7 @@ export async function getPublicSiteView(): Promise<PublicSiteView> {
   if (!tenant) {
     return buildViewFromRow(null);
   }
-  const row = await prisma.institutionalSiteContent.findUnique({
+  const row = await getPrisma().institutionalSiteContent.findUnique({
     where: { tenantId: tenant.id },
   });
   return buildViewFromRow(row);
@@ -74,7 +74,7 @@ export async function getInstitutionalContentForEditor(): Promise<{
 } | null> {
   const tenant = await resolvePublicBlogTenant();
   if (!tenant) return null;
-  const row = await prisma.institutionalSiteContent.findUnique({
+  const row = await getPrisma().institutionalSiteContent.findUnique({
     where: { tenantId: tenant.id },
   });
   return {

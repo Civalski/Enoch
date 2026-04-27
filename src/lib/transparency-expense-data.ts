@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { resolvePublicBlogTenant } from "@/lib/blog-data";
 import { calendarMonthKey, lastNCalendarMonths } from "@/lib/donations-months";
 import type { DonationMonthBucket } from "@/lib/donations-data";
@@ -49,7 +49,7 @@ export async function getTransparencyExpenseViews(
   const rangeStart = new Date(first.year, first.month, 1);
   const rangeEnd = new Date(last.year, last.month + 1, 0, 23, 59, 59, 999);
 
-  const rows = await prisma.transparencyExpense.findMany({
+  const rows = await getPrisma().transparencyExpense.findMany({
     where: { tenantId: tenant.id, spentAt: { gte: rangeStart, lte: rangeEnd } },
     orderBy: { spentAt: "desc" },
     select: { id: true, category: true, amount: true, spentAt: true, description: true },

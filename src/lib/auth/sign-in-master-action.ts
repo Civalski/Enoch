@@ -13,7 +13,7 @@ import {
 } from "@/lib/auth/simple-session";
 import { safeNextPath } from "@/lib/auth/safe-next-path";
 import { createClient } from "@/utils/supabase/server";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { resolvePublicBlogTenant } from "@/lib/blog-data";
 
 export type SignInMasterResult = { error: string } | undefined;
@@ -83,7 +83,7 @@ export async function signInWithMasterAction(input: {
     return { error: AUTH_FAIL };
   }
 
-  const member = await prisma.tenantMember.findFirst({
+  const member = await getPrisma().tenantMember.findFirst({
     where: { userId: data.user.id, tenantId: publicT.id },
   });
   if (!member) {

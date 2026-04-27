@@ -2,7 +2,7 @@
 
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { resolvePublicBlogTenant } from "@/lib/blog-data";
 import {
   contactFormWindowStart,
@@ -35,12 +35,12 @@ export async function submitContactMessageAction(
   const h = await headers();
   const ipKey = hashContactRateIpKey(getClientIpForContactRate(h));
   const windowStart = contactFormWindowStart(Date.now(), CONTACT_FORM_RATE_WINDOW_MS);
-  const rate = await reserveContactFormRateSlot(prisma, ipKey, windowStart);
+  const rate = await reserveContactFormRateSlot(getPrisma(), ipKey, windowStart);
   if (!rate.ok) {
     return { ok: false, message: rate.message };
   }
 
-  await prisma.contactMessage.create({
+  await getPrisma().contactMessage.create({
     data: {
       tenantId: tenant.id,
       name: parsed.data.name,

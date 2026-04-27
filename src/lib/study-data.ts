@@ -1,6 +1,6 @@
 import { getSiteCapabilities } from "@/lib/permissions/site-permissions";
 import { resolvePublicBlogTenant } from "@/lib/blog-data";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { emptyStudyItemGroups } from "@/lib/study-kinds-constants";
 import {
   type GroupedStudyResources,
@@ -40,7 +40,7 @@ export async function getStudyResourcesGrouped(): Promise<GroupedStudyResources>
   if (!t?.id) {
     return emptyGroups();
   }
-  const rows = await prisma.studyResource.findMany({
+  const rows = await getPrisma().studyResource.findMany({
     where: { tenantId: t.id },
     orderBy: [{ displayOrder: "asc" }, { title: "asc" }],
     select: {
@@ -82,14 +82,14 @@ export async function getStudyResourcesPage(options: {
     tenantId: t.id,
     ...(options.kind ? { kind: options.kind } : {}),
   };
-  const totalCount = await prisma.studyResource.count({ where });
+  const totalCount = await getPrisma().studyResource.count({ where });
   const totalInTenant = options.kind
-    ? await prisma.studyResource.count({ where: { tenantId: t.id } })
+    ? await getPrisma().studyResource.count({ where: { tenantId: t.id } })
     : totalCount;
   const totalPages = totalCount === 0 ? 1 : Math.ceil(totalCount / pageSize);
   const page = Math.min(Math.max(1, options.page), totalPages);
   const skip = (page - 1) * pageSize;
-  const rows = await prisma.studyResource.findMany({
+  const rows = await getPrisma().studyResource.findMany({
     where,
     orderBy: [{ displayOrder: "asc" }, { title: "asc" }],
     skip,
@@ -120,7 +120,7 @@ export async function getStudyResourcesPage(options: {
 }
 
 export async function getStudyForEdit(tenantId: string, id: string) {
-  return prisma.studyResource.findFirst({
+  return getPrisma().studyResource.findFirst({
     where: { id, tenantId },
     select: {
       id: true,

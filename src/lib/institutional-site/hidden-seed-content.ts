@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 
 export async function getHiddenStaticBlogSlugSet(
   publicTenantId: string | null,
@@ -6,7 +6,7 @@ export async function getHiddenStaticBlogSlugSet(
   if (!publicTenantId) {
     return new Set();
   }
-  const row = await prisma.institutionalSiteContent.findUnique({
+  const row = await getPrisma().institutionalSiteContent.findUnique({
     where: { tenantId: publicTenantId },
     select: { hiddenStaticBlogSlugs: true },
   });
@@ -19,7 +19,7 @@ export async function getHiddenStaticProjectTitleSet(
   if (!publicTenantId) {
     return new Set();
   }
-  const row = await prisma.institutionalSiteContent.findUnique({
+  const row = await getPrisma().institutionalSiteContent.findUnique({
     where: { tenantId: publicTenantId },
     select: { hiddenStaticProjectTitles: true },
   });

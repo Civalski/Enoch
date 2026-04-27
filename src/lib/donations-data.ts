@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { resolvePublicBlogTenant } from "@/lib/blog-data";
 import {
   calendarMonthKey,
@@ -63,7 +63,7 @@ export async function getDonationsTransparencyPayload(): Promise<DonationsTransp
     };
   }
 
-  const rows = await prisma.donation.findMany({
+  const rows = await getPrisma().donation.findMany({
     where: {
       tenantId: tenant.id,
       donatedAt: { gte: rangeStart, lte: rangeEnd },

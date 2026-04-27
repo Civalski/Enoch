@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { requireServerUser } from "@/lib/auth/server";
 import { ensureUserProvisioning } from "@/lib/tenant/provisioning";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { BlogEditorForm } from "@/components/app/BlogEditorForm";
 import { getPublicSiteMembership, memberHasSitePermission } from "@/lib/permissions/site-permissions";
 
@@ -25,10 +25,10 @@ export default async function EditarBlogPostPage({ params }: { params: Promise<P
   }
 
   const [post, categories] = await Promise.all([
-    prisma.blogPost.findFirst({
+    getPrisma().blogPost.findFirst({
       where: { id: postId, tenantId: m.tenantId },
     }),
-    prisma.blogPostCategory.findMany({
+    getPrisma().blogPostCategory.findMany({
       where: { tenantId: m.tenantId },
       orderBy: { label: "asc" },
       select: { id: true, slug: true, label: true },

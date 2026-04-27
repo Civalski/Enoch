@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { requireSitePermission } from "@/lib/permissions/site-permissions";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import type { AboutTeamFormState } from "./about-team-form-state";
 
 async function requireWriterTenant() {
@@ -29,7 +29,7 @@ export async function createAboutTeamMemberAction(
       return { ok: false, message: "Indique um URL de imagem válido." };
     }
 
-    await prisma.aboutTeamMember.create({
+    await getPrisma().aboutTeamMember.create({
       data: { tenantId, name, roleTitle, imageUrl },
     });
     revalidatePath("/sobre");
@@ -50,7 +50,7 @@ export async function updateAboutTeamMemberAction(
     if (!id) {
       return { ok: false, message: "Registo inválido." };
     }
-    const existing = await prisma.aboutTeamMember.findFirst({
+    const existing = await getPrisma().aboutTeamMember.findFirst({
       where: { id, tenantId },
     });
     if (!existing) {
@@ -69,7 +69,7 @@ export async function updateAboutTeamMemberAction(
       return { ok: false, message: "Indique um URL de imagem válido." };
     }
 
-    await prisma.aboutTeamMember.update({
+    await getPrisma().aboutTeamMember.update({
       where: { id },
       data: { name, roleTitle, imageUrl },
     });
@@ -87,12 +87,12 @@ export async function deleteAboutTeamMemberAction(formData: FormData) {
   if (!id) {
     throw new Error("Registo inválido.");
   }
-  const existing = await prisma.aboutTeamMember.findFirst({
+  const existing = await getPrisma().aboutTeamMember.findFirst({
     where: { id, tenantId },
   });
   if (!existing) {
     throw new Error("Membro não encontrado.");
   }
-  await prisma.aboutTeamMember.delete({ where: { id } });
+  await getPrisma().aboutTeamMember.delete({ where: { id } });
   revalidatePath("/sobre");
 }

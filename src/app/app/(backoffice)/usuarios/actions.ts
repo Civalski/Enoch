@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { requirePublicSiteMembersManager } from "@/lib/permissions/site-permissions";
 import { ALL_SITE_PERMISSIONS } from "@/lib/permissions/site-permission-logic";
 import type { SitePermission } from "@/generated/prisma/client";
@@ -24,7 +24,7 @@ export async function updateMemberPermissionsAction(
   next: readonly SitePermission[],
 ): Promise<UpdatePermsResult> {
   const { tenantId, userId: actorId } = await requirePublicSiteMembersManager();
-  const target = await prisma.tenantMember.findFirst({
+  const target = await getPrisma().tenantMember.findFirst({
     where: { id: memberId, tenantId },
   });
   if (!target) {
@@ -37,7 +37,7 @@ export async function updateMemberPermissionsAction(
   if (target.role === "MEMBER" && perms.length === 0) {
     return { ok: false, message: "Um membro precisa de pelo menos uma permissão." };
   }
-  await prisma.tenantMember.update({
+  await getPrisma().tenantMember.update({
     where: { id: memberId },
     data: { permissions: target.role === "ADMIN" ? [...ALL_SITE_PERMISSIONS] : perms },
   });
@@ -50,7 +50,7 @@ export async function updateMemberPermissionsAction(
 
 export async function removeMemberAction(memberId: string): Promise<UpdatePermsResult> {
   const { tenantId, userId: actorId } = await requirePublicSiteMembersManager();
-  const target = await prisma.tenantMember.findFirst({
+  const target = await getPrisma().tenantMember.findFirst({
     where: { id: memberId, tenantId },
   });
   if (!target) {
@@ -59,7 +59,7 @@ export async function removeMemberAction(memberId: string): Promise<UpdatePermsR
   if (isMasterPanelTenantUserId(target.userId)) {
     return { ok: false, message: "Não é possível remover o administrador máximo (conta de painel)." };
   }
-  await prisma.tenantMember.delete({ where: { id: memberId } });
+  await getPrisma().tenantMember.delete({ where: { id: memberId } });
   revalidatePath("/app/usuarios");
   revalidatePath("/app");
   if (actorId === target.userId) {
@@ -126,7 +126,7 @@ export async function updateMemberUserDataAction(
   profile: ParsedUserProfileExtras,
 ): Promise<UpdatePermsResult> {
   const { tenantId } = await requirePublicSiteMembersManager();
-  const target = await prisma.tenantMember.findFirst({
+  const target = await getPrisma().tenantMember.findFirst({
     where: { id: memberId, tenantId },
   });
   if (!target) {
@@ -135,7 +135,7 @@ export async function updateMemberUserDataAction(
   if (isMasterPanelTenantUserId(target.userId)) {
     return { ok: false, message: "Não é possível alterar dados do administrador máximo aqui." };
   }
-  await prisma.userProfile.update({
+  await getPrisma().userProfile.update({
     where: { id: target.userId },
     data: userProfileExtrasToPrismaData(profile),
   });
@@ -167,7 +167,7 @@ export async function setMemberPasswordAction(
     return { ok: false, message: "A senha deve ter pelo menos 8 caracteres." };
   }
   const { tenantId } = await requirePublicSiteMembersManager();
-  const target = await prisma.tenantMember.findFirst({
+  const target = await getPrisma().tenantMember.findFirst({
     where: { id: memberId, tenantId },
   });
   if (!target) {

@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireSitePermission } from "@/lib/permissions/site-permissions";
 import { isStudyResourceKind, type StudyResourceKind } from "@/lib/study-kinds-constants";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { parseOptionalHttpUrl } from "@/lib/study-url";
 import type { StudyFormState } from "./study-form-state";
 
@@ -39,7 +39,7 @@ export async function createStudyFormAction(
       return { ok: false, message: linkParsed.error };
     }
 
-    await prisma.studyResource.create({
+    await getPrisma().studyResource.create({
       data: {
         tenantId,
         kind,
@@ -68,7 +68,7 @@ export async function updateStudyFormAction(
     if (!id) {
       return { ok: false, message: "Registo inválido." };
     }
-    const existing = await prisma.studyResource.findFirst({ where: { id, tenantId } });
+    const existing = await getPrisma().studyResource.findFirst({ where: { id, tenantId } });
     if (!existing) {
       return { ok: false, message: "Material não encontrado." };
     }
@@ -87,7 +87,7 @@ export async function updateStudyFormAction(
       return { ok: false, message: linkParsed.error };
     }
 
-    await prisma.studyResource.update({
+    await getPrisma().studyResource.update({
       where: { id },
       data: {
         kind,
@@ -112,11 +112,11 @@ export async function deleteStudyResourceAction(formData: FormData) {
   if (!id) {
     throw new Error("Registo inválido.");
   }
-  const existing = await prisma.studyResource.findFirst({ where: { id, tenantId } });
+  const existing = await getPrisma().studyResource.findFirst({ where: { id, tenantId } });
   if (!existing) {
     throw new Error("Material não encontrado.");
   }
-  await prisma.studyResource.delete({ where: { id } });
+  await getPrisma().studyResource.delete({ where: { id } });
   revalidatePath("/estudos");
   redirect("/estudos");
 }

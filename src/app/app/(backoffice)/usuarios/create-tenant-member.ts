@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { AuthApiError } from "@supabase/supabase-js";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { requirePublicSiteMembersManager } from "@/lib/permissions/site-permissions";
 import { ALL_SITE_PERMISSIONS } from "@/lib/permissions/site-permission-logic";
 import type { SitePermission } from "@/generated/prisma/client";
@@ -70,7 +70,7 @@ export async function createTenantMemberAction(input: {
       if (!isDuplicateEmailAuthError(error)) {
         return { ok: false, message: error.message || GENERIC };
       }
-      const profile = await prisma.userProfile.findFirst({
+      const profile = await getPrisma().userProfile.findFirst({
         where: { email: { equals: authEmail, mode: "insensitive" } },
       });
       if (!profile) {
@@ -88,7 +88,7 @@ export async function createTenantMemberAction(input: {
       return { ok: false, message: GENERIC };
     }
 
-    const existingMember = await prisma.tenantMember.findUnique({
+    const existingMember = await getPrisma().tenantMember.findUnique({
       where: { tenantId_userId: { tenantId, userId: newUserId } },
     });
     if (existingMember) {
@@ -99,7 +99,7 @@ export async function createTenantMemberAction(input: {
     }
 
     const prof = userProfileExtrasToPrismaData(input.profile);
-    await prisma.$transaction(async (tx) => {
+    await getPrisma().$transaction(async (tx) => {
       await tx.userProfile.upsert({
         where: { id: newUserId! },
         create: { id: newUserId!, email: authEmail, ...prof },

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getMergedPostBySlug, getMergedSlugs } from "@/lib/blog-data";
+import { getMergedPostBySlug } from "@/lib/blog-data";
 import { getPublicBlogManageCapability } from "@/lib/permissions/site-permissions";
 import { BlogPostMarkdown } from "@/components/site/BlogPostMarkdown";
 import { BlogPostAdminControls } from "@/components/site/BlogPostAdminControls";
@@ -17,9 +17,8 @@ type Params = { slug: string };
 
 export const dynamic = "force-dynamic";
 
-export async function generateStaticParams(): Promise<{ slug: string }[]> {
-  return getMergedSlugs();
-}
+/** Sem `generateStaticParams`: a lista de slugs vem de Prisma/merge e quebrava o `next build` com
+ * cliente `runtime = "cloudflare"` (WASM) no passo "Collecting page data". Os slugs resolvem em runtime. */
 
 export async function generateMetadata({
   params,

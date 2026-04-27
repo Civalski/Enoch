@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { requireSitePermission } from "@/lib/permissions/site-permissions";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import type { TransparencyExpenseCategory } from "@/generated/prisma/client";
 import type { DonationFormState } from "./donation-form-state";
 import type { TransparencyExpenseFormState } from "./expense-form-state";
@@ -55,7 +55,7 @@ export async function createDonationFormAction(
     }
     const donatedAt = parseDonatedAt(String(formData.get("donatedAt") ?? ""));
 
-    await prisma.donation.create({
+    await getPrisma().donation.create({
       data: {
         tenantId,
         donorName,
@@ -100,7 +100,7 @@ export async function updateDonationFormAction(
     }
     const donatedAt = parseDonatedAt(String(formData.get("donatedAt") ?? ""));
 
-    const r = await prisma.donation.updateMany({
+    const r = await getPrisma().donation.updateMany({
       where: { id, tenantId },
       data: { donorName, amount, donatedAt },
     });
@@ -123,7 +123,7 @@ export async function deleteDonationAction(id: string): Promise<{ ok: boolean; m
     if (!isRecordId(id)) {
       return { ok: false, message: "Identificador inválido." };
     }
-    const r = await prisma.donation.deleteMany({ where: { id: id.trim(), tenantId } });
+    const r = await getPrisma().donation.deleteMany({ where: { id: id.trim(), tenantId } });
     if (r.count === 0) {
       return { ok: false, message: "Doação não encontrada ou sem permissão." };
     }
@@ -175,7 +175,7 @@ export async function createTransparencyExpenseFormAction(
       return { ok: false, message: "A descrição é demasiado longa (máx. 500 caracteres)." };
     }
 
-    await prisma.transparencyExpense.create({
+    await getPrisma().transparencyExpense.create({
       data: {
         tenantId,
         category,
@@ -225,7 +225,7 @@ export async function updateTransparencyExpenseFormAction(
       return { ok: false, message: "A descrição é demasiado longa (máx. 500 caracteres)." };
     }
 
-    const r = await prisma.transparencyExpense.updateMany({
+    const r = await getPrisma().transparencyExpense.updateMany({
       where: { id, tenantId },
       data: { category, amount, spentAt, description },
     });
@@ -250,7 +250,7 @@ export async function deleteTransparencyExpenseAction(
     if (!isRecordId(id)) {
       return { ok: false, message: "Identificador inválido." };
     }
-    const r = await prisma.transparencyExpense.deleteMany({
+    const r = await getPrisma().transparencyExpense.deleteMany({
       where: { id: id.trim(), tenantId },
     });
     if (r.count === 0) {

@@ -14,7 +14,7 @@ Abra [http://localhost:3000](http://localhost:3000).
 
 ## Produção (Cloudflare Workers)
 
-URL atual: **https://enoch.arkersoft.workers.dev** (altere `vars.NEXT_PUBLIC_SITE_URL` em [`wrangler.json`](wrangler.json) e os segredos abaixo se usar outro domínio).
+URL pública usada no [`wrangler.json`](wrangler.json) (`vars.NEXT_PUBLIC_SITE_URL`): **https://site-enoch.arkersoft.workers.dev** (aloje o domínio custom/redirect no painel e mantenha a mesma URL no Supabase e no worker).
 
 ### Variáveis e segredos
 
@@ -46,8 +46,15 @@ Enquanto não houver binding, defina `DATABASE_URL` como secret com a connection
 
 No **Supabase** → **Authentication** → **URL configuration**:
 
-- **Site URL**: a URL pública (ex. `https://enoch.arkersoft.workers.dev` ou o domínio custom).
-- **Redirect URLs**: inclua a callback exata, por exemplo `https://enoch.arkersoft.workers.dev/auth/callback` (e o equivalente no domínio de produção). Sem isto, o fluxo após o email/link de autenticação falha.
+- **Site URL**: a URL pública (a mesma que em `wrangler.json`, ex. `https://site-enoch.arkersoft.workers.dev` ou o domínio custom).
+- **Redirect URLs**: inclua a callback exata, por exemplo `https://site-enoch.arkersoft.workers.dev/auth/callback` (e o equivalente no domínio de produção). Sem isto, o fluxo após o email/link de autenticação falha.
+
+### Erro 500 / digest no site (Workers)
+
+1. **Postgres no Worker**: o secret `DATABASE_URL` (ou o binding [Hyperdrive](#postgres-e-hyperdrive) em `wrangler.json` + novo deploy) tem de existir. Sem isso, o layout público (Prisma) falha. Ver [Wrangler: tail](https://developers.cloudflare.com/workers/observability/) ou **Workers → site-enoch → Observability** para a exceção real.
+2. **Build de produção** tem de ser **`npm run deploy`** (faz `prisma generate` com `runtime = "cloudflare"` via [`scripts/prisma-wasm-toggle.mjs`](scripts/prisma-wasm-toggle.mjs) antes do OpenNext). Não basta `next build` + `wrangler deploy` com artefactos de cliente Node, ou no Worker ocorre `WebAssembly.Module(): Wasm code generation disallowed by embedder`.
+3. **Windows**: o aviso do OpenNext aplica-se; se o `opennextjs-cloudflare build` falhar, use [WSL](https://learn.microsoft.com/windows/wsl/) ou um agente Linux/CI.
+4. **`[unenv] fs.readFile` no Worker**: algum código (dependência ou padrão antigo) tentou `fs` no `workerd`. Reduz-se o risco com **`getPrisma()`** por pedido (React `cache` + `max: 1` no pool) em [`src/lib/prisma.ts`](src/lib/prisma.ts) / [`src/lib/prisma-factory.ts`](src/lib/prisma-factory.ts) em linha com [OpenNext + Prisma](https://opennext.js.org/cloudflare/howtos/db#postgresql). Evite `next/font` no layout (o projecto usa link à Google Fonts + CSS). Scripts CLI importam de `prisma-factory` (não de `prisma.ts`, que traz `server-only`).
 
 ## Scripts
 

@@ -1,5 +1,5 @@
 import type { Prisma } from "@/generated/prisma/client";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 
 const DEFAULT: { slug: string; label: string }[] = [
   { slug: "acao_caridade", label: "Ação de caridade" },
@@ -14,7 +14,7 @@ export async function ensureDefaultBlogCategories(
   tenantId: string,
   tx?: Prisma.TransactionClient,
 ) {
-  const db = tx ?? prisma;
+  const db = tx ?? getPrisma();
   for (const { slug, label } of DEFAULT) {
     const exists = await db.blogPostCategory.findUnique({
       where: { tenantId_slug: { tenantId, slug } },
