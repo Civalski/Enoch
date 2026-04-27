@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useState, useTransition } from "react";
-import { saveHomeContentObjectAction } from "@/app/app/institucional/actions";
+import { loadInstitutionalActions } from "@/lib/institutional-site/institutional-actions-client";
 import { Hero } from "@/components/site/Hero";
 import { InlinePencilText } from "@/components/site/inline-edit/InlinePencilText";
 import { Preloader } from "@/components/site/Preloader";
@@ -40,6 +40,7 @@ export function HomePageView({ site, canManage }: Props) {
 
   const onSave = () => {
     startTransition(async () => {
+      const { saveHomeContentObjectAction } = await loadInstitutionalActions();
       const r = await saveHomeContentObjectAction(home);
       setMsg({ ok: r.ok, text: r.message });
       if (r.ok) {

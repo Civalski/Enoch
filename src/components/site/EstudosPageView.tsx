@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
-import { saveEstudosContentObjectAction } from "@/app/app/institucional/actions";
+import { loadInstitutionalActions } from "@/lib/institutional-site/institutional-actions-client";
 import { EstudosListSection } from "@/components/site/estudos/EstudosListSection";
 import { InlinePencilText } from "@/components/site/inline-edit/InlinePencilText";
 import { Section } from "@/components/site/Section";
@@ -80,6 +80,7 @@ export function EstudosPageView({
   const onSave = () => {
     startTransition(async () => {
       const payload = estudosPayloadForSave(estudos);
+      const { saveEstudosContentObjectAction } = await loadInstitutionalActions();
       const r = await saveEstudosContentObjectAction(payload);
       setMsg({ ok: r.ok, text: r.message });
       if (r.ok) {

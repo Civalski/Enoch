@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState, useTransition } from "react";
-import { saveHeaderBrandingObjectAction } from "@/app/app/institucional/actions";
+import { loadInstitutionalActions } from "@/lib/institutional-site/institutional-actions-client";
 import { InlinePencilText } from "@/components/site/inline-edit/InlinePencilText";
 import { DEFAULT_LOGO_URL } from "@/lib/institutional-site/defaults";
 
@@ -39,6 +39,7 @@ export function HeaderBrandBlock({ canEdit, orgName, headerTagline, logoUrl }: P
       if (patch.logoUrl !== undefined) setL(patch.logoUrl);
       setErr(null);
       startTransition(async () => {
+        const { saveHeaderBrandingObjectAction } = await loadInstitutionalActions();
         const r = await saveHeaderBrandingObjectAction({
           orgName: next.orgName,
           headerTagline: next.headerTagline,

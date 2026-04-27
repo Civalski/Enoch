@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useCallback, useState, useTransition } from "react";
-import { saveAboutContentObjectAction } from "@/app/app/institucional/actions";
+import { loadInstitutionalActions } from "@/lib/institutional-site/institutional-actions-client";
 import { AboutTeamSection } from "@/components/site/AboutTeamSection";
 import { InlinePencilText } from "@/components/site/inline-edit/InlinePencilText";
 import { SobreCtaBlock } from "@/components/site/sobre/SobreCtaBlock";
@@ -38,6 +38,7 @@ export function SobrePageView({ site, members, canManage }: Props) {
 
   const onSave = () => {
     startTransition(async () => {
+      const { saveAboutContentObjectAction } = await loadInstitutionalActions();
       const r = await saveAboutContentObjectAction(about);
       setMsg({ ok: r.ok, text: r.message });
       if (r.ok) {

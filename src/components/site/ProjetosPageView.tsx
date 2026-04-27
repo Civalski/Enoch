@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useState, useTransition } from "react";
-import { saveProjetosContentObjectAction } from "@/app/app/institucional/actions";
+import { loadInstitutionalActions } from "@/lib/institutional-site/institutional-actions-client";
 import { InlinePencilText } from "@/components/site/inline-edit/InlinePencilText";
 import { ProjetosPageImpactSection } from "@/components/site/projetos/ProjetosPageImpactSection";
 import { ProjetosPageParticiparSection } from "@/components/site/projetos/ProjetosPageParticiparSection";
@@ -34,6 +34,7 @@ export function ProjetosPageView({ site, projetos, canManage }: Props) {
 
   const onSave = () => {
     startTransition(async () => {
+      const { saveProjetosContentObjectAction } = await loadInstitutionalActions();
       const r = await saveProjetosContentObjectAction(proj);
       setMsg({ ok: r.ok, text: r.message });
       if (r.ok) {

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState, useTransition } from "react";
-import { saveHeaderNavLabelsObjectAction } from "@/app/app/institucional/actions";
+import { loadInstitutionalActions } from "@/lib/institutional-site/institutional-actions-client";
 import { AuthHeaderLinks } from "@/components/app/AuthHeaderLinks";
 import { HeaderBrandBlock } from "@/components/site/HeaderBrandBlock";
 import { HeaderNavItemLabel } from "@/components/site/inline-edit/HeaderNavItemLabel";
@@ -107,6 +107,7 @@ export function SiteHeader({
       if (!changed) return;
 
       startNavTransition(async () => {
+        const { saveHeaderNavLabelsObjectAction } = await loadInstitutionalActions();
         const r = await saveHeaderNavLabelsObjectAction(o);
         if (r.ok) {
           router.refresh();

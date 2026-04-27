@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState, useTransition, type ReactNode } from "react";
-import { saveContatoContentObjectAction } from "@/app/app/institucional/actions";
+import { loadInstitutionalActions } from "@/lib/institutional-site/institutional-actions-client";
 import { ContatoPublicDonationSection } from "@/components/site/ContatoPublicDonationSection";
 import { InlinePencilText } from "@/components/site/inline-edit/InlinePencilText";
 import type { ContatoContentV1 } from "@/lib/institutional-site/types";
@@ -51,6 +51,7 @@ export function ContatoPublicPageClient({ canEdit, initial, mailto, children }: 
 
   const onSave = () => {
     startTransition(async () => {
+      const { saveContatoContentObjectAction } = await loadInstitutionalActions();
       const r = await saveContatoContentObjectAction(c);
       setMsg({ ok: r.ok, text: r.message });
       if (r.ok) {

@@ -1,5 +1,4 @@
 import { createHash } from "node:crypto";
-import { Prisma } from "@prisma/client";
 import type { PrismaClient } from "@prisma/client";
 
 /** Janela deslizante alinhada em blocos (ex.: 15 minutos UTC a partir de epoch). */
@@ -48,7 +47,9 @@ export function contactFormRateLimitMessage(
 }
 
 function isUniqueViolation(e: unknown): boolean {
-  return e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002";
+  if (typeof e !== "object" || e === null) return false;
+  const code = "code" in e ? (e as { code: unknown }).code : undefined;
+  return code === "P2002";
 }
 
 /**
@@ -89,7 +90,7 @@ export async function reserveContactFormRateSlot(
           return { ok: true as const };
         },
         {
-          isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+          isolationLevel: "Serializable",
           maxWait: 5000,
           timeout: 10000,
         },

@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useCallback, useState, useTransition } from "react";
-import { saveBlogContentObjectAction } from "@/app/app/institucional/actions";
+import { loadInstitutionalActions } from "@/lib/institutional-site/institutional-actions-client";
 import { BlogCategoryFilter } from "@/components/site/BlogCategoryFilter";
 import { InlinePencilText } from "@/components/site/inline-edit/InlinePencilText";
 import { Section } from "@/components/site/Section";
@@ -38,6 +38,7 @@ export function BlogPageView({ site, posts, canManage }: Props) {
 
   const onSave = () => {
     startTransition(async () => {
+      const { saveBlogContentObjectAction } = await loadInstitutionalActions();
       const r = await saveBlogContentObjectAction(blog);
       setMsg({ ok: r.ok, text: r.message });
       if (r.ok) {
