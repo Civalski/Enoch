@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["@radix-ui/react-alert-dialog", "@supabase/supabase-js"],
   },
+  // Prisma `runtime = "cloudflare"` uses a WASM query engine; required for `next build` / OpenNext.
+  webpack: (config) => {
+    config.experiments = { ...config.experiments, asyncWebAssembly: true };
+    return config;
+  },
   serverExternalPackages: [
     "@prisma/client",
     "@prisma/adapter-pg",

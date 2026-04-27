@@ -1,5 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Cliente gerado por defeito: Node (`npm run dev`, CI, Vercel).
+// Para Cloudflare Workers, `scripts/opennext-cloudflare-bundle.mjs` adiciona temporariamente
+// `runtime = "cloudflare"` e corre `prisma generate` antes do `opennextjs-cloudflare build`.
 
 generator client {
   provider = "prisma-client"
