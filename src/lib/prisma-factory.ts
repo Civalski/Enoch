@@ -1,6 +1,6 @@
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
-import parse from "pg-connection-string";
+import { parse } from "pg-connection-string";
 import type { PoolConfig } from "pg";
 import { getDatabaseUrl, isDatabaseSslInsecure } from "@/lib/database-url";
 
