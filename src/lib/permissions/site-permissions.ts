@@ -15,18 +15,20 @@ export { ALL_SITE_PERMISSIONS, memberHasSitePermission, toSiteCapabilities } fro
 
 /**
  * Membro do tenant público do site (blog/institucional), se existir.
+ * Aceita publicT já resolvido para evitar uma query duplicada.
  */
 export async function getPublicSiteMembership(
   userId: string,
+  publicT?: { id: string; slug: string } | null,
 ): Promise<TenantMembershipRow | null> {
-  const [memberships, publicT] = await Promise.all([
+  const [memberships, resolvedPublicT] = await Promise.all([
     listTenantsForUser(userId),
-    resolvePublicBlogTenant(),
+    publicT !== undefined ? Promise.resolve(publicT) : resolvePublicBlogTenant(),
   ]);
-  if (!publicT || memberships.length === 0) {
+  if (!resolvedPublicT || memberships.length === 0) {
     return null;
   }
-  return memberships.find((m) => m.tenantId === publicT.id) ?? null;
+  return memberships.find((m) => m.tenantId === resolvedPublicT.id) ?? null;
 }
 
 export async function getSiteCapabilities(): Promise<SiteCapabilities> {
@@ -42,8 +44,9 @@ export async function getSiteCapabilities(): Promise<SiteCapabilities> {
     return emptyCapabilities();
   }
   try {
-    await ensureUserProvisioning(user.id, email);
-    const m = await getPublicSiteMembership(user.id);
+    const publicT = await resolvePublicBlogTenant();
+    await ensureUserProvisioning(user.id, email, publicT);
+    const m = await getPublicSiteMembership(user.id, publicT);
     if (!m) {
       return emptyCapabilities();
     }
@@ -79,8 +82,9 @@ export async function getPublicBlogManageCapability(): Promise<{ canManage: bool
     return { canManage: false };
   }
   try {
-    await ensureUserProvisioning(user.id, email);
-    const m = await getPublicSiteMembership(user.id);
+    const publicT = await resolvePublicBlogTenant();
+    await ensureUserProvisioning(user.id, email, publicT);
+    const m = await getPublicSiteMembership(user.id, publicT);
     if (!m) {
       return { canManage: false };
     }
@@ -107,8 +111,37 @@ export async function requirePublicSiteContext(): Promise<PublicSiteWriterContex
   if (!email) {
     throw new Error("Sessão inválida.");
   }
-  await ensureUserProvisioning(user.id, email);
-  const m = await getPublicSiteMembership(user.id);
+  // Resolve publicT once and reuse for both provisioning and membership check,
+  // eliminating the duplicate resolvePublicBlogTenant() call.
+  const publicT = await resolvePublicBlogTenant();
+  await ensureUserProvisioning(user.id, email, publicT);
+  const m = await getPublicSiteMembership(user.id, publicT);
+  if (!m) {
+    throw new Error("Organização não encontrada.");
+  }
+  return {
+    tenantId: m.tenantId,
+    userId: user.id,
+    role: m.role,
+    permissions: [...m.permissions],
+  };
+}
+
+/**
+ * Versão rápida para Server Actions de escrita onde o utilizador já foi
+ * provisionado no login. Omite `ensureUserProvisioning` (4 queries) e vai
+ * direto ao membership — apenas 2 queries ao banco em vez de 6.
+ *
+ * NÃO usar em páginas/layouts que fazem o primeiro acesso do utilizador.
+ */
+export async function requirePublicSiteContextFast(): Promise<PublicSiteWriterContext> {
+  const user = await requireServerUser();
+  if (!user.email?.trim()) {
+    throw new Error("Sessão inválida.");
+  }
+  // Resolve publicT + memberships in parallel — 2 queries total.
+  const publicT = await resolvePublicBlogTenant();
+  const m = await getPublicSiteMembership(user.id, publicT);
   if (!m) {
     throw new Error("Organização não encontrada.");
   }
@@ -122,6 +155,18 @@ export async function requirePublicSiteContext(): Promise<PublicSiteWriterContex
 
 export async function requireSitePermission(permission: SitePermission): Promise<PublicSiteWriterContext> {
   const ctx = await requirePublicSiteContext();
+  if (!memberHasSitePermission(ctx.role, ctx.permissions, permission)) {
+    throw new Error("Não autorizado.");
+  }
+  return ctx;
+}
+
+/**
+ * Versão rápida de requireSitePermission — sem ensureUserProvisioning.
+ * Usar apenas em Server Actions de escrita (o utilizador já está provisionado).
+ */
+export async function requireSitePermissionFast(permission: SitePermission): Promise<PublicSiteWriterContext> {
+  const ctx = await requirePublicSiteContextFast();
   if (!memberHasSitePermission(ctx.role, ctx.permissions, permission)) {
     throw new Error("Não autorizado.");
   }
@@ -155,8 +200,9 @@ export async function getCanManagePublicSiteMembers(): Promise<boolean> {
     return false;
   }
   try {
-    await ensureUserProvisioning(user.id, email);
-    const m = await getPublicSiteMembership(user.id);
+    const publicT = await resolvePublicBlogTenant();
+    await ensureUserProvisioning(user.id, email, publicT);
+    const m = await getPublicSiteMembership(user.id, publicT);
     return m != null;
   } catch (error) {
     console.error("getCanManagePublicSiteMembers: failed; degrading to false.", error);
@@ -177,15 +223,15 @@ export async function requirePublicSiteMembersManager(): Promise<{
   if (!email) {
     throw new Error("Sessão inválida.");
   }
-  await ensureUserProvisioning(user.id, email);
+  const publicT = await resolvePublicBlogTenant();
+  await ensureUserProvisioning(user.id, email, publicT);
   if (!isMasterUser(user)) {
     throw new Error("Apenas o administrador principal (conta de painel) pode aceder a esta função.");
   }
-  const publicT = await resolvePublicBlogTenant();
   if (!publicT) {
     throw new Error("Site público não configurado.");
   }
-  const m = await getPublicSiteMembership(user.id);
+  const m = await getPublicSiteMembership(user.id, publicT);
   if (!m) {
     throw new Error("Sem associação ao site público.");
   }

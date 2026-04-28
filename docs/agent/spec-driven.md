@@ -1,5 +1,7 @@
 # Spec-driven development
 
+Este documento aplica-se sobretudo à **evolução de produto** (novas capacidades ou mudanças de comportamento). Otimizações pontuais, hardening ou correções sem nova superfície de produto podem seguir a **Trilha A** em [harness.md](harness.md) com spec apenas quando obrigatório.
+
 A especificação é a **fonte da verdade** antes de código substancial. Isso melhora trabalho com IA: o agente (e humanos) alinha expectativas sem adivinhar.
 
 ## Onde vivem as specs

@@ -78,23 +78,6 @@ export async function saveInstitutionalContentAction(
       return { ok: false, message: "URL do mapa é demasiado longo." };
     }
 
-    const existing = await getPrisma().institutionalSiteContent.findUnique({
-      where: { tenantId },
-      select: { homeContent: true, aboutContent: true, projetosContent: true },
-    });
-
-    const homeJson: Prisma.InputJsonValue | typeof PrismaJson.JsonNull =
-      existing?.homeContent != null
-        ? (existing.homeContent as Prisma.InputJsonValue)
-        : PrismaJson.JsonNull;
-    const aboutJson: Prisma.InputJsonValue | typeof PrismaJson.JsonNull =
-      existing?.aboutContent != null
-        ? (existing.aboutContent as Prisma.InputJsonValue)
-        : PrismaJson.JsonNull;
-    const projetosJson: Prisma.InputJsonValue | typeof PrismaJson.JsonNull =
-      existing?.projetosContent != null
-        ? (existing.projetosContent as Prisma.InputJsonValue)
-        : PrismaJson.JsonNull;
     await getPrisma().institutionalSiteContent.upsert({
       where: { tenantId },
       create: {
@@ -108,9 +91,13 @@ export async function saveInstitutionalContentAction(
         whatsappUrl: wa.value,
         mapEmbedUrl: mapEmbedUrl || null,
         copyrightLine,
-        homeContent: homeJson,
-        aboutContent: aboutJson,
-        projetosContent: projetosJson,
+        homeContent: PrismaJson.JsonNull,
+        aboutContent: PrismaJson.JsonNull,
+        contatoContent: PrismaJson.JsonNull,
+        projetosContent: PrismaJson.JsonNull,
+        blogContent: PrismaJson.JsonNull,
+        estudosContent: PrismaJson.JsonNull,
+        headerNavLabels: PrismaJson.JsonNull,
       },
       update: {
         footerTagline: footerTagline || null,
@@ -122,16 +109,13 @@ export async function saveInstitutionalContentAction(
         whatsappUrl: wa.value,
         mapEmbedUrl: mapEmbedUrl || null,
         copyrightLine,
-        homeContent: homeJson,
-        aboutContent: aboutJson,
-        projetosContent: projetosJson,
+        // homeContent, aboutContent, projetosContent are NOT touched here —
+        // they are managed by their own dedicated actions.
       },
     });
 
     revalidatePath("/");
-    revalidatePath("/sobre");
     revalidatePath("/contato");
-    revalidatePath("/projetos");
     return { ok: true, message: "Dados gerais guardados. O site público foi actualizado." };
   } catch (e) {
     const message = e instanceof Error ? e.message : "Não foi possível guardar.";
@@ -339,7 +323,6 @@ export async function saveHeaderNavLabelsObjectAction(
 
     revalidatePath("/");
     revalidatePath("/estudos");
-    revalidatePath("/app/email");
     return { ok: true, message: "Nomes do menu actualizados." };
   } catch (e) {
     const message = e instanceof Error ? e.message : "Não foi possível guardar.";

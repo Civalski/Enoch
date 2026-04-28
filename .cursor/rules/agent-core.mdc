@@ -1,28 +1,48 @@
 ---
-description: Governança para agentes — harness, spec-first, TDD, limite de linhas, MCP, segurança
+description: Produção/manutenção — segurança, performance observável, harness em duas trilhas (manutenção vs feature), Prisma, MCP
 alwaysApply: true
 ---
 
 # Agente — núcleo obrigatório
 
-Siga [AGENTS.md](mdc:AGENTS.md) na raiz. Resumo executivo:
+Siga [AGENTS.md](mdc:AGENTS.md) na raiz. **Fase produção:** o sistema está estável em prod; priorizar **risco para utilizadores**, reversibilidade das mudanças e critérios de sucesso mensuráveis quando fizer sentido.
 
-## Harness (ordem de trabalho)
+## Harness (duas trilhas)
 
-1. Entender: `AGENTS.md` + spec em `docs/specs/` (criar spec mínima se faltar, antes de muito código).
-2. Especificar: critérios de aceite testáveis; não-objetivos explícitos.
-3. TDD: teste que falha → implementação mínima → refatorar. Exceções documentadas em [docs/agent/tdd.md](mdc:docs/agent/tdd.md).
-4. Implementar: mudanças mínimas alinhadas ao spec; sem refactors não pedidos.
-5. Verificar: testes/lint quando o projeto tiver; checklist em [docs/agent/security.md](mdc:docs/agent/security.md). Se houve alteração Prisma/migrações, correr migração (ver abaixo).
-6. Parar: não expandir escopo.
+Escolher a trilha pelo tipo de trabalho — o pedido ou o chat costuma indicá-lo.
+
+### Trilha A — Manutenção, hardening, otimização, incidentes
+
+Use por defeito para segurança, performance, dependências, pequenos bugfixes ou otimização técnica **sem** mudança de produto nova.
+
+1. **Entender** impacto e blast radius (`AGENTS.md` + leitura dirigida ao código relevante).
+2. **Definir sucesso:** critério **mensurável** (ex.: latência p95, memória, taxa de erros, tamanho de bundle) **ou** checklist em [docs/agent/security.md](mdc:docs/agent/security.md) para trabalho só de segurança. Opcional registar baseline no PR/chat.
+3. **Implementar** mudanças **mínimas** e reversíveis; sem refactors não pedidos. Para perf, medir ou perfilar **antes** de otimizar quando o problema não for óbvio.
+4. **Verificar:** testes/lint quando o projeto tiver; [docs/agent/security.md](mdc:docs/agent/security.md) se tocou inputs, auth, headers, rotas públicas ou dependências. Se houve alteração Prisma/migrações, correr migração (abaixo).
+5. **Parar:** não expandir escopo.
+
+**Spec em `docs/specs/`:** **opcional** se o pedido for puramente técnico e baseline + aceite estiver claro no PR/chat. **Obrigatória** para mudança de **comportamento visível**, contrato de API, permissões ou dados sensíveis.
+
+**TDD:** aplicar onde a lógica for crítica; não é mandatório criar ciclo red/green inteiro só para tweak de infra ou número isolado — ver [docs/agent/tdd.md](mdc:docs/agent/tdd.md).
+
+### Trilha B — Nova funcionalidade ou mudança comportamental relevante
+
+1. **Entender:** `AGENTS.md` + spec em `docs/specs/` (criar spec mínima se faltar, antes de muito código).
+2. **Especificar:** critérios de aceite testáveis; não-objetivos explícitos. Ver [docs/agent/spec-driven.md](mdc:docs/agent/spec-driven.md).
+3. **TDD:** teste que falha → implementação mínima → refatorar. Exceções: [docs/agent/tdd.md](mdc:docs/agent/tdd.md).
+4. **Implementar:** mudanças mínimas alinhadas ao spec; sem refactors não pedidos.
+5. **Verificar:** como na Trilha A.
+6. **Parar:** não expandir escopo.
 
 ## Spec-driven
 
-- Spec em `docs/specs/<feature>.md` usando [docs/agent/templates/feature-spec.md](mdc:docs/agent/templates/feature-spec.md) antes de implementação substancial.
+- Trilha B: spec em `docs/specs/<feature>.md` usando [docs/agent/templates/feature-spec.md](mdc:docs/agent/templates/feature-spec.md) antes de implementação substancial.
+- Trilha A: usar spec quando obrigatório (comportamento, API, permissões, dados sensíveis); caso contrário documentação curta no PR/chat basta.
 
 ## Base de dados (Prisma)
 
 - Mudanças em `prisma/schema.prisma` ou em `prisma/migrations/` **exigem** migração aplicada na base (`DATABASE_URL`).
+- Preferir **compatibilidade retroativa** do schema ou plano de rollout quando dados em produção estiverem em jogo (expandir antes de contrair quando possível).
 - **Executar automaticamente** após essas mudanças, quando o ambiente tiver `DATABASE_URL` válido: `npx prisma migrate deploy` (aplica migrações pendentes, não interativo).
 - Para **gerar** nova migração a partir do schema (nome e revisão): `npx prisma migrate dev --name <slug>` (pode pedir input; alternativa: criar SQL em `prisma/migrations/` e depois `migrate deploy`).
 - Se não houver base acessível ao agente, avisar o utilizador para correr `migrate deploy` (ou `npm run db:migrate` em desenvolvimento, conforme o fluxo do projeto).
@@ -44,12 +64,13 @@ Siga [AGENTS.md](mdc:AGENTS.md) na raiz. Resumo executivo:
 - Uso: documentação/bindings Cloudflare e tarefas alinhadas; não substituir leitura do código do repo.
 - Preferir uma consulta bem formulada a várias vagas. Detalhes: [docs/agent/mcp.md](mdc:docs/agent/mcp.md).
 
-## Segurança
+## Segurança (produção)
 
 - Nunca commitar segredos; env + `.gitignore`.
+- Qualquer mudança em **autenticação/autorização**, **headers**, **rotas públicas**, **parse de input** ou **dependências** nova/pensada: revisar [docs/agent/security.md](mdc:docs/agent/security.md). Evitar registar dados pessoais em logs em claro quando não for necessário.
 - Validar entradas em limites HTTP/API; menor privilégio para tokens de CI.
 - Revisar dependências sugeridas (supply chain).
-- Não desabilitar checagens de segurança/lint sem spec + revisão humana.
+- Não desabilitar checagens de segurança/lint sem spec/decisão registada + revisão humana ([docs/agent/security.md](mdc:docs/agent/security.md)).
 
 ## Tokens
 

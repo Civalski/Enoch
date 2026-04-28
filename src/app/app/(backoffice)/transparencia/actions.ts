@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireSitePermission } from "@/lib/permissions/site-permissions";
+import { requireSitePermissionFast } from "@/lib/permissions/site-permissions";
 import { getPrisma } from "@/lib/prisma";
 import type { TransparencyExpenseCategory } from "@prisma/client";
 import type { DonationFormState } from "./donation-form-state";
@@ -9,7 +9,7 @@ import type { TransparencyExpenseFormState } from "./expense-form-state";
 import { isTransparencyExpenseCategory } from "@/lib/transparency-categories";
 
 async function requireWriterTenant() {
-  const { tenantId } = await requireSitePermission("TRANSPARENCY");
+  const { tenantId } = await requireSitePermissionFast("TRANSPARENCY");
   return { tenantId };
 }
 
@@ -65,7 +65,6 @@ export async function createDonationFormAction(
     });
 
     revalidatePath("/transparencia");
-    revalidatePath("/app/transparencia/doacoes");
     return { ok: true, message: "Doação registada com sucesso." };
   } catch (e) {
     const message = e instanceof Error ? e.message : "Não foi possível guardar.";
@@ -109,7 +108,6 @@ export async function updateDonationFormAction(
     }
 
     revalidatePath("/transparencia");
-    revalidatePath("/app/transparencia/doacoes");
     return { ok: true, message: "Doação atualizada." };
   } catch (e) {
     const message = e instanceof Error ? e.message : "Não foi possível guardar.";
@@ -128,7 +126,6 @@ export async function deleteDonationAction(id: string): Promise<{ ok: boolean; m
       return { ok: false, message: "Doação não encontrada ou sem permissão." };
     }
     revalidatePath("/transparencia");
-    revalidatePath("/app/transparencia/doacoes");
     return { ok: true, message: "Doação removida." };
   } catch (e) {
     const message = e instanceof Error ? e.message : "Não foi possível remover.";
@@ -186,7 +183,6 @@ export async function createTransparencyExpenseFormAction(
     });
 
     revalidatePath("/transparencia");
-    revalidatePath("/app/transparencia/doacoes");
     return { ok: true, message: "Despesa registada com sucesso." };
   } catch (e) {
     const message = e instanceof Error ? e.message : "Não foi possível guardar.";
@@ -234,7 +230,6 @@ export async function updateTransparencyExpenseFormAction(
     }
 
     revalidatePath("/transparencia");
-    revalidatePath("/app/transparencia/doacoes");
     return { ok: true, message: "Despesa atualizada." };
   } catch (e) {
     const message = e instanceof Error ? e.message : "Não foi possível guardar.";
@@ -257,7 +252,6 @@ export async function deleteTransparencyExpenseAction(
       return { ok: false, message: "Despesa não encontrada ou sem permissão." };
     }
     revalidatePath("/transparencia");
-    revalidatePath("/app/transparencia/doacoes");
     return { ok: true, message: "Despesa removida." };
   } catch (e) {
     const message = e instanceof Error ? e.message : "Não foi possível remover.";

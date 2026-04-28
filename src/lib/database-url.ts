@@ -17,11 +17,6 @@ export function stripWorkerUnsupportedTlsFileParams(connectionString: string): s
   return s;
 }
 
-/**
- * Quando verdadeiro, o pool `pg` não exige cadeia de confiança (ver `prisma-factory`).
- * - `next dev` (`NODE_ENV=development`): activo por omissão (proxies / certificados internos).
- * - `next start` / Workers: só com `DATABASE_SSL_INSECURE`; ou desactivar relax em dev com `DATABASE_SSL_STRICT`.
- */
 export function isDatabaseSslInsecure(): boolean {
   if (envTruthy("DATABASE_SSL_STRICT")) {
     return false;
@@ -32,11 +27,6 @@ export function isDatabaseSslInsecure(): boolean {
   return process.env.NODE_ENV === "development";
 }
 
-/**
- * Cloudflare Workers block TCP to localhost, RFC1918, etc. The runtime surfaces
- * that as: "proxy request failed, cannot connect to the specified address".
- * @see https://developers.cloudflare.com/workers/runtime-apis/tcp-sockets/#troubleshooting
- */
 function assertPostgresHostReachableFromWorkers(connectionString: string): void {
   let hostname: string;
   try {
@@ -55,19 +45,11 @@ function assertPostgresHostReachableFromWorkers(connectionString: string): void 
     /^172\.(1[6-9]|2\d|3[01])\.\d+\.\d+$/.test(hostname);
   if (disallowed) {
     throw new Error(
-      `Postgres host "${hostname}" cannot be reached over TCP from Cloudflare Workers (use the public Supabase host, Transaction pooler, or Hyperdrive). See Workers TCP troubleshooting: https://developers.cloudflare.com/workers/runtime-apis/tcp-sockets/#troubleshooting`,
+      `Postgres host "${hostname}" cannot be reached over TCP from Cloudflare Workers.`
     );
   }
 }
 
-/**
- * Supabase (Prisma + Workers): manter TLS activo sem impor `verify-full` por omissão.
- * O `pg` actual trata `sslmode=require` como `verify-full`, o que pode falhar com
- * cadeias intermédias do pooler; `uselibpqcompat=true` repõe a semântica libpq
- * (TLS obrigatório, sem verificação rígida de cadeia) até o ecossistema estabilizar.
- * No pooler de transacções (6543 / `*.pooler.supabase.*`), `pgbouncer=true` é obrigatório
- * para o Prisma — sem isto as ligações caem com "Connection terminated unexpectedly".
- */
 export function enhanceSupabasePostgresUrl(connectionString: string): string {
   if (!/supabase\.(co|com)/i.test(connectionString)) {
     return connectionString;
@@ -89,19 +71,9 @@ export function enhanceSupabasePostgresUrl(connectionString: string): string {
   ) {
     s += "&uselibpqcompat=true";
   }
-  const hostPath = s.split("?")[0] ?? s;
-  const isTransactionPooler =
-    /pooler\.supabase\.(com|co)/i.test(hostPath) || /:6543([/?]|$)/.test(hostPath);
-  if (isTransactionPooler && !/[?&]pgbouncer=true(?=&|$)/i.test(s)) {
-    s += (s.includes("?") ? "&" : "?") + "pgbouncer=true";
-  }
   return s;
 }
 
-/**
- * Resolves the Postgres connection string: Hyperdrive (Workers) when the binding
- * exists, otherwise `DATABASE_URL` (local dev, Vercel, `next build` / SSG).
- */
 export function getDatabaseUrl(): string {
   let inWorker = false;
   try {
@@ -109,7 +81,6 @@ export function getDatabaseUrl(): string {
     inWorker = true;
     const e = env as { HYPERDRIVE?: HyperdriveLike; DATABASE_URL?: string };
     if (e.HYPERDRIVE?.connectionString) {
-      // Não validar host: a string do binding é gerida pelo Hyperdrive e pode não ser um host "público" parseável.
       return stripWorkerUnsupportedTlsFileParams(e.HYPERDRIVE.connectionString);
     }
     if (typeof e.DATABASE_URL === "string" && e.DATABASE_URL.length > 0) {
@@ -121,13 +92,10 @@ export function getDatabaseUrl(): string {
     }
   } catch (err) {
     if (inWorker) throw err;
-    // SSG, or dev without OpenNext worker context
   }
   const url = process.env.DATABASE_URL;
   if (!url) {
-    throw new Error(
-      "DATABASE_URL is not set (or Hyperdrive is not bound as HYPERDRIVE in wrangler).",
-    );
+    throw new Error("DATABASE_URL is not set.");
   }
   const resolved = stripWorkerUnsupportedTlsFileParams(enhanceSupabasePostgresUrl(url));
   if (inWorker) {

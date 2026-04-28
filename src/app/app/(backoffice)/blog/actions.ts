@@ -2,16 +2,18 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { Prisma } from "@prisma/client";
 import { getPostBySlug } from "@/lib/blog";
 import { uniqueCategorySlugForTenant } from "@/lib/blog-category-slug";
 import { slugifyTitle } from "@/lib/blog-markdown";
-import { requireSitePermission } from "@/lib/permissions/site-permissions";
+import { requireSitePermissionFast } from "@/lib/permissions/site-permissions";
 import { getPrisma } from "@/lib/prisma";
+
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 async function requireWriterTenant() {
-  const { tenantId } = await requireSitePermission("BLOG");
+  const { tenantId } = await requireSitePermissionFast("BLOG");
   return { tenantId };
 }
 
@@ -87,7 +89,7 @@ export async function createBlogPostAction(formData: FormData) {
     String(formData.get("categoryId") ?? ""),
   );
   const publishedAt = parsePublishedAt(String(formData.get("publishedAt") ?? ""));
-  let slugInput = String(formData.get("slug") ?? "").trim();
+  const slugInput = String(formData.get("slug") ?? "").trim();
   const slug = await uniqueSlugForTenant(tenantId, slugInput || title);
 
   await getPrisma().blogPost.create({
@@ -104,7 +106,6 @@ export async function createBlogPostAction(formData: FormData) {
   });
 
   revalidatePath("/blog");
-  revalidatePath("/app/blog");
   redirect(`/blog/${slug}`);
 }
 
@@ -113,12 +114,6 @@ export async function updateBlogPostAction(formData: FormData) {
   const id = String(formData.get("id") ?? "").trim();
   if (!id) {
     throw new Error("Artigo inválido.");
-  }
-  const existing = await getPrisma().blogPost.findFirst({
-    where: { id, tenantId },
-  });
-  if (!existing) {
-    throw new Error("Artigo não encontrado.");
   }
 
   const title = String(formData.get("title") ?? "").trim();
@@ -136,10 +131,19 @@ export async function updateBlogPostAction(formData: FormData) {
     String(formData.get("categoryId") ?? ""),
   );
   const publishedAt = parsePublishedAt(String(formData.get("publishedAt") ?? ""));
-  let slugInput = String(formData.get("slug") ?? "").trim();
-  const slug = await uniqueSlugForTenant(tenantId, slugInput || title, id);
+  const slugInput = String(formData.get("slug") ?? "").trim();
 
+  // Fetch only current slug (needed for revalidatePath), and update in one step.
+  // tenantId scoping ensures we cannot modify another tenant's post.
+  const existing = await getPrisma().blogPost.findFirst({
+    where: { id, tenantId },
+    select: { slug: true },
+  });
+  if (!existing) {
+    throw new Error("Artigo não encontrado.");
+  }
   const prevSlug = existing.slug;
+  const slug = await uniqueSlugForTenant(tenantId, slugInput || title, id);
 
   await getPrisma().blogPost.update({
     where: { id },
@@ -155,9 +159,10 @@ export async function updateBlogPostAction(formData: FormData) {
   });
 
   revalidatePath("/blog");
-  revalidatePath(`/blog/${prevSlug}`);
+  if (prevSlug !== slug) {
+    revalidatePath(`/blog/${prevSlug}`);
+  }
   revalidatePath(`/blog/${slug}`);
-  revalidatePath("/app/blog");
   redirect(`/blog/${slug}`);
 }
 
@@ -167,19 +172,14 @@ export async function deleteBlogPostAction(formData: FormData) {
   if (!id) {
     throw new Error("Artigo inválido.");
   }
-  const existing = await getPrisma().blogPost.findFirst({
-    where: { id, tenantId },
-  });
-  if (!existing) {
-    throw new Error("Artigo não encontrado.");
+
+  // deleteMany with tenantId scope — avoids extra findFirst, returns count=0 if not found.
+  const { count } = await getPrisma().blogPost.deleteMany({ where: { id, tenantId } });
+  if (count === 0) {
+    throw new Error("Artigo não encontrado ou sem permissão.");
   }
 
-  const slug = existing.slug;
-  await getPrisma().blogPost.delete({ where: { id } });
-
   revalidatePath("/blog");
-  revalidatePath(`/blog/${slug}`);
-  revalidatePath("/app/blog");
   redirect("/blog");
 }
 
@@ -205,8 +205,6 @@ export async function createBlogCategoryAction(labelArg: string): Promise<Create
     const row = await getPrisma().blogPostCategory.create({
       data: { tenantId, slug, label },
     });
-    revalidatePath("/app/blog/novo");
-    revalidatePath("/app/blog", "layout");
     revalidatePath("/blog");
     return { ok: true, id: row.id, slug: row.slug, label: row.label };
   } catch (e) {
@@ -216,7 +214,7 @@ export async function createBlogCategoryAction(labelArg: string): Promise<Create
 
 /** Remove artigos de exemplo (`blog.ts`) do site, persistindo a escolha em `InstitutionalSiteContent`. */
 export async function hideStaticBlogPostAction(formData: FormData) {
-  const { tenantId } = await requireSitePermission("BLOG");
+  const { tenantId } = await requireSitePermissionFast("BLOG");
   const slug = String(formData.get("slug") ?? "").trim();
   if (!slug) {
     throw new Error("Artigo inválido.");
@@ -225,20 +223,25 @@ export async function hideStaticBlogPostAction(formData: FormData) {
     throw new Error("Não é um artigo de exemplo do repositório.");
   }
 
-  const current = await getPrisma().institutionalSiteContent.findUnique({
-    where: { tenantId },
-    select: { hiddenStaticBlogSlugs: true },
-  });
-  const hiddenStaticBlogSlugs = [...new Set([...(current?.hiddenStaticBlogSlugs ?? []), slug])];
-
+  // Use Prisma array push to append the slug without a prior read.
   await getPrisma().institutionalSiteContent.upsert({
     where: { tenantId },
-    create: { tenantId, hiddenStaticBlogSlugs },
-    update: { hiddenStaticBlogSlugs },
+    create: {
+      tenantId,
+      hiddenStaticBlogSlugs: [slug],
+      homeContent: Prisma.JsonNull,
+      aboutContent: Prisma.JsonNull,
+      contatoContent: Prisma.JsonNull,
+      projetosContent: Prisma.JsonNull,
+      blogContent: Prisma.JsonNull,
+      estudosContent: Prisma.JsonNull,
+      headerNavLabels: Prisma.JsonNull,
+    },
+    update: {
+      hiddenStaticBlogSlugs: { push: slug },
+    },
   });
 
   revalidatePath("/blog");
-  revalidatePath(`/blog/${slug}`);
-  revalidatePath("/app/blog");
   redirect("/blog");
 }

@@ -2,13 +2,14 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { Prisma } from "@prisma/client";
 import { getStaticProjectByTitle } from "@/lib/projects-static";
-import { requireSitePermission } from "@/lib/permissions/site-permissions";
+import { requireSitePermissionFast } from "@/lib/permissions/site-permissions";
 import { getPrisma } from "@/lib/prisma";
 import type { ProjectFormState } from "./project-form-state";
 
 async function requireWriterTenant() {
-  const { tenantId } = await requireSitePermission("PROJECTS");
+  const { tenantId } = await requireSitePermissionFast("PROJECTS");
   return { tenantId };
 }
 
@@ -45,7 +46,6 @@ export async function createProjectFormAction(
     });
 
     revalidatePath("/projetos");
-    revalidatePath("/app/projetos");
     return { ok: true, message: "Projeto criado." };
   } catch (e) {
     const message = e instanceof Error ? e.message : "Não foi possível guardar.";
@@ -63,13 +63,6 @@ export async function updateProjectFormAction(
     if (!id) {
       return { ok: false, message: "Projeto inválido." };
     }
-    const existing = await getPrisma().project.findFirst({
-      where: { id, tenantId },
-    });
-    if (!existing) {
-      return { ok: false, message: "Projeto não encontrado." };
-    }
-
     const title = String(formData.get("title") ?? "").trim();
     if (!title || title.length > 200) {
       return { ok: false, message: "O título é obrigatório (máx. 200 caracteres)." };
@@ -84,13 +77,16 @@ export async function updateProjectFormAction(
     }
     const displayOrder = parseIntOrder(String(formData.get("displayOrder") ?? "0"));
 
-    await getPrisma().project.update({
-      where: { id },
+    // updateMany with tenantId scope — avoids extra findFirst, returns count=0 if not found.
+    const { count } = await getPrisma().project.updateMany({
+      where: { id, tenantId },
       data: { title, description, imageUrl, displayOrder },
     });
+    if (count === 0) {
+      return { ok: false, message: "Projeto não encontrado." };
+    }
 
     revalidatePath("/projetos");
-    revalidatePath("/app/projetos");
     return { ok: true, message: "Alterações guardadas." };
   } catch (e) {
     const message = e instanceof Error ? e.message : "Não foi possível guardar.";
@@ -104,23 +100,20 @@ export async function deleteProjectAction(formData: FormData) {
   if (!id) {
     throw new Error("Projeto inválido.");
   }
-  const existing = await getPrisma().project.findFirst({
-    where: { id, tenantId },
-  });
-  if (!existing) {
-    throw new Error("Projeto não encontrado.");
+
+  // deleteMany with tenantId scope — avoids extra findFirst.
+  const { count } = await getPrisma().project.deleteMany({ where: { id, tenantId } });
+  if (count === 0) {
+    throw new Error("Projeto não encontrado ou sem permissão.");
   }
 
-  await getPrisma().project.delete({ where: { id } });
-
   revalidatePath("/projetos");
-  revalidatePath("/app/projetos");
   redirect("/projetos");
 }
 
 /** Remove blocos de `projects-static` do site. */
 export async function hideStaticProjectAction(formData: FormData) {
-  const { tenantId } = await requireSitePermission("PROJECTS");
+  const { tenantId } = await requireSitePermissionFast("PROJECTS");
   const title = String(formData.get("title") ?? "").trim();
   if (!title) {
     throw new Error("Projeto inválido.");
@@ -129,21 +122,25 @@ export async function hideStaticProjectAction(formData: FormData) {
     throw new Error("Não é um bloco de exemplo do repositório.");
   }
 
-  const current = await getPrisma().institutionalSiteContent.findUnique({
-    where: { tenantId },
-    select: { hiddenStaticProjectTitles: true },
-  });
-  const hiddenStaticProjectTitles = [
-    ...new Set([...(current?.hiddenStaticProjectTitles ?? []), title]),
-  ];
-
+  // Use Prisma array push to append without a prior read.
   await getPrisma().institutionalSiteContent.upsert({
     where: { tenantId },
-    create: { tenantId, hiddenStaticProjectTitles },
-    update: { hiddenStaticProjectTitles },
+    create: {
+      tenantId,
+      hiddenStaticProjectTitles: [title],
+      homeContent: Prisma.JsonNull,
+      aboutContent: Prisma.JsonNull,
+      contatoContent: Prisma.JsonNull,
+      projetosContent: Prisma.JsonNull,
+      blogContent: Prisma.JsonNull,
+      estudosContent: Prisma.JsonNull,
+      headerNavLabels: Prisma.JsonNull,
+    },
+    update: {
+      hiddenStaticProjectTitles: { push: title },
+    },
   });
 
   revalidatePath("/projetos");
-  revalidatePath("/app/projetos");
   redirect("/projetos");
 }

@@ -21,11 +21,14 @@ export function createPrismaClient() {
   const { PrismaClient } = getPrismaClientModule();
   const connectionString = getDatabaseUrl();
 
-  // Build adapter options following the official OpenNext pattern.
-  // `maxUses: 1` prevents pool reuse across requests (avoiding frozen TCP sockets in Workers).
+  // pg.Pool configuration for Cloudflare Workers
+  // max: 1 ensures only one connection per request.
+  // idleTimeoutMillis: 1000 closes the connection quickly to avoid
+  // frozen sockets when the V8 isolate is suspended.
   const adapterOptions: Record<string, unknown> = {
     connectionString,
-    maxUses: 1,
+    max: 1,
+    idleTimeoutMillis: 1000,
   };
 
   // In production (Workers), relax SSL verification for Supabase pooler.
@@ -34,11 +37,7 @@ export function createPrismaClient() {
     adapterOptions.ssl = { rejectUnauthorized: false };
   }
 
-  // In Cloudflare Workers, process.env might not contain DATABASE_URL automatically.
-  // We MUST set it here so the Prisma Engine can read the `pgbouncer=true` flag
-  // from the URL during initialization. Without this, Prisma will attempt to use
-  // prepared statements, which Supabase PgBouncer (Transaction mode) rejects,
-  // resulting in "Connection terminated unexpectedly".
+  // We set process.env as fallback, but also pass datasourceUrl explicitly.
   process.env.DATABASE_URL = connectionString;
 
   const adapter = new PrismaPg(adapterOptions as ConstructorParameters<typeof PrismaPg>[0]);

@@ -2,14 +2,14 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { requireSitePermission } from "@/lib/permissions/site-permissions";
+import { requireSitePermissionFast } from "@/lib/permissions/site-permissions";
 import { isStudyResourceKind, type StudyResourceKind } from "@/lib/study-kinds-constants";
 import { getPrisma } from "@/lib/prisma";
 import { parseOptionalHttpUrl } from "@/lib/study-url";
 import type { StudyFormState } from "./study-form-state";
 
 async function requireWriterTenant() {
-  const { tenantId } = await requireSitePermission("INSTITUTIONAL");
+  const { tenantId } = await requireSitePermissionFast("INSTITUTIONAL");
   return { tenantId };
 }
 
@@ -68,10 +68,6 @@ export async function updateStudyFormAction(
     if (!id) {
       return { ok: false, message: "Registo inválido." };
     }
-    const existing = await getPrisma().studyResource.findFirst({ where: { id, tenantId } });
-    if (!existing) {
-      return { ok: false, message: "Material não encontrado." };
-    }
     const kind = parseKind(String(formData.get("kind") ?? ""));
     if (!kind) {
       return { ok: false, message: "Categoria inválida." };
@@ -87,16 +83,19 @@ export async function updateStudyFormAction(
       return { ok: false, message: linkParsed.error };
     }
 
-    await getPrisma().studyResource.update({
-      where: { id },
+    // updateMany with tenantId scope — avoids extra findFirst query.
+    const { count } = await getPrisma().studyResource.updateMany({
+      where: { id, tenantId },
       data: {
         kind,
         title,
         description: description || null,
         linkUrl: linkParsed.value,
-        displayOrder: existing.displayOrder,
       },
     });
+    if (count === 0) {
+      return { ok: false, message: "Material não encontrado." };
+    }
 
     revalidatePath("/estudos");
     return { ok: true, message: "Alterações guardadas." };
@@ -112,11 +111,13 @@ export async function deleteStudyResourceAction(formData: FormData) {
   if (!id) {
     throw new Error("Registo inválido.");
   }
-  const existing = await getPrisma().studyResource.findFirst({ where: { id, tenantId } });
-  if (!existing) {
-    throw new Error("Material não encontrado.");
+
+  // deleteMany with tenantId scope — avoids extra findFirst.
+  const { count } = await getPrisma().studyResource.deleteMany({ where: { id, tenantId } });
+  if (count === 0) {
+    throw new Error("Material não encontrado ou sem permissão.");
   }
-  await getPrisma().studyResource.delete({ where: { id } });
+
   revalidatePath("/estudos");
   redirect("/estudos");
 }

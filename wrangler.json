@@ -20,6 +20,13 @@
       "service": "site-enoch"
     }
   ],
+  "hyperdrive": [
+    {
+      "binding": "HYPERDRIVE",
+      "id": "8b7d5263fc9b43888a5f1ef2eebd58b2",
+      "localConnectionString": "postgresql://postgres:postgres@localhost:5432/postgres"
+    }
+  ],
   "vars": {
     "NEXT_PUBLIC_SITE_URL": "https://site-enoch.arkersoft.workers.dev",
     "NEXT_PUBLIC_SUPABASE_URL": "https://onpbpjpicxahnwrdzrbx.supabase.co",
