@@ -10,9 +10,26 @@ import { getHiddenStaticBlogSlugSet } from "@/lib/institutional-site/hidden-seed
  * — Senão, se existir **apenas um** tenant na base (caso institucional comum), usa esse.
  * — Com vários tenants e sem env, devolve null (é preciso definir o slug).
  */
+import { getCloudflareContext } from "@opennextjs/cloudflare";
+
+function getEnvBlogTenantSlug(): string | undefined {
+  let inWorker = false;
+  try {
+    const { env } = getCloudflareContext();
+    inWorker = true;
+    const e = env as { BLOG_TENANT_SLUG?: string };
+    if (typeof e.BLOG_TENANT_SLUG === "string" && e.BLOG_TENANT_SLUG.trim().length > 0) {
+      return e.BLOG_TENANT_SLUG.trim();
+    }
+  } catch (err) {
+    if (inWorker) throw err;
+  }
+  return process.env.BLOG_TENANT_SLUG?.trim();
+}
+
 export async function resolvePublicBlogTenant(): Promise<{ id: string; slug: string } | null> {
   try {
-    const envSlug = process.env.BLOG_TENANT_SLUG?.trim();
+    const envSlug = getEnvBlogTenantSlug();
     if (envSlug) {
       const tenant = await getPrisma().tenant.findUnique({
         where: { slug: envSlug },
