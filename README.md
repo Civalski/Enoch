@@ -63,6 +63,7 @@ No **Supabase** → **Authentication** → **URL configuration**:
 | `SIMPLE_AUTH_SECRET` | Sim | Mínimo 16 caracteres; sem isto a sessão do painel não assina. |
 | `ADMIN_PASSWORD` | Sim para login de mestre | Conta de painel (`ADMIN_LOGIN` opcional). |
 | `BLOG_TENANT_SLUG` | Se vários `Tenant` | Evita conteúdo público ambíguo. |
+| `AUTH_SESSION_COOKIE_DOMAIN` | Se apex + www (ou dois hosts ao mesmo domínio) | Ex.: `.enochbrasil.com.br` — permite que `enoch_painel` seja enviado em todos os hosts; sem isto, login num hostname e navegação noutro parece “sem sessão”. |
 
 4. **Degradação em falha de base**: o layout público degrada capabilities quando o Provisioning/Prisma falha (veja [`getSiteCapabilities`](src/lib/permissions/site-permissions.ts)) para evitar tela em branco; *ações* no backoffice ainda exigem base disponível. Corrija a ligação à base, não conte com degradação permanente.
 

@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
+
+/** Evitar HTML cached na borda sem contexto do cookie da sessão (edição parece ausente em produção). */
+export const dynamic = "force-dynamic";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { ConditionalSiteFooter } from "@/components/site/ConditionalSiteFooter";
 import { ScrollRevealAndGuards } from "@/components/site/ScrollRevealAndGuards";

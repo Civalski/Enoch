@@ -43,24 +43,41 @@ export function getSimpleAuthUserId() {
   return "00000000-0000-4000-8000-000000000001";
 }
 
-export function getSessionCookieOptions() {
+/**
+ * Domínio opcional com ponto inicial (ex.: `.enochbrasil.com.br`) para o cookie ser enviado em
+ * `www` e apex. Sem isto, o browser trata cada host como cookies separados — login num e edição noutro parece “sem sessão”.
+ */
+export function getAuthSessionCookieDomain(): string | undefined {
+  const d = process.env.AUTH_SESSION_COOKIE_DOMAIN?.trim();
+  return d || undefined;
+}
+
+function authCookiePathSameSiteSecure() {
   return {
-    httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax" as const,
     path: "/",
+  };
+}
+
+export function getSessionCookieOptions() {
+  const domain = getAuthSessionCookieDomain();
+  return {
+    httpOnly: true,
+    ...authCookiePathSameSiteSecure(),
     maxAge: MAX_AGE_SEC,
+    ...(domain ? { domain } : {}),
   };
 }
 
 /** Expirar o cookie de sessão do painel (logout / sessão inválida). */
 export function getSessionCookieClearOptions() {
+  const domain = getAuthSessionCookieDomain();
   return {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax" as const,
-    path: "/",
+    ...authCookiePathSameSiteSecure(),
     maxAge: 0,
+    ...(domain ? { domain } : {}),
   };
 }
 
