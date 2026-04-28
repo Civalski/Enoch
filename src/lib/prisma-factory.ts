@@ -1,6 +1,6 @@
 import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "@prisma/client/wasm";
 import { getDatabaseUrl, isDatabaseSslInsecure } from "@/lib/database-url";
+import { getPrismaClientModule } from "@/lib/prisma-runtime";
 
 /**
  * Creates a new PrismaClient per request.
@@ -11,13 +11,14 @@ import { getDatabaseUrl, isDatabaseSslInsecure } from "@/lib/database-url";
  * Key decisions:
  * - `maxUses: 1` prevents connection reuse across requests, which causes
  *   "Connection terminated unexpectedly" errors in Cloudflare Workers.
- * - Imports from `@prisma/client` directly (not `/wasm`). OpenNext patches the
- *   generated client to use the WASM query engine for the workerd runtime.
+ * - `getPrismaClientModule()` picks `@prisma/client` on Node (`next dev`) and
+ *   `@prisma/client/wasm` on workerd; a static `/wasm` import breaks Next dev on Windows.
  * - SSL config: In production Workers, Supabase's transaction pooler (:6543)
  *   requires TLS, but the workerd TLS stack may not validate the full cert chain.
  *   We set `ssl: { rejectUnauthorized: false }` to avoid "Connection terminated".
  */
 export function createPrismaClient() {
+  const { PrismaClient } = getPrismaClientModule();
   const connectionString = getDatabaseUrl();
 
   // Build adapter options following the official OpenNext pattern.

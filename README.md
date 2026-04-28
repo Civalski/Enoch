@@ -51,10 +51,24 @@ No **Supabase** → **Authentication** → **URL configuration**:
 
 ### Erro 500 / digest no site (Workers)
 
-1. **Postgres no Worker**: o secret `DATABASE_URL` (ou o binding [Hyperdrive](#postgres-e-hyperdrive) em `wrangler.json` + novo deploy) tem de existir. Sem isso, o layout público (Prisma) falha. Ver [Wrangler: tail](https://developers.cloudflare.com/workers/observability/) ou **Workers → site-enoch → Observability** para a exceção real.
-2. **Build de produção** para o Worker: use **`npm run deploy`** (OpenNext + `wrangler deploy --keep-vars`). O projeto usa **Prisma** com `engineType = "client"` + `@prisma/adapter-pg`, evitando o engine Rust no `workerd`.
-3. **Windows**: o aviso do OpenNext aplica-se; se o `opennextjs-cloudflare build` falhar, use [WSL](https://learn.microsoft.com/windows/wsl/) ou um agente Linux/CI.
-4. **`[unenv] fs.*` no Worker**: algum código (dependência ou padrão antigo) tentou `fs` no `workerd`. Para Prisma em Workers, mantenha `engineType = "client"` no [`prisma/schema.prisma`](prisma/schema.prisma), use **`getPrisma()`** por pedido (React `cache` + `max: 1` no pool) em [`src/lib/prisma.ts`](src/lib/prisma.ts) / [`src/lib/prisma-factory.ts`](src/lib/prisma-factory.ts), e evite `next/font` no layout (o projecto usa link à Google Fonts + CSS). Scripts CLI importam de `prisma-factory` (não de `prisma.ts`, que traz `server-only`).
+1. **Postgres no Worker**: o secret `DATABASE_URL` (ou o binding [Hyperdrive](#postgres-e-hyperdrive) em `wrangler.json` + novo deploy) tem de existir. Sem isso, o layout público (Prisma) falha. O digest mostrado no browser **não** contém a mensagem; a exceção real está nos **logs do worker**.
+
+2. **Ver o erro real (correlação com digest)**: com [Wrangler autenticado](https://developers.cloudflare.com/workers/wrangler/commands/#login), no diretório do projecto: `npx wrangler tail site-enoch` (o nome bate com `name` em [`wrangler.json`](wrangler.json)). Reproduza o erro; no stream aparecem `Exceptions` e `console` com stack (Prisma, `P1001`, `pgbouncer`, etc.). No painel: **Workers → site-enoch → Observability** (ou *Logs* / *Real-time*). O digest do Next.js é id da instância de erro no servidor; basta o mesmo minuto/URL do pedido para associar.
+
+3. **Checklist de produção (Worker)** além de `NEXT_PUBLIC_*` e Supabase:
+
+| Variável | Obrigatório | Nota |
+|----------|------------|------|
+| `DATABASE_URL` ou Hyperdrive + binding | Sim (runtime) | String do pooler de transacções; ver [`getDatabaseUrl`](src/lib/database-url.ts) e notas de SSL/pgbouncer no código. |
+| `SIMPLE_AUTH_SECRET` | Sim | Mínimo 16 caracteres; sem isto a sessão do painel não assina. |
+| `ADMIN_PASSWORD` | Sim para login de mestre | Conta de painel (`ADMIN_LOGIN` opcional). |
+| `BLOG_TENANT_SLUG` | Se vários `Tenant` | Evita conteúdo público ambíguo. |
+
+4. **Degradação em falha de base**: o layout público degrada capabilities quando o Provisioning/Prisma falha (veja [`getSiteCapabilities`](src/lib/permissions/site-permissions.ts)) para evitar tela em branco; *ações* no backoffice ainda exigem base disponível. Corrija a ligação à base, não conte com degradação permanente.
+
+5. **Build de produção** para o Worker: use **`npm run deploy`** (OpenNext + `wrangler deploy --keep-vars`). O projeto usa **Prisma** com `engineType = "client"` + `@prisma/adapter-pg`, evitando o engine Rust no `workerd`.
+6. **Windows**: o aviso do OpenNext aplica-se; se o `opennextjs-cloudflare build` falhar, use [WSL](https://learn.microsoft.com/windows/wsl/) ou um agente Linux/CI.
+7. **`[unenv] fs.*` no Worker**: algum código (dependência ou padrão antigo) tentou `fs` no `workerd`. Para Prisma em Workers, mantenha `engineType = "client"` no [`prisma/schema.prisma`](prisma/schema.prisma), use **`getPrisma()`** por pedido (React `cache` + `max: 1` no pool) em [`src/lib/prisma.ts`](src/lib/prisma.ts) / [`src/lib/prisma-factory.ts`](src/lib/prisma-factory.ts), e evite `next/font` no layout (o projecto usa link à Google Fonts + CSS). Scripts CLI importam de `prisma-factory` (não de `prisma.ts`, que traz `server-only`).
 
 ## Scripts
 

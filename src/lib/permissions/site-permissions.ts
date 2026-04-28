@@ -41,12 +41,17 @@ export async function getSiteCapabilities(): Promise<SiteCapabilities> {
   if (!email) {
     return emptyCapabilities();
   }
-  await ensureUserProvisioning(user.id, email);
-  const m = await getPublicSiteMembership(user.id);
-  if (!m) {
+  try {
+    await ensureUserProvisioning(user.id, email);
+    const m = await getPublicSiteMembership(user.id);
+    if (!m) {
+      return emptyCapabilities();
+    }
+    return toSiteCapabilities(m.role, m.permissions);
+  } catch (error) {
+    console.error("getSiteCapabilities: provisioning or membership failed; degrading to empty capabilities.", error);
     return emptyCapabilities();
   }
-  return toSiteCapabilities(m.role, m.permissions);
 }
 
 function emptyCapabilities(): SiteCapabilities {
@@ -73,12 +78,17 @@ export async function getPublicBlogManageCapability(): Promise<{ canManage: bool
   if (!email) {
     return { canManage: false };
   }
-  await ensureUserProvisioning(user.id, email);
-  const m = await getPublicSiteMembership(user.id);
-  if (!m) {
+  try {
+    await ensureUserProvisioning(user.id, email);
+    const m = await getPublicSiteMembership(user.id);
+    if (!m) {
+      return { canManage: false };
+    }
+    return { canManage: memberHasSitePermission(m.role, m.permissions, "BLOG") };
+  } catch (error) {
+    console.error("getPublicBlogManageCapability: failed; degrading to no blog manage.", error);
     return { canManage: false };
   }
-  return { canManage: memberHasSitePermission(m.role, m.permissions, "BLOG") };
 }
 
 /**
@@ -146,11 +156,12 @@ export async function getCanManagePublicSiteMembers(): Promise<boolean> {
   }
   try {
     await ensureUserProvisioning(user.id, email);
-  } catch {
+    const m = await getPublicSiteMembership(user.id);
+    return m != null;
+  } catch (error) {
+    console.error("getCanManagePublicSiteMembers: failed; degrading to false.", error);
     return false;
   }
-  const m = await getPublicSiteMembership(user.id);
-  return m != null;
 }
 
 /**

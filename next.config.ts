@@ -14,6 +14,7 @@ const nextConfig: NextConfig = {
   },
   serverExternalPackages: [
     "@prisma/client",
+    "@prisma/client/wasm",
     ".prisma/client",
     "@prisma/adapter-pg",
     "pg",

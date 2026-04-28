@@ -1,6 +1,5 @@
 import { getSessionDisplayName } from "@/lib/auth/login-identity";
 import { requireServerUser } from "@/lib/auth/server";
-import { ensureUserProvisioning } from "@/lib/tenant/provisioning";
 import { AppBackofficeRouteChrome } from "@/components/app/AppBackofficeRouteChrome";
 import { isPublicVisitorPreviewSession } from "@/lib/permissions/visitor-preview";
 import { getCanManagePublicSiteMembers, getSiteCapabilities } from "@/lib/permissions/site-permissions";
@@ -15,8 +14,6 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       </div>
     );
   }
-
-  await ensureUserProvisioning(user.id, email);
 
   const [caps, showUsersLink, visitorPreview] = await Promise.all([
     getSiteCapabilities(),
