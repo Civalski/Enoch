@@ -3,6 +3,7 @@ import "./globals.css";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { ConditionalSiteFooter } from "@/components/site/ConditionalSiteFooter";
 import { ScrollRevealAndGuards } from "@/components/site/ScrollRevealAndGuards";
+import { isMasterUser } from "@/lib/auth/admin-master";
 import { getServerUser } from "@/lib/auth/server";
 import { isPublicVisitorPreviewSession } from "@/lib/permissions/visitor-preview";
 import { getCanManagePublicSiteMembers, getSiteCapabilities } from "@/lib/permissions/site-permissions";
@@ -27,6 +28,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const site = await getPublicSiteView();
   const headerNav = withContactInboxNavItem(site.headerNav, caps.contactInbox, site.headerNavLabelsRaw);
   const isLoggedInPublic = !visitorPreview && user != null;
+  const masterSession = Boolean(user && isMasterUser(user));
   return (
     <html lang="pt-BR" style={{ colorScheme: "light" }}>
       <head>
@@ -46,7 +48,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           canManageInstitutional={caps.institutional}
           canManageSiteUsers={!visitorPreview && canManageSiteUsers}
           isLoggedIn={isLoggedInPublic}
-          showVisitorPreview={canManageSiteUsers}
+          showVisitorPreview={masterSession}
           visitorPreviewActive={visitorPreview}
           logoUrl={site.scalars.logoUrl}
           orgName={site.scalars.orgName}

@@ -20,7 +20,8 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "check:site-admin": "npx tsx scripts/check-public-site-admin-readiness.ts"
   },
   "dependencies": {
     "@opennextjs/cloudflare": "^1.3.0",

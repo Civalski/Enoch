@@ -1,10 +1,16 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { isMasterUser } from "@/lib/auth/admin-master";
+import { resolvePublicBlogTenant } from "@/lib/blog-data";
 import { requireServerUser } from "@/lib/auth/server";
+import { getPrisma } from "@/lib/prisma";
+import {
+  getPublicSiteMembership,
+  getSiteCapabilities,
+} from "@/lib/permissions/site-permissions";
 import { ensureUserProvisioning } from "@/lib/tenant/provisioning";
-import { getSiteCapabilities } from "@/lib/permissions/site-permissions";
-import { getInstitutionalContentForEditor } from "@/lib/institutional-site/public";
 import { InstitutionalEditorForm } from "@/components/app/InstitutionalEditorForm";
+import { getInstitutionalContentForEditor } from "@/lib/institutional-site/public";
 
 export default async function InstitucionalPage() {
   const user = await requireServerUser();
@@ -15,7 +21,47 @@ export default async function InstitucionalPage() {
   await ensureUserProvisioning(user.id, email);
   const c = await getSiteCapabilities();
   if (!c.institutional) {
-    redirect("/app");
+    if (!isMasterUser(user)) {
+      redirect("/app");
+    }
+    const [publicT, m, tenantTotal] = await Promise.all([
+      resolvePublicBlogTenant(),
+      getPublicSiteMembership(user.id),
+      getPrisma().tenant.count(),
+    ]);
+    return (
+      <div className="max-w-2xl space-y-4">
+        <h2 className="text-lg font-semibold text-slate-900">Conteúdo do site — diagnóstico</h2>
+        <p className="text-sm text-slate-600">
+          A sua sessão é de administrador principal, mas neste ambiente não há permissão de edição institucional
+          (membro do site público no tenant correcto). Isto explica a ausência de controlos de edição no site.
+        </p>
+        <ul className="text-sm text-slate-700 list-disc pl-5 space-y-1">
+          <li>
+            Tenant público resolvido:{" "}
+            <strong>
+              {publicT ? `${publicT.slug} (${publicT.id})` : "não — defina BLOG_TENANT_SLUG ou mantenha um único tenant"}
+            </strong>
+          </li>
+          <li>
+            Membership no tenant público: <strong>{m ? "sim" : "não"}</strong>
+          </li>
+          <li>
+            Total de tenants na base: <strong>{tenantTotal}</strong>
+          </li>
+        </ul>
+        <p className="text-sm text-slate-600">
+          Com vários tenants, defina <code className="text-xs bg-slate-100 px-1 rounded">BLOG_TENANT_SLUG</code> no
+          ambiente de produção e garanta um registo <code className="text-xs bg-slate-100 px-1 rounded">TenantMember</code>{" "}
+          para o <code className="text-xs bg-slate-100 px-1 rounded">SIMPLE_AUTH_USER_ID</code> nesse tenant. Pode correr{" "}
+          <code className="text-xs bg-slate-100 px-1 rounded">npm run check:site-admin</code> com a mesma{" "}
+          <code className="text-xs bg-slate-100 px-1 rounded">DATABASE_URL</code>.
+        </p>
+        <Link href="/" className="inline-block text-sm text-blue-600 hover:underline">
+          Voltar ao início
+        </Link>
+      </div>
+    );
   }
 
   const editor = await getInstitutionalContentForEditor();
